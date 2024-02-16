@@ -1,0 +1,2 @@
+<!ELEMENT panels (panel+)>
+<!ELEMENT panel (name)> 

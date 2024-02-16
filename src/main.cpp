@@ -5,8 +5,11 @@
 #include <sstream>
 #include <stdexcept>
 #include <filesystem>
+#include "panel.cpp"
 
 #include "tinyxml2.h"   // no parsea dtds, no habria que usar esta libreria
+
+#define MYNULL -1
 
 using namespace tinyxml2;
 
@@ -26,50 +29,65 @@ int main(int argc, char* argv[])
     XMLDocument doc;
     if (doc.LoadFile(inputFileName) != XML_SUCCESS) {
         std::cerr << "Error loading XML file: " << inputFileName << std::endl;
-        return 1;
+        return EXIT_FAILURE;
     }
 
-    const XMLElement* filesElement = doc.FirstChildElement("files");
-    if (!filesElement) {
-        std::cerr << "Missing <files> element in XML file." << std::endl;
-        return 1;
+    const XMLElement* panelsElement = doc.FirstChildElement("panels");
+    if (!panelsElement) {
+        std::cerr << "Missing <panels> element in XML file." << std::endl;
+        return EXIT_FAILURE;
     }
 
-    std::vector<std::pair<std::string, std::string>> fileContents;
+    std::vector<Panel> panelContents;
 
-    const XMLElement* fileElement = filesElement->FirstChildElement("file");
-    while (fileElement) {
-        const XMLElement* nameElement = fileElement->FirstChildElement("name");
-        const XMLElement* extensionElement = fileElement->FirstChildElement("extension");
-        const XMLElement* contentElement = fileElement->FirstChildElement("content");
+    // Aquí comienza a detectar paneles a generar
 
-        if (!nameElement || !contentElement || !extensionElement) {
-            std::cerr << "Malformed <file> element in XML file." << std::endl;
-            return 1;
+    const XMLElement* panelElement = panelsElement->FirstChildElement("panel");
+    while (panelElement) {
+        const XMLAttribute* typeAttribute = panelElement->FindAttribute("type");
+        bool fixed = strcmp(typeAttribute->Value(), "fixed") ? true : false;
+
+        const XMLElement* nameElement = panelElement->FirstChildElement("name");
+
+        if (!nameElement) {
+            std::cerr << "Malformed <panel> element in XML file (no name)." << std::endl;
+            return EXIT_FAILURE;
         }
 
         const char* name = nameElement->GetText();
-        const char* content = contentElement->GetText();
-        const char* ext = extensionElement->GetText();
 
-        fileContents.push_back(std::make_pair(std::string(name), std::string(content)));
+        const XMLElement* xElement = panelElement->FirstChildElement("x");
+        const XMLElement* yElement = panelElement->FirstChildElement("y");
+        const XMLElement* wElement = panelElement->FirstChildElement("w");
+        const XMLElement* hElement = panelElement->FirstChildElement("h");
 
-        fileElement = fileElement->NextSiblingElement("file");
+        int x = xElement ? atoi(xElement->GetText()) : MYNULL;
+        int y = yElement ? atoi(yElement->GetText()) : MYNULL;
+        int w = wElement ? atoi(wElement->GetText()) : MYNULL;
+        int h = hElement ? atoi(hElement->GetText()) : MYNULL;
+        
+        panelContents.push_back(Panel(name, x, y, w, h, fixed));
+
+        panelElement = panelElement->NextSiblingElement("panel");
     }
 
-    std::string path("./out");
-    //std::strcat(path, "./out");
-    std::filesystem::create_directory(path);
+    for(Panel panel : panelContents)
+    {
+        std::cout << panel.toString() << std::endl; // DEBUG
 
-    for (const auto& fileContent : fileContents) {
-        std::ofstream outputFile(fileContent.first);
-        if (!outputFile) {
-            std::cerr << "Error creating file: " << fileContent.first << std::endl;
-            return 1;
-        }
-        outputFile << fileContent.second;
-        std::cout << "File created: " << fileContent.first << std::endl;
+        
+        
     }
 
-    return 0;
+    // for (const auto& fileContent : panelContents) {
+    //     std::ofstream outputFile(fileContent.first);
+    //     if (!outputFile) {
+    //         std::cerr << "Error creating file: " << fileContent.first << std::endl;
+    //         return 1;
+    //     }
+    //     outputFile << fileContent.second;
+    //     std::cout << "File created: " << fileContent.first << std::endl;
+    // }
+
+    return EXIT_SUCCESS;
 }
