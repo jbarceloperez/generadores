@@ -7,11 +7,11 @@ private:
     std::string name; // Nombre del panel
     int x, y; // Coordenadas del panel en la pantalla
     int w, h; // Ancho y altura del panel en píxeles
-    bool fixed; // Propiedad que indica si el tamaño del panel es fijo o no
+    std::string type; // Propiedad 
 
 public:
     // Constructor
-    Panel(std::string name, int posX, int posY, int width, int height, bool fixed);
+    Panel(std::string name, int posX, int posY, int width, int height, std::string type);
     Panel(std::string name);
 
     // Destructor
@@ -23,14 +23,14 @@ public:
     int getY() const;
     int getWidth() const;
     int getHeight() const;
-    bool isFixed() const;
+    std::string getType() const;
 
     // Setters
     void setX(int newX);
     void setY(int newY);
     void setWidth(int newWidth);
     void setHeight(int newHeight);
-    void setFixed(bool newFixedValue);
+    void setType(std::string newTypeValue);
 
     std::string toString() const;
 };

@@ -4,17 +4,17 @@
 #define DEFAULT_Y 50
 #define DEFAULT_W 400
 #define DEFAULT_H 300
-#define DEFAULT_FIXED false
+#define DEFAULT_TYPE "simple"
 
 // Constructor
-Panel::Panel(std::string _name, int _x, int _y, int _w, int _h, bool _fixed)
+Panel::Panel(std::string _name, int _x, int _y, int _w, int _h, std::string _type)
 {
     name = _name;
     x = _x == -1 ? DEFAULT_X : _x;
     y = _y == -1 ? DEFAULT_Y : _y;
     w = _w == -1 ? DEFAULT_W : _w;
     h = _h == -1 ? DEFAULT_H : _h;
-    fixed = _fixed;
+    type = _type;
     //std::cout << "\t\tPANEL CREADO\n";  // DEBUG
 }
 
@@ -25,7 +25,7 @@ Panel::Panel(std::string _name)
     y = DEFAULT_Y;
     w = DEFAULT_W;
     h = DEFAULT_H;
-    fixed = DEFAULT_FIXED;
+    type = DEFAULT_TYPE;
 }
 
 // Destructor
@@ -63,9 +63,9 @@ int Panel::getHeight() const
     return h;
 }
 
-bool Panel::isFixed() const
+std::string Panel::getType() const
 {
-    return fixed;
+    return type;
 }
 
 // Setters
@@ -89,9 +89,9 @@ void Panel::setHeight(int newHeight)
     h = newHeight;
 }
 
-void Panel::setFixed(bool newFixedValue)
+void Panel::setType(std::string newTypeValue)
 {
-    fixed = newFixedValue;
+    type = newTypeValue;
 }
 
 std::string Panel::toString() const
@@ -101,8 +101,8 @@ std::string Panel::toString() const
     str += "{\n";
     str += "\tname=[" + name + "]\n";
     str += "\tcoords=[x=" + std::to_string(x) + ",y=" + std::to_string(y) + "]\n";
-    str += "\tsize=[h=" + std::to_string(h) + ",w=" + std::to_string(h) + "]\n";
-    str += "\tisFixed=" + std::to_string(fixed) + "\n";
+    str += "\tsize=[w=" + std::to_string(w) + ",h=" + std::to_string(h) + "]\n";
+    str += "\ttype=" + type + "\n";
     str += "}\n";
 
     return str;

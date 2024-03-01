@@ -6,12 +6,14 @@
 #include <stdexcept>
 #include <filesystem>
 #include "panel.cpp"
-
-#include "tinyxml2.h"   // no parsea dtds, no habria que usar esta libreria
+#include "xmlparser.cpp"
 
 #define MYNULL -1
 
-using namespace tinyxml2;
+// using namespace tinyxml2;
+
+// Enumerado de tipos de elemento XML, TODO implementarlo en el código
+enum Elements {geometry, sample};
 
 int main(int argc, char* argv[]) 
 {
@@ -22,61 +24,74 @@ int main(int argc, char* argv[])
         return EXIT_FAILURE;
     }
 
-    const char* inputFileName = argv[1];
+    char* inputFileName = argv[1];
 
-    //
-
-    XMLDocument doc;
-    if (doc.LoadFile(inputFileName) != XML_SUCCESS) {
-        std::cerr << "Error loading XML file: " << inputFileName << std::endl;
-        return EXIT_FAILURE;
+    // XML PARSER
+    
+    XMLDoc doc;
+    try
+    {
+        doc = XMLDoc(inputFileName);
     }
-
-    const XMLElement* panelsElement = doc.FirstChildElement("panels");
-    if (!panelsElement) {
+    catch(const XMLFileException& e)
+    {
+        std::cerr << e.what() << '\n';
+        std::cerr << "Error loading path '" << inputFileName << "'\n";
+        exit(EXIT_FAILURE);
+    }
+    catch(const XMLParseException& e)
+    {
+        std::cerr << e.what() << '\n';
         std::cerr << "Missing <panels> element in XML file." << std::endl;
-        return EXIT_FAILURE;
+        exit(EXIT_FAILURE);
     }
-
+    
     std::vector<Panel> panelContents;
 
     // Aquí comienza a detectar paneles a generar
 
-    const XMLElement* panelElement = panelsElement->FirstChildElement("panel");
-    while (panelElement) {
-        const XMLAttribute* typeAttribute = panelElement->FindAttribute("type");
-        bool fixed = strcmp(typeAttribute->Value(), "fixed") ? true : false;
+    for(XMLElemento panel : doc.getRootElement().getElementos()) {
 
-        const XMLElement* nameElement = panelElement->FirstChildElement("name");
+        // elementos obligatorios
+        string type = panel.getAtributoValue("type");
+        string name = panel.getAtributoValue("name");
 
-        if (!nameElement) {
-            std::cerr << "Malformed <panel> element in XML file (no name)." << std::endl;
-            return EXIT_FAILURE;
+        Panel panelObject = Panel(name);
+        panelObject.setType(type);
+
+        // otros elementos
+        for (XMLElemento e : panel.getElementos()) {
+            // TRATAR CADA POSIBLE ELEMENTO QUE SE QUIERA CONTEMPLAR
+
+            // TODO HACER UN SWITCH-CASE CON UN ENUM DE DIFERENTES
+            // TIPOS DE ELEMENTO XML PARA LA APLICACION
+
+            string name = e.getName();
+            if (!name.compare("geometry")) {
+                try
+                {
+                    panelObject.setX(atoi(e.getSubelement("x").getContent().c_str()));
+                    panelObject.setY(atoi(e.getSubelement("y").getContent().c_str()));
+                    panelObject.setWidth(atoi(e.getSubelement("w").getContent().c_str()));
+                    panelObject.setHeight(atoi(e.getSubelement("h").getContent().c_str()));
+                }
+                catch(const XMLElementNotFoundException e)
+                {
+                    std::cerr << e.what() << '\n';
+                }
+            }
         }
-
-        const char* name = nameElement->GetText();
-
-        const XMLElement* xElement = panelElement->FirstChildElement("x");
-        const XMLElement* yElement = panelElement->FirstChildElement("y");
-        const XMLElement* wElement = panelElement->FirstChildElement("w");
-        const XMLElement* hElement = panelElement->FirstChildElement("h");
-
-        int x = xElement ? atoi(xElement->GetText()) : MYNULL;
-        int y = yElement ? atoi(yElement->GetText()) : MYNULL;
-        int w = wElement ? atoi(wElement->GetText()) : MYNULL;
-        int h = hElement ? atoi(hElement->GetText()) : MYNULL;
-        
-        panelContents.push_back(Panel(name, x, y, w, h, fixed));
-
-        panelElement = panelElement->NextSiblingElement("panel");
+        panelContents.push_back(panelObject);
     }
+
+
+    // a este punto ya debería tener los paneles claros, ahora toca
+    // decidir cómo los va a generar cada uno, en su subcarpeta y con
+    // sus características
 
     for(Panel panel : panelContents)
     {
-        std::cout << panel.toString() << std::endl; // DEBUG
-
-        
-        
+        std::cout << panel.toString() << std::endl; // DEBUG 
     }
 
     // for (const auto& fileContent : panelContents) {

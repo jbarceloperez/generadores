@@ -1,13 +1,13 @@
 <!DOCTYPE files SYSTEM "check.dtd">
 <panels>
-    <panel type="simple">
-        <name>test1</name>
-        <x>300</x>
-        <y>300</y>
-        <w>600</w>
-        <h>400</h>
+    <panel name="panel1" type="simple">
+        <geometry>
+            <x>300</x>
+            <y>300</y>
+            <w>600</w>
+            <h>400</h>
+        </geometry>
     </panel>
-    <panel type="fixed">
-        <name>test2</name>
+    <panel name="panel2" type="fixed">
     </panel>
 </panels>

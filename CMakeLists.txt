@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 project(codeGenerator VERSION 0.1.0 LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_PREFIX_PATH "C:\\Qt\\6.6.1\\mingw_64\\")
@@ -11,6 +11,7 @@ qt_standard_project_setup()
 
 qt_add_executable(codeGenerator
     src/main.cpp
+    # src/xmlparser.cpp
 )
 
 # Add TinyXML-2 library
