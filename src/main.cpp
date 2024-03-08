@@ -100,7 +100,7 @@ int main(int argc, char* argv[])
     {
         // std::cout << panel.toString() << std::endl; // DEBUG
 
-        generateFilesWithUi(panel);
+        generateFiles(panel);
 
         cout << "Ended generating files for " + panel.getName() + "\n\n";
     }
