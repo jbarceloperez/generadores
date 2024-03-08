@@ -14,8 +14,7 @@ qt_add_executable(codeGenerator
     # src/xmlparser.cpp
 )
 
-# Add TinyXML-2 library
-add_subdirectory(lib/tinyxml2-10.0.0)
+add_subdirectory(lib)
 
 # # Define MY_SOURCES to be a list of all the source files for my project
 # file(GLOB_RECURSE MY_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")

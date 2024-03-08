@@ -4,16 +4,17 @@
 #include <vector>
 #include <sstream>
 #include <stdexcept>
-#include <filesystem>
+
 #include "panel.cpp"
 #include "xmlparser.cpp"
+#include "generador.cpp"
 
 #define MYNULL -1
 
-// using namespace tinyxml2;
 
 // Enumerado de tipos de elemento XML, TODO implementarlo en el código
 enum Elements {geometry, sample};
+
 
 int main(int argc, char* argv[]) 
 {
@@ -26,6 +27,11 @@ int main(int argc, char* argv[])
 
     char* inputFileName = argv[1];
 
+    /* TODO:Detectar si la entrada es un .ui o un .xml, para poder
+            directamente leer el ui y generar la estructura de clases
+            a partir de este, o hace falta generar también el ui
+    */
+   
     // XML PARSER
     
     XMLDoc doc;
@@ -82,6 +88,7 @@ int main(int argc, char* argv[])
             }
         }
         panelContents.push_back(panelObject);
+
     }
 
 
@@ -91,18 +98,13 @@ int main(int argc, char* argv[])
 
     for(Panel panel : panelContents)
     {
-        std::cout << panel.toString() << std::endl; // DEBUG 
+        // std::cout << panel.toString() << std::endl; // DEBUG
+
+        generateFilesWithUi(panel);
+
+        cout << "Ended generating files for " + panel.getName() + "\n\n";
     }
 
-    // for (const auto& fileContent : panelContents) {
-    //     std::ofstream outputFile(fileContent.first);
-    //     if (!outputFile) {
-    //         std::cerr << "Error creating file: " << fileContent.first << std::endl;
-    //         return 1;
-    //     }
-    //     outputFile << fileContent.second;
-    //     std::cout << "File created: " << fileContent.first << std::endl;
-    // }
 
     return EXIT_SUCCESS;
 }
