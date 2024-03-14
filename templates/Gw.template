@@ -1,0 +1,37 @@
+#include "%NAME%Gw.h"
+
+
+
+%NAME%Gw::%NAME%Gw(BaseClass * parent)
+: %NAME%QtCb(parent)
+{
+
+}
+
+%NAME%Gw::~%NAME%Gw()
+{
+
+}
+//------------------------------------------------------------------------------------
+/*virtual*/ const ParameterLimitData* %NAME%Gw::exportGetParameterLimit()
+{
+    /*const ParameterLimitData* toReturn = 0;
+    boost::optional<const ParameterLimitData*> data = ConfigSignals::ParameterLimit_get();
+    if(data)
+    {
+        toReturn = *data;
+    }
+
+    return toReturn;*/
+}
+//-----------------------------------------------------------------------------------------
+void %NAME%Gw::exportAction(const Common::Action& p_action, const boost::any& p_any)
+{
+    //ControllerSignals::Action_cmd_id(p_action, p_any);
+}
+//-----------------------------------------------------------------------------------------
+void %NAME%Gw::exportMessage(const Format::MessageKind& p_kind, const Format::MessageBody& p_body)
+{
+    //ControllerSignals::Message_cmd_id(p_kind, p_body);
+}
+//------------------------------------------------------------------------------------

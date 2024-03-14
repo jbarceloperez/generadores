@@ -1,0 +1,21 @@
+#ifndef __%NAME_CAPS%GW_H__
+#define __%NAME_CAPS%GW_H__
+
+#pragma once
+
+#include "%NAME%QtCb.h"
+
+class %NAME%Gw : public %NAME%QtCb
+{
+public:
+    %NAME%Gw(BaseClass * parent = 0);
+    virtual ~%NAME%Gw();
+
+protected:
+    virtual const ParameterLimitData* exportGetParameterLimit()override final;
+    virtual void exportAction(const Common::Action& , const boost::any&)override final;
+    virtual void exportMessage(const Format::MessageKind&, const Format::MessageBody&)override final;    
+
+};
+
+#endif

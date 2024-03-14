@@ -4,10 +4,12 @@
 #include <vector>
 #include <sstream>
 #include <stdexcept>
+#include <regex>
 
 #include "panel.cpp"
 #include "xmlparser.cpp"
 #include "generador.cpp"
+#include "logs.hpp"
 
 #define MYNULL -1
 
@@ -18,12 +20,19 @@ enum Elements {geometry, sample};
 
 int main(int argc, char* argv[]) 
 {
-
     if (argc != 2) 
     {
-        std::cerr << "Usage: " << argv[0] << " input.xml" << std::endl;
+        std::cerr << "Usage: " << argv[0] << " [INPUT_FILE]" << std::endl;
         return EXIT_FAILURE;
     }
+    
+    // Logger
+    dbg::log::initialize("traces.cfg");
+    // system("xclock");
+    dbg::log mainlog;
+    dbg::log tracks;
+    tracks.info("Code generator saes initializing...\n");
+    mainlog.info("Traza warning\n");
 
     char* inputFileName = argv[1];
 
@@ -31,7 +40,10 @@ int main(int argc, char* argv[])
             directamente leer el ui y generar la estructura de clases
             a partir de este, o hace falta generar también el ui
     */
-   
+
+   regex pattern("\\.ui$");
+   regex_search(string(inputFileName), pattern);
+
     // XML PARSER
     
     XMLDoc doc;
@@ -69,7 +81,7 @@ int main(int argc, char* argv[])
         for (XMLElemento e : panel.getElementos()) {
             // TRATAR CADA POSIBLE ELEMENTO QUE SE QUIERA CONTEMPLAR
 
-            // TODO HACER UN SWITCH-CASE CON UN ENUM DE DIFERENTES
+            // TODO: HACER UN SWITCH-CASE CON UN ENUM DE DIFERENTES
             // TIPOS DE ELEMENTO XML PARA LA APLICACION
 
             string name = e.getName();

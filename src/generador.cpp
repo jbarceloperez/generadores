@@ -107,25 +107,25 @@ string writeFile(Panel p, map<string, string>& properties, FileToGenerate file)
     switch (file)
     {
     case HEADER:
-        code = readTemplate("../templates/Header");
+        code = readTemplate("../templates/Header.template");
         break;
     case GWHEADER:
-        code = readTemplate("../templates/foo");
+        code = readTemplate("../templates/GwHeader.template");
         break;
     case GW:
-        code = readTemplate("../templates/foo");
+        code = readTemplate("../templates/Gw.template");
         break;
     case QTCBHEADER:
-        code = readTemplate("../templates/foo");
+        code = readTemplate("../templates/QtCbHeader.template");
         break;
     case QTCB:
-        code = readTemplate("../templates/foo");
+        code = readTemplate("../templates/QtCb.template");
         break;
     case CMAKELISTS:
-        code = readTemplate("../templates/CMakeLists");
+        code = readTemplate("../templates/CMakeLists.template");
         break;
     case UI:
-        code = readTemplate("../templates/Ui");
+        code = readTemplate("../templates/Ui.template");
         break;
     default:
         // unreachable
