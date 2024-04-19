@@ -1,12 +1,17 @@
 <!DOCTYPE files SYSTEM "check.dtd">
 <panels>
-    <panel name="ExamplePanel" type="simple">
+    <panel name="ExampleROPanel" type="readonly">
         <geometry>
             <x>300</x>
             <y>300</y>
             <w>600</w>
             <h>400</h>
         </geometry>
-        
+    </panel>
+    <panel name="ExampleCPanel" type="config">
+
+    </panel>
+    <panel name="NewWavRecordPanel" type="ui">
+        <uipath>../ScenarioWavRecordPanel.ui</uipath>
     </panel>
 </panels>

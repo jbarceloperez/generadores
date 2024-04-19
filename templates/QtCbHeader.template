@@ -20,9 +20,11 @@ public:
     virtual ~%NAME%QtCb();
     
     virtual void init();
-    virtual void panelApply()override final;
-    virtual void panelCancel()override final;
-    virtual bool panelCheck()override final;
+    %PANEL_APPLY_H%
+    %PANEL_CANCEL_H%
+    %PANEL_CHECK_H%
+    %PANEL_RESET_H%
+    %PANEL_CUSTOM_H%
 
 private Q_SLOTS:    
 

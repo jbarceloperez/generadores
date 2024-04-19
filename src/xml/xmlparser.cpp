@@ -1,8 +1,6 @@
 #include "xmlparser.h"
 #include <string>
-#include <iostream>
 
-using namespace tinyxml2;
 
 //
 //  XMLAtributo
@@ -22,8 +20,7 @@ std::string XMLAtributo::getValor() const {
 
 string XMLAtributo::toString() const
 {
-    // TODO
-    return string();
+    return string("XMLAributo: [" + name + "] -> " + valor + "\n");
 }
 
 //
@@ -64,7 +61,7 @@ std::string XMLElemento::getAtributoValue(std::string name)
         if (!atributo.getName().compare(name))
             return atributo.getValor();
     }
-    return "";
+    throw XMLAtributeNotFoundException("Attribute '" + name + "' does not exist.");
 }
 
 /**
@@ -94,10 +91,31 @@ int XMLElemento::numSubelements() const{
     return elements.size();
 }
 
-string XMLElemento::toString() const
+string XMLElemento::toString(int depth) const
 {   
-    // TODO
-    return string();
+    string str, space = "";
+
+    for (int i=0;i<depth;i++)
+    {
+        space += "| ";
+    }
+    depth++;
+    str += "XMLElemento: [" + name + "]";
+    if (!content.empty())
+    {
+        str += " -> " + content;
+    }
+    str += "\n";
+    for (XMLAtributo a : attributes)
+    {
+        str += space + a.toString();
+    }
+    for (XMLElemento e : elements)
+    {
+        str += space + e.toString(depth);
+    }
+    
+    return str;
 }
 
 //
@@ -107,59 +125,62 @@ string XMLElemento::toString() const
 
 
 //
-//  XMLDoc
+//  XMLFile
 //
 
-XMLDoc::XMLDoc(char* _xmlPath) {
+XMLFile::XMLFile(char* _xmlPath) {
     xmlPath = _xmlPath;
-    XMLDocument doc;
-    if (doc.LoadFile(xmlPath) != XML_SUCCESS) {
+    tinyxml2::XMLDocument doc;
+    if (doc.LoadFile(xmlPath) != tinyxml2::XML_SUCCESS) {
         throw XMLException("Error loading XML file");
     }
 
-    const XMLElement* root = doc.FirstChildElement("panels");
-    if (!root) {
-        throw XMLParseException("Error finding root element 'panels'");
-    }
+    const tinyxml2::XMLElement* root = doc.FirstChildElement();
+    // const XMLElement* root = doc.FirstChildElement("panels");
+    // if (!root) {
+    //     // throw XMLParseException("Error finding root element: no <panels> element.");
+    //     std::cerr << "No <panels> element \n";
+    //     root = doc.FirstChildElement();
+    // }
     
     rootElement = parseElement(root);
 }
 
-XMLDoc::XMLDoc() {}
+XMLFile::XMLFile() {}
 
-XMLDoc::~XMLDoc() {}
+XMLFile::~XMLFile() {}
 
-char * XMLDoc::getXmlPath() const {
+char * XMLFile::getXmlPath() const {
     return xmlPath;
 }
 
-char * XMLDoc::getDtdPath() const {
+char * XMLFile::getDtdPath() const {
     return dtdPath;
 }
 
-XMLElemento XMLDoc::getRootElement() const {
+XMLElemento XMLFile::getRootElement() const {
     return rootElement;
 }
 
-string XMLDoc::toString() const
+string XMLFile::toString() const
 {
+    int depth = 1;
     std::string str;
-    str = "Class=XMLDoc\n";
+    str = "Class=XMLFile\n";
     str += "{\n";
-    str += "\txmlPath=[" + string(xmlPath) + "]\n";
-    str += "\tdtdPath=[" + string(dtdPath) + "]\n\tElements:\n{";
-    str += rootElement.toString() + "}\n";
-    str += "}\n";
+    str += "xmlPath=[" + string(xmlPath) + "]\n";
+    str += "dtdPath=[" + string(dtdPath) + "]\nElements:\n";
+    str += rootElement.toString(depth) + "}\n";
 
     return str;
 }
 
 /**
- * Implementa la funcionalidad de la librería externa. Rellena el objeto XMLDoc
+ * Implementa la funcionalidad de la librería externa. Rellena el objeto XMLFile
  * con los elementos y atributos correspondientes que va creando a medida que
  * tinyxml2 va parseando el documento.
 */
-XMLElemento XMLDoc::parseElement(const XMLElement* e) {
+XMLElemento XMLFile::parseElement(const tinyxml2::XMLElement* e) {
     // elementos directamente obtenibles
     string name = e->Name();
     string content;
@@ -179,7 +200,7 @@ XMLElemento XMLDoc::parseElement(const XMLElement* e) {
     }
 
     // cuando tiene todo parseado devuelve el elemento a la función anterior
-
+    
     return XMLElemento(name, content, atributos, subelementos);
 
     

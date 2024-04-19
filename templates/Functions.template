@@ -1,0 +1,53 @@
+PANEL_APPLY_H:
+%virtual void panelApply()override final;%
+
+PANEL_CANCEL_H:
+%virtual void panelCancel()override final;%
+
+PANEL_CHECK_H:
+%virtual bool panelCheck()override final;%
+
+PANEL_RESET_H:
+%virtual void panelReset()override final;%
+
+PANEL_CUSTOM_H:
+%virtual void panelCustom1();
+    virtual void panelCustom2();%`
+
+PANEL_CHECK_CPP:
+%//----------------------------------------------------------------
+bool %NAME%QtCb::panelCheck()
+{
+    return true;
+}%
+
+PANEL_APPLY_CPP:
+%//----------------------------------------------------------------
+void %NAME%QtCb::panelApply()
+{
+    createData();
+ 
+    reset();    
+}%
+
+PANEL_CANCEL_CPP:
+%//----------------------------------------------------------------
+void %NAME%QtCb::panelCancel()
+{
+    reset();
+}%
+
+ADD_FOOTER_BUTTON_APPLY:
+%addFooterButton(Footer::Button_Apply, p_impl->ui.pbApply);%
+
+ADD_FOOTER_BUTTON_CANCEL:
+%addFooterButton(Footer::Button_Cancel, p_impl->ui.pbCancel);%
+
+ADD_FOOTER_BUTTON_CHECK:
+%addFooterButton(Footer::Button_Check, p_impl->ui.pbCheck);%
+
+ADD_FOOTER_BUTTON_RESET:
+%addFooterButton(Footer::Button_Reset, p_impl->ui.pbReset);%
+
+
+

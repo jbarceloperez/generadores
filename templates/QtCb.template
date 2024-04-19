@@ -50,9 +50,10 @@ void %NAME%QtCb::init()
 //----------------------------------------------------------------
 void %NAME%QtCb::initialize()
 {   
-
-    addFooterButton(Footer::Button_Apply, p_impl->ui.pbApply);
-    addFooterButton(Footer::Button_Cancel, p_impl->ui.pbCancel);
+    %ADD_FOOTER_BUTTON_APPLY%
+    %ADD_FOOTER_BUTTON_CANCEL%
+    %ADD_FOOTER_BUTTON_CHECK%
+    %ADD_FOOTER_BUTTON_RESET%
 
     addComponents(p_impl->ui.layoutBase);
 }
@@ -83,22 +84,8 @@ void %NAME%QtCb::createData()
 {
 
 }
-//----------------------------------------------------------------
-bool %NAME%QtCb::panelCheck()
-{
-    return true;
-}
-//----------------------------------------------------------------
-void %NAME%QtCb::panelApply()
-{
-    createData();
- 
-    reset();    
-}
-//----------------------------------------------------------------
-void %NAME%QtCb::panelCancel()
-{
-    reset();
-}
+%PANEL_CHECK_CPP%
+%PANEL_APPLY_CPP%
+%PANEL_CANCEL_CPP%
 //--------------------------------------------------------------------------------------------
 

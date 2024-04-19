@@ -2,10 +2,9 @@
 #include <filesystem>
 #include <iostream>
 #include <fstream>
-#include <streambuf>
 #include <map>
 #include <algorithm> // for using transform 
-#include <cctype> // for using toupper
+#include <cctype> // for using toUpper
 
 namespace fs = std::filesystem;
 using namespace std;
@@ -17,7 +16,7 @@ using namespace std;
 */
 void generateFiles(Panel p)
 {
-    map<string, string> properties;
+    map<TemplateMark, string> properties;
     fillPropertiesMap(p, properties);
 
     string name = p.getName();
@@ -52,7 +51,6 @@ void generateFiles(Panel p)
     // Archivo panel.h
     fs::path panelHeaderPath = aux_root + ".h";
     ofstream outHeader(panelHeaderPath);
-    // outHeader << "// " + panelHeaderPath.string();
     outHeader << writeFile(p, properties, HEADER);
     cout << "Creado nuevo fichero -> " << panelHeaderPath.string() << endl;   // TODO: Cambiar esto por logs de la libreria de saes
 
@@ -80,27 +78,29 @@ void generateFiles(Panel p)
     outQtCb << writeFile(p, properties, QTCB);
     cout << "Creado nuevo fichero -> " << panelQtCbPath.string() << endl;   // TODO: Cambiar esto por logs de la libreria de saes
 
-    // Archivo Panel.ui, si no existe previamente
-    fs::path panelUiPath = aux_root + ".ui";
-    ofstream outUi(panelUiPath);
-    outUi << writeFile(p, properties, UI);
-    cout << "Creado nuevo fichero -> " << panelUiPath.string() << endl;   // TODO: Cambiar esto por logs de la libreria de saes
-
-    
+    if (!p.hasUi())
+    {
+        // Archivo Panel.ui, si no existe previamente
+        fs::path panelUiPath = aux_root + ".ui";
+        ofstream outUi(panelUiPath);
+        outUi << writeFile(p, properties, UI);
+        cout << "Creado nuevo fichero -> " << panelUiPath.string() << endl;   // TODO: Cambiar esto por logs de la libreria de saes
+    }
 }
 
 //-----------------------------------------------------------------------------
 
-void fillPropertiesMap(Panel p, map<string, string>& props) {
-    props["NAME"] = p.getName();
+void fillPropertiesMap(Panel p, map<TemplateMark, string>& props) {
+    props[NAME] = p.getName();
     string str = p.getName();
     transform(str.begin(), str.end(), str.begin(), ::toupper);
-    props["NAME_CAPS"] = str;
+    props[NAME_CAPS] = str;
+
 }   
 
 
 
-string writeFile(Panel p, map<string, string>& properties, FileToGenerate file)
+string writeFile(Panel p, map<TemplateMark, string>& properties, FileToGenerate file)
 {   
     string code;
 
@@ -144,11 +144,20 @@ string readTemplate(const std::string &filename)
     return content;
 }
 
-void replaceMarks(string &code, const map<string, string> &props)
+void replaceMarks(string &code, const map<TemplateMark, string> &props)
 {
     for (const auto& pair : props) {
-        std::string placeholder = "%" + pair.first + "%";
+        std::string placeholder = "%" + MarkStrings.find(pair.first)->second + "%";
         size_t pos = code.find(placeholder);
+        // switch (pair.first)
+        // {
+        // case /* constant-expression */:
+        //     /* code */
+        //     break;
+        
+        // default:
+        //     break;
+        // }
         while (pos != std::string::npos) {
             code.replace(pos, placeholder.size(), pair.second);
             pos = code.find(placeholder);

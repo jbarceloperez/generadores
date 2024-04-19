@@ -1,13 +1,14 @@
 #include "Panel.h"
+#include <iostream>     // para los cout, no debe quedarse cuando haya logger funcional
 
 #define DEFAULT_X 50
 #define DEFAULT_Y 50
 #define DEFAULT_W 400
 #define DEFAULT_H 300
-#define DEFAULT_TYPE "simple"
+
 
 // Constructor
-Panel::Panel(std::string _name, int _x, int _y, int _w, int _h, std::string _type)
+Panel::Panel(std::string _name, int _x, int _y, int _w, int _h, PanelType _type)
 {
     name = _name;
     x = _x == -1 ? DEFAULT_X : _x;
@@ -25,17 +26,13 @@ Panel::Panel(std::string _name)
     y = DEFAULT_Y;
     w = DEFAULT_W;
     h = DEFAULT_H;
-    type = DEFAULT_TYPE;
+    type = PanelType::READ_ONLY;
 }
 
+Panel::Panel(){}
+
 // Destructor
-Panel::~Panel()
-{
-    /*
-    no es necesario liberar memoria de estructuras
-    de la librería estandar, esto ya no es C
-    */
-}
+Panel::~Panel() {}
 
 // Getters
 const std::string &Panel::getName() const
@@ -63,9 +60,14 @@ int Panel::getHeight() const
     return h;
 }
 
-std::string Panel::getType() const
+PanelType Panel::getType() const
 {
     return type;
+}
+
+bool Panel::hasUi() const
+{   
+    return ui;
 }
 
 // Setters
@@ -89,9 +91,29 @@ void Panel::setHeight(int newHeight)
     h = newHeight;
 }
 
-void Panel::setType(std::string newTypeValue)
+void Panel::setType(PanelType newTypeValue)
 {
     type = newTypeValue;
+}
+
+void Panel::setType(std::string newTypeValue)
+{
+    for (const auto& pair : PanelTypeStrings)
+    {
+        if (!pair.second.compare(newTypeValue))
+        {
+            type = pair.first;
+            return;
+        }
+    }
+    // TODO: logear esto correctamente
+    std::cerr << "ERROR: PanelType '" << newTypeValue << "' does not exist\n";
+    // exception?
+}
+
+void Panel::setHasUi(bool newValue)
+{
+    ui = newValue;
 }
 
 std::string Panel::toString() const
@@ -102,7 +124,7 @@ std::string Panel::toString() const
     str += "\tname=[" + name + "]\n";
     str += "\tcoords=[x=" + std::to_string(x) + ",y=" + std::to_string(y) + "]\n";
     str += "\tsize=[w=" + std::to_string(w) + ",h=" + std::to_string(h) + "]\n";
-    str += "\ttype=" + type + "\n";
+    str += "\ttype=" + PanelTypeStrings.find(type)->second + "\n";
     str += "}\n";
 
     return str;

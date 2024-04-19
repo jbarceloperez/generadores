@@ -51,6 +51,14 @@ public:
 };
 
 /**
+ * Excepción que hereda de XMLException, para cuando falle la búsqueda de un atributo concreto
+*/
+class XMLAtributeNotFoundException : public XMLException {
+public:
+    using XMLException::XMLException; 
+};
+
+/**
  * TODO: Clase que agrupe cualquier tipo de dato
  * para desacoplar más el código, ya que funciones no
  * devuelven solo primitivos
@@ -115,7 +123,7 @@ public:
     string getAtributoValue(string name);
     XMLElemento getSubelement(string name);
     int numSubelements() const;
-    string toString() const;
+    string toString(int depth) const;
 };
 
 /**
@@ -124,7 +132,7 @@ public:
  * A TINYXML2). Tiene el elemento raíz como atributo privado, y es en esta
  * clase donde se implementa la funcionalidad de la librería externa.
 */
-class XMLDoc {
+class XMLFile {
 
 private:
     char * xmlPath;
@@ -134,11 +142,11 @@ private:
     XMLElemento parseElement(const tinyxml2::XMLElement* e);
 
 public:
-    // XMLDoc(string xmlPath, string dtdPath, XMLElemento rootElement);
-    XMLDoc(char * xmlPath);
-    XMLDoc();
+    // XMLFile(string xmlPath, string dtdPath, XMLElemento rootElement);
+    XMLFile(char * xmlPath);
+    XMLFile();
 
-    ~XMLDoc();
+    ~XMLFile();
 
     char * getXmlPath() const;
     char * getDtdPath() const;
