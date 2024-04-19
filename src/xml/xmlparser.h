@@ -1,11 +1,11 @@
-#include <string>
-#include <filesystem>
-#include <vector>
-#include <stdexcept>
-#include "tinyxml2.h"
-
 #ifndef XMLPARSER_H
 #define XMLPARSER_H
+
+#include <string>
+#include <vector>
+#include <exception>
+#include "tinyxml2.h"
+
 
 #define XMLNULL -1
 
@@ -14,48 +14,47 @@ using namespace std;
 /**
  * Tipo de excepción genérico para el código del wrapper.
 */
-class XMLException : public std::exception {
+class XMLBaseException : public exception {
+private:
+    const char* m_message;
 public:
-    XMLException(const std::string& message) : m_message(message) {}
+    XMLBaseException(const char* message) : m_message(message) {}
 
     const char* what() const noexcept override {
-        return m_message.c_str();
+        return m_message;
     }
-
-private:
-    std::string m_message;
 };
 
 /**
- * Excepción que hereda de XMLException, lanzada al haber un fallo en la lectura del input
+ * Excepción que hereda de XMLBaseException, lanzada al haber un fallo en la lectura del input
 */
-class XMLFileException : public XMLException {
+class XMLFileException : public XMLBaseException {
 public:
-    using XMLException::XMLException; 
+    using XMLBaseException::XMLBaseException;
 };
 
 /**
- * Excepción que hereda de XMLException, para cunado haya un fallo al parsear el archivo
+ * Excepción que hereda de XMLBaseException, para cunado haya un fallo al parsear el archivo
 */
-class XMLParseException : public XMLException {
+class XMLParseException : public XMLBaseException {
 public:
-    using XMLException::XMLException; 
+    using XMLBaseException::XMLBaseException;
 };
 
 /**
- * Excepción que hereda de XMLException, para cuando falle la búsqueda de un elemento concreto
+ * Excepción que hereda de XMLBaseException, para cuando falle la búsqueda de un elemento concreto
 */
-class XMLElementNotFoundException : public XMLException {
+class XMLElementNotFoundException : public XMLBaseException {
 public:
-    using XMLException::XMLException; 
+    using XMLBaseException::XMLBaseException;
 };
 
 /**
- * Excepción que hereda de XMLException, para cuando falle la búsqueda de un atributo concreto
+ * Excepción que hereda de XMLBaseException, para cuando falle la búsqueda de un atributo concreto
 */
-class XMLAtributeNotFoundException : public XMLException {
+class XMLAtributeNotFoundException : public XMLBaseException {
 public:
-    using XMLException::XMLException; 
+    using XMLBaseException::XMLBaseException;
 };
 
 /**

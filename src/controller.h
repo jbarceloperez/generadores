@@ -1,7 +1,6 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
-#include <iostream>
 #include <vector>
 
 #include "model/panel.h"    // Include necessary headers for Panel, XMLFile, etc.

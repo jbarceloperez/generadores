@@ -1,4 +1,4 @@
-#include "Panel.h"
+#include "panel.h"
 #include <iostream>     // para los cout, no debe quedarse cuando haya logger funcional
 
 #define DEFAULT_X 50
@@ -98,7 +98,7 @@ void Panel::setType(PanelType newTypeValue)
 
 void Panel::setType(std::string newTypeValue)
 {
-    for (const auto& pair : PanelTypeStrings)
+    for (const auto& pair : PanelTypeToStrings)
     {
         if (!pair.second.compare(newTypeValue))
         {
@@ -124,7 +124,7 @@ std::string Panel::toString() const
     str += "\tname=[" + name + "]\n";
     str += "\tcoords=[x=" + std::to_string(x) + ",y=" + std::to_string(y) + "]\n";
     str += "\tsize=[w=" + std::to_string(w) + ",h=" + std::to_string(h) + "]\n";
-    str += "\ttype=" + PanelTypeStrings.find(type)->second + "\n";
+    str += "\ttype=" + PanelTypeToStrings.find(type)->second + "\n";
     str += "}\n";
 
     return str;

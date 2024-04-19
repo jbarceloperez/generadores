@@ -61,7 +61,8 @@ std::string XMLElemento::getAtributoValue(std::string name)
         if (!atributo.getName().compare(name))
             return atributo.getValor();
     }
-    throw XMLAtributeNotFoundException("Attribute '" + name + "' does not exist.");
+    string what = "Attribute '" + name + "' does not exist.";
+    throw XMLAtributeNotFoundException(what.c_str());
 }
 
 /**
@@ -80,7 +81,8 @@ XMLElemento XMLElemento::getSubelement(string name)
         if (!e.getName().compare(name))
             return e;
     }
-    throw XMLElementNotFoundException("No existe el elemento " + name);
+    string what = "No existe el elemento " + name;
+    throw XMLElementNotFoundException(what.c_str());
 }
 
 void XMLElemento::addSubelemento(XMLElemento e) {
@@ -132,7 +134,7 @@ XMLFile::XMLFile(char* _xmlPath) {
     xmlPath = _xmlPath;
     tinyxml2::XMLDocument doc;
     if (doc.LoadFile(xmlPath) != tinyxml2::XML_SUCCESS) {
-        throw XMLException("Error loading XML file");
+        throw XMLBaseException("Error loading XML file");
     }
 
     const tinyxml2::XMLElement* root = doc.FirstChildElement();
@@ -146,7 +148,7 @@ XMLFile::XMLFile(char* _xmlPath) {
     rootElement = parseElement(root);
 }
 
-XMLFile::XMLFile() {}
+XMLFile:: XMLFile() {}
 
 XMLFile::~XMLFile() {}
 

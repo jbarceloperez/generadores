@@ -18,7 +18,7 @@ enum TemplateMark
     END_MARK
 };
 
-std::map<TemplateMark, std::string> MarkStrings = {
+static std::map<TemplateMark, std::string> MarkStrings = {
     {NAME,                      "NAME"},
     {NAME_CAPS,                 "NAME_CAPS"},
     {PANEL_APPLY_H,             "PANEL_APPLY_H"},

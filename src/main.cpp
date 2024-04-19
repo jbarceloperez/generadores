@@ -1,12 +1,12 @@
-#include <iostream>
+// #include <iostream>
 #include <QApplication>
 #include "gui/MainPanel.h"
-#include "controller.cpp"
+#include "controller.h"
 
 
 int main(int argc, char* argv[]) 
 {
-    // Controller c;
+    Controller c;
     // std::cout << "PROBANDO\n";      // debug
     // c.run(argc, argv);
     // return EXIT_SUCCESS;

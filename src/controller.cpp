@@ -1,9 +1,7 @@
 #include "controller.h"
 
-#include "model/panel.cpp"
-#include "model/panelbuilder.cpp"
-#include "model/generador.cpp"
-#include "xml/xmlparser.cpp"
+#include "model/panelbuilder.h"
+#include "model/generador.h"
 #include "logs.hpp"
 
 

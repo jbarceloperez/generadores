@@ -1,13 +1,14 @@
-#include <string>
-#include <map>
 #ifndef PANEL_H
 #define PANEL_H
+
+#include <string>
+#include <map>
 
 enum PanelType {
     READ_ONLY, CONFIG, EXTERNAL_UI, PANELS_END
 };
 
-std::map<PanelType, std::string> PanelTypeStrings = {
+static std::map<PanelType, std::string> PanelTypeToStrings = {
     {READ_ONLY, "readonly"},
     {CONFIG, "config"},
     {EXTERNAL_UI, "ui"},
