@@ -9,9 +9,14 @@
 
 class GeneratorPanelImpl : public QFrame
 {
+    Q_OBJECT
+
 public:
     GeneratorPanelImpl();
     ~GeneratorPanelImpl();
+
+private slots:
+    void handleButtonClicked();
 
 private:
     class PrivateData;

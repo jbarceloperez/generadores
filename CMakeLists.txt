@@ -10,10 +10,11 @@ project(codeGenerator VERSION 0.1.0
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(CMAKE_PREFIX_PATH "C:\\Qt\\6.6.1\\mingw_64\\")
+# set(CMAKE_PREFIX_PATH "C:\\Qt\\6.6.1\\mingw_64\\")
 # Para poder incluir los logs
-set ( ENV{SAES_PATH} "C:\\Users\\javib\\Documents\\saes\\Generadores\\lib\\log-saes")
-
+# set ( ENV{SAES_PATH} "C:\\Users\\javib\\Documents\\saes\\Generadores\\lib\\log-saes")
+set ( ENV{SAES_PATH} "lib/log-saes")
+set(CMAKE_PREFIX_PATH "/home/javi/Qt/6.7.0/gcc_64/lib/cmake")
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
@@ -29,10 +30,12 @@ set(PROJECT_SOURCES
         src/gui/GeneratorPanelImpl.h
         src/gui/GeneratorPanel.ui
 
-        src/model/generador.cpp  src/model/panel.cpp src/model/panelbuilder.cpp
-        src/model/generador.h src/model/panel.h src/model/panelbuilder.h
+        src/model/generador.cpp  src/model/panel.cpp
+        src/model/generador.h src/model/panel.h 
         src/xml/xmlparser.cpp
         src/xml/xmlparser.h
+
+        # src/model/panelbuilder.cpp src/model/panelbuilder.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

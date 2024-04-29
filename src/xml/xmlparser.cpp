@@ -1,6 +1,8 @@
 #include "xmlparser.h"
 #include <string>
 
+#include "../controller.h"
+
 
 //
 //  XMLAtributo
@@ -40,6 +42,7 @@ std::string XMLElemento::getContent() const {
     return content;
 }
 
+
 std::vector<XMLAtributo> XMLElemento::getAtributos() {
     return attributes;
 }
@@ -49,7 +52,7 @@ std::vector<XMLElemento> XMLElemento::getElementos() {
 }
 
 /**
- * Función que devuelve el valor de un atributo.
+ * Función que devuelve el valor de un atributo, o cadena vacía si no existe.
  * 
  * @param name Cadena con el nombre del atributo
  * @return Cadena con el valor del atributo, o cadena vacía en caso de fallo.
@@ -61,8 +64,8 @@ std::string XMLElemento::getAtributoValue(std::string name)
         if (!atributo.getName().compare(name))
             return atributo.getValor();
     }
-    string what = "Attribute '" + name + "' does not exist.";
-    throw XMLAtributeNotFoundException(what.c_str());
+    Controller::getInstance().printTrace(DEBUG, "Attribute '" + name + "' does not exist.");
+    return "";
 }
 
 /**

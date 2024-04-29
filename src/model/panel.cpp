@@ -70,6 +70,16 @@ bool Panel::hasUi() const
     return ui;
 }
 
+std::vector<Button> Panel::getButtons() const
+{
+    return buttons;
+}
+
+void Panel::setName(std::string _name)
+{
+    name = _name;
+}
+
 // Setters
 void Panel::setX(int newX)
 {
@@ -114,6 +124,11 @@ void Panel::setType(std::string newTypeValue)
 void Panel::setHasUi(bool newValue)
 {
     ui = newValue;
+}
+
+void Panel::addButton(ButtonType type, std::string name)
+{
+    buttons.push_back(Button(name, type));
 }
 
 std::string Panel::toString() const

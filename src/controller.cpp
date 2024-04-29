@@ -1,31 +1,107 @@
 #include "controller.h"
+#include <iostream>
+#include <string>
 
 #include "model/panelbuilder.h"
 #include "model/generador.h"
-#include "logs.hpp"
 
 
-void Controller::init()
+Controller& Controller::getInstance() {
+    static Controller instance;
+    return instance;
+}
+
+void Controller::init(int _argc, char *_argv[])
+{
+    argc = _argc;
+    for (int i = 0; i < argc; i++)
+    {
+        argv[i] = _argv[i];
+    }
+    // dbg::log::initialize("../traces.cfg");
+    dbg::log::initialize("/home/javi/Documentos/Generadores/src/traces.cfg");
+    appLogLevel = TRACE;
+}
+
+
+void Controller::printTrace(DebugLevel level, string msg)
+{   
+    if (level >= appLogLevel)
+    {
+        switch (level)
+        {
+        case TRACE:
+            mainlog.trace(msg.c_str());
+            break;
+        case DEBUG:
+            mainlog.debug(msg.c_str());
+            break;
+        case INFO:
+            mainlog.info(msg.c_str());
+            break;
+        case WARNING:
+            mainlog.warning(msg.c_str());
+            break;
+        case ERROR:
+            mainlog.error(msg.c_str());
+            break;
+        case CRITICAL:
+            mainlog.critical(msg.c_str());
+            break;
+        
+        default:
+            break;
+        }
+    }
+    // mainlog.warning(msg.c_str());
+    
+}
+
+void Controller::onPbGeneratePressed()
 {
 
 }
 
-void Controller::run(int argc, char *argv[])
+void Controller::onPbWithUIPressed(string uiPath)
 {
-    if (argc != 2) 
+    currentPanel = Panel("");
+    XMLFile uiXml;
+    try
     {
-        std::cerr << "Usage: " << argv[0] << " [INPUT_FILE]" << std::endl;
-        exit(EXIT_FAILURE);
+        uiXml = XMLFile(uiPath.data());
+        readUiXml(uiXml);
     }
+    catch(const XMLFileException& e)
+    {
+        printTrace(CRITICAL, e.what());
+        printTrace(CRITICAL, "Error loading path '" + uiPath + "'\n");
+        
+    }
+    panelContents.push_back(currentPanel);
+}
+
+void Controller::onPbWithoutUIPressed()
+{
+
+}
+
+void Controller::onPbFilePressed(string file)
+{
+
+}
+
+void Controller::updateUi()
+{
+    // TODO: Mostrar los paneles en el menú, y al seleccionar un panel mostrar su información
+}
+
+void Controller::run()
+{
     
     // Logger
-    dbg::log::initialize("traces.cfg");
-    // system("xclock");
-    dbg::log mainlog;
-    dbg::log tracks;
     tracks.info("Code generator saes initializing...\n");
     mainlog.info("Traza warning\n");
-
+    mainlog.critical("starting generating...\n");
     char* inputFileName = argv[1];
 
     /* TODO:Detectar si la entrada es un .ui o un .xml, para poder
@@ -111,4 +187,39 @@ Panel Controller::buildPanel(XMLElemento panel)
     }
 
     return panelObject;
+}
+
+
+void Controller::readUiXml(XMLFile ui)
+{
+    std::cerr << ui.toString();      // DEBUG
+
+    XMLElemento root = ui.getRootElement();
+    iterateXML(root);
+
+    if (!currentPanel.getButtons().size()) {
+        currentPanel.setType(PanelType::EXTERNAL_UI_READ);
+    }
+    else {
+        currentPanel.setType(PanelType::EXTERNAL_UI_CONFIG);
+    }
+
+}
+
+void Controller::iterateXML(XMLElemento e)
+{
+    vector<XMLElemento> subelementos = e.getElementos();
+    for (XMLElemento i : subelementos)
+    {
+        if (i.getName().compare("class")) currentPanel.setName(i.getContent());
+        string aux = i.getAtributoValue("class");
+        if (!aux.compare("QPushButton"))
+        {
+            currentPanel.addButton(QPUSHBUTTON, i.getAtributoValue("name"));
+            Controller::getInstance().printTrace(WARNING, "QPushButton: " + i.getAtributoValue("name"));
+        }
+        
+        iterateXML(i);
+        
+    }
 }
