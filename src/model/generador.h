@@ -18,6 +18,11 @@ enum TemplateMark
     END_MARK
 };
 
+enum ButtonActions
+{
+    APPLY, CANCEL, CHECK, RESET, CUSTOM1, CUSTOM2
+};
+
 static std::map<TemplateMark, std::string> MarkStrings = {
     {NAME,                      "NAME"},
     {NAME_CAPS,                 "NAME_CAPS"},
@@ -39,14 +44,14 @@ static std::map<TemplateMark, std::string> MarkStrings = {
 
 };
 
-void generateFiles(Panel p);
-void generateFilesWithUi(Panel p);
+void generateFiles(GPanel p);
+void generateFilesWithUi(GPanel p);
 
-std::string writeFile(Panel p, std::map<TemplateMark, std::string>& properties, FileToGenerate file);
+std::string writeFile(GPanel p, std::map<TemplateMark, std::string>& properties, FileToGenerate file);
 
 std::string readTemplate(const std::string& filename);
 void replaceMarks(std::string& code, const std::map<TemplateMark, std::string>& properties);
-void fillPropertiesMap(Panel p, std::map<TemplateMark, std::string>& properties);
+void fillPropertiesMap(GPanel p, std::map<TemplateMark, std::string>& properties);
 
 
 #endif  // GENERATOR_H

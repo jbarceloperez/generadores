@@ -14,7 +14,7 @@ using namespace std;
  * Función que genera la estructura de ficheros para
  * la estructura de clases del panel.
 */
-void generateFiles(Panel p)
+void generateFiles(GPanel p)
 {
     map<TemplateMark, string> properties;
     fillPropertiesMap(p, properties);
@@ -78,7 +78,7 @@ void generateFiles(Panel p)
     outQtCb << writeFile(p, properties, QTCB);
     cout << "Creado nuevo fichero -> " << panelQtCbPath.string() << endl;   // TODO: Cambiar esto por logs de la libreria de saes
 
-    if (!p.hasUi())
+    if (p.getType() == PanelType::EXTERNAL_UI_CONFIG || p.getType() == PanelType::EXTERNAL_UI_READ)
     {
         // Archivo Panel.ui, si no existe previamente
         fs::path panelUiPath = aux_root + ".ui";
@@ -90,7 +90,7 @@ void generateFiles(Panel p)
 
 //-----------------------------------------------------------------------------
 
-void fillPropertiesMap(Panel p, map<TemplateMark, string>& props) {
+void fillPropertiesMap(GPanel p, map<TemplateMark, string>& props) {
     props[NAME] = p.getName();
     string str = p.getName();
     transform(str.begin(), str.end(), str.begin(), ::toupper);
@@ -100,7 +100,7 @@ void fillPropertiesMap(Panel p, map<TemplateMark, string>& props) {
 
 
 
-string writeFile(Panel p, map<TemplateMark, string>& properties, FileToGenerate file)
+string writeFile(GPanel p, map<TemplateMark, string>& properties, FileToGenerate file)
 {   
     string code;
 

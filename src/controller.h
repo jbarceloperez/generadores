@@ -16,8 +16,8 @@ class Controller {
 private:
     XMLFile doc;
     // std::vector<PanelBuilder> panelBuilders;
-    std::vector<Panel> panelContents;
-    Panel currentPanel;
+    std::vector<GPanel> panelContents;
+    GPanel currentPanel;
     dbg::log mainlog;
     dbg::log tracks;
     int argc;
@@ -25,6 +25,10 @@ private:
     char* argv[];
     
     Controller() {};
+
+    void iterateXML(XMLElemento e);
+    bool readUiXml(XMLFile ui);
+    GPanel buildPanel(XMLElemento panel);
 
 public:
     Controller(Controller const&) = delete;
@@ -35,14 +39,12 @@ public:
     void printTrace(DebugLevel level, string msg);
 
     void onPbGeneratePressed();
-    void onPbWithUIPressed(string uiPath);
+    bool onPbWithUIPressed(string uiPath);
     void onPbWithoutUIPressed();
     void onPbFilePressed(string file);
-    void updateUi();
 
-    void iterateXML(XMLElemento e);
-    void readUiXml(XMLFile ui);
-    Panel buildPanel(XMLElemento panel);
+    GPanel getCurrentPanel() const;
+    
 
     
 };
