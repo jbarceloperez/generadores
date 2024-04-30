@@ -13,11 +13,15 @@ enum ButtonType {
     QPUSHBUTTON, QRADIOBUTTON, QCHECKBOX
 };
 
+enum ButtonAction {
+    APPLY, CANCEL, CHECK, RESET, CUSTOM1, CUSTOM2
+};
+
 static std::map<PanelType, std::string> PanelTypeToStrings = {
     {READ_ONLY, "readonly"},
     {CONFIG, "config"},
-    {EXTERNAL_UI_READ, "ui_r"},
-    {EXTERNAL_UI_CONFIG, "ui_c"},
+    {EXTERNAL_UI_READ, "ui_readonly"},
+    {EXTERNAL_UI_CONFIG, "ui_config"},
     {PANELS_END, ""}
 };
 
@@ -25,6 +29,8 @@ class Button {
 private:
     std::string name;
     ButtonType type;
+    ButtonAction action;
+
 public:
     Button() {};
     Button(std::string _name, ButtonType _type) {
@@ -33,11 +39,46 @@ public:
     };
     ~Button() {};
 
-    std::string getName() {return name;};
-    ButtonType getType() {return type;};
+    std::string getName() {return name;}
+    ButtonType getType() {return type;}
+    ButtonAction getAction() {return action;}
 
     void setName(std::string _name) {name = _name;}
-    void setName(ButtonType _type) {type = _type;}
+    void setType(ButtonType _type) {type = _type;}
+    void setAction(ButtonAction _action) {action = _action;}
+
+    std::string toString() {
+        std::string str;
+        str = "'" + name + "': type=";
+        if (type==QRADIOBUTTON) str+="QRadioButton, action=";
+        else if(type==QPUSHBUTTON) str+="QPushButton, action=";
+        else str+="QCheckButton, action=";
+        switch (action)
+        {
+        case APPLY:
+            str+="panelApply\n";
+            break;
+        case CANCEL:
+            str+="panelCancel\n";
+            break;
+        case CHECK:
+            str+="panelCheck\n";
+            break;
+        case RESET:
+            str+="panelReset\n";
+            break;
+        case CUSTOM1:
+            str+="panelCustom1\n";
+            break;
+        case CUSTOM2:
+            str+="panelCustom2\n";
+            break;
+        default:
+            str+="null\n";
+            break;
+        }
+        return str;
+    }
 };
 
 class GPanel {
@@ -71,6 +112,7 @@ public:
     void setType(std::string newTypeValue);
     
     void addButton(ButtonType type, std::string name);
+    void addActionToButton(int button, ButtonAction action);
 
 
     std::string toString() const;

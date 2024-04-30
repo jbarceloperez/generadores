@@ -14,6 +14,7 @@ class GeneratorPanelImpl : public QFrame
 public:
     GeneratorPanelImpl();
     ~GeneratorPanelImpl();
+    void updateTxtAssociate();
     
 
 private slots:

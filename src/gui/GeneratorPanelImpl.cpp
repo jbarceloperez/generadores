@@ -100,6 +100,12 @@ void GeneratorPanelImpl::onPbDeassociatePressed()
 void GeneratorPanelImpl::onPbAssociatePressed()
 {
     Controller::getInstance().printTrace(DEBUG, "pbAssociate");
+    int button = p_impl->ui.comboBox_2->currentIndex();
+    int action = p_impl->ui.comboBox_3->currentIndex();
+    if (Controller::getInstance().onPbAssociatePressed(button, action))
+    {// update ui
+        updateTxtAssociate();
+    }
 }
 
 void GeneratorPanelImpl::onPbGeberatePressed()
@@ -111,6 +117,7 @@ void GeneratorPanelImpl::onPbGeberatePressed()
 void GeneratorPanelImpl::onPbWithoutUIPressed()
 {
     Controller::getInstance().printTrace(DEBUG, "pbWithoutUi");
+    p_impl->ui.txtAsociate->clear();
 }
 
 void GeneratorPanelImpl::onPbWithUIPressed()
@@ -121,16 +128,19 @@ void GeneratorPanelImpl::onPbWithUIPressed()
     {
         QMessageBox::critical(this, "Error", "A .ui file must be selected.");
     }
-    else
-    {
-        if (Controller::getInstance().onPbWithUIPressed(file.toStdString()))
-        {   // update ui if something new
-            GPanel currentPanel = Controller::getInstance().getCurrentPanel();
-            p_impl->ui.txtAsociate->appendPlainText(currentPanel.toString().data());
-            for (Button b : currentPanel.getButtons())
-            {
-                p_impl->ui.comboBox_2->addItem(b.getName().data());
-            }
+    else if (Controller::getInstance().onPbWithUIPressed(file.toStdString()))
+    { // update ui if something new
+        updateTxtAssociate();
+        for (Button b : Controller::getInstance().getCurrentPanel().getButtons())
+        {
+            p_impl->ui.comboBox_2->addItem(b.getName().data());
         }
     }
+}
+
+void GeneratorPanelImpl::updateTxtAssociate()
+{
+    GPanel currentPanel = Controller::getInstance().getCurrentPanel();
+    p_impl->ui.txtAsociate->clear();
+    p_impl->ui.txtAsociate->appendPlainText(currentPanel.toString().data());
 }

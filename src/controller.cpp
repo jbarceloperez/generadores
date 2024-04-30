@@ -93,6 +93,22 @@ void Controller::onPbFilePressed(string file)
 
 }
 
+bool Controller::onPbAssociatePressed(int button, int action)
+{
+    ButtonAction a = static_cast<ButtonAction>(action);
+    if (currentPanel.getButtons()[button].getAction() != a)
+    {
+        currentPanel.addActionToButton(button, a);
+        return true;
+    }
+    return false;
+}
+
+void Controller::onPbDeassociatePressed()
+{
+
+}
+
 GPanel Controller::getCurrentPanel() const
 {
     return currentPanel;

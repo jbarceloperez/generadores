@@ -11,7 +11,7 @@
     <panel name="ExampleCPanel" type="config">
 
     </panel>
-    <panel name="NewWavRecordPanel" type="ui">
+    <panel name="NewWavRecordPanel" type="ui_config">
         <uipath>../ScenarioWavRecordPanel.ui</uipath>
     </panel>
 </panels>

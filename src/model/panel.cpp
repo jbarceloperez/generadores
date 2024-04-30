@@ -98,6 +98,11 @@ void GPanel::addButton(ButtonType type, std::string name)
     buttons.push_back(Button(name, type));
 }
 
+void GPanel::addActionToButton(int button, ButtonAction action)
+{
+    buttons[button].setAction(action);
+}
+
 std::string GPanel::toString() const
 {
     std::string str;
@@ -106,6 +111,11 @@ std::string GPanel::toString() const
     str += " name=[" + name + "]\n";
     str += " size=[w=" + std::to_string(w) + ",h=" + std::to_string(h) + "]\n";
     str += " type=" + PanelTypeToStrings.find(type)->second + "\n";
+    str += " buttons={\n";
+    for (Button b : buttons)
+    {
+        str += "  " + b.toString();
+    }
     str += "}\n";
 
     return str;

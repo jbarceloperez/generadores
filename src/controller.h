@@ -42,6 +42,8 @@ public:
     bool onPbWithUIPressed(string uiPath);
     void onPbWithoutUIPressed();
     void onPbFilePressed(string file);
+    bool onPbAssociatePressed(int button, int action);
+    void onPbDeassociatePressed();
 
     GPanel getCurrentPanel() const;
     

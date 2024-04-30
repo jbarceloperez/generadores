@@ -18,10 +18,6 @@ enum TemplateMark
     END_MARK
 };
 
-enum ButtonActions
-{
-    APPLY, CANCEL, CHECK, RESET, CUSTOM1, CUSTOM2
-};
 
 static std::map<TemplateMark, std::string> MarkStrings = {
     {NAME,                      "NAME"},
