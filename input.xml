@@ -9,7 +9,12 @@
         </geometry>
     </panel>
     <panel name="ExampleCPanel" type="config">
-
+        <buttons>
+            <button type="QPushButton">
+                <name>pbApply</name>
+                <action>panelApply</action>
+            </button>
+        </buttons>
     </panel>
     <panel name="NewWavRecordPanel" type="ui_config">
         <uipath>../ScenarioWavRecordPanel.ui</uipath>

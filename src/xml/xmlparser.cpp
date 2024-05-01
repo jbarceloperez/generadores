@@ -31,6 +31,12 @@ string XMLAtributo::toString() const
 
 XMLElemento::XMLElemento() { }
 
+XMLElemento::XMLElemento(string _name, string _content)
+{
+    name = _name;
+    content = _content;
+}
+
 XMLElemento::XMLElemento(std::string name, std::string content, std::vector<XMLAtributo> atributos, std::vector<XMLElemento> elements) : 
     name(name), content(content), attributes(atributos), elements(elements) {}
 
@@ -43,11 +49,11 @@ std::string XMLElemento::getContent() const {
 }
 
 
-std::vector<XMLAtributo> XMLElemento::getAtributos() {
+std::vector<XMLAtributo> XMLElemento::getAttributes() {
     return attributes;
 }
 
-std::vector<XMLElemento> XMLElemento::getElementos() {
+std::vector<XMLElemento> XMLElemento::getElements() {
     return elements;
 }
 
@@ -88,11 +94,24 @@ XMLElemento XMLElemento::getSubelement(string name)
     throw XMLElementNotFoundException(what.c_str());
 }
 
-void XMLElemento::addSubelemento(XMLElemento e) {
+void XMLElemento::addSubelement(XMLElemento e) 
+{
     elements.push_back(e);
 }
 
-int XMLElemento::numSubelements() const{
+void XMLElemento::addAttribute(XMLAtributo a)
+{
+    attributes.push_back(a);
+}
+
+void XMLElemento::addAttribute(string name, string data)
+{
+    XMLAtributo a = XMLAtributo(name, data);
+    attributes.push_back(a);
+}
+
+int XMLElemento::numSubelements() const
+{
     return elements.size();
 }
 
@@ -163,8 +182,83 @@ char * XMLFile::getDtdPath() const {
     return dtdPath;
 }
 
+void XMLFile::setXmlPath(char *path)
+{
+    xmlPath = path;
+}
+
+void XMLFile::setRoot(XMLElemento root)
+{
+    rootElement = root;
+}
+
 XMLElemento XMLFile::getRootElement() const {
     return rootElement;
+}
+
+void XMLFile::writeXMLFile(PanelCollection panels)
+{
+    tinyxml2::XMLDocument doc;
+    
+    // Create a declaration (optional)
+    tinyxml2::XMLDeclaration* decl = doc.NewDeclaration();
+    doc.InsertFirstChild(decl);
+    
+    // root element <panels>
+    tinyxml2::XMLElement* root = doc.NewElement("panels");
+    doc.InsertEndChild(root);
+
+    // insertar cada panel
+    for (GPanel p : panels.getVector())
+    {
+        // XMLElemento panel = XMLElemento("panel", "");
+        tinyxml2::XMLElement* panel = doc.NewElement("panel");
+        
+        panel->SetAttribute("name",p.getName().data());
+        panel->SetAttribute("type",PanelTypeToString.find(p.getType())->second.data());
+        root->InsertEndChild(panel);
+
+        PanelType tipo = p.getType();
+        // si es de tipo ui externo, añadir el path del ui
+        if (tipo == EXTERNAL_UI_CONFIG || tipo == EXTERNAL_UI_READ)
+        {
+            tinyxml2::XMLElement* uipath = doc.NewElement("uipath");
+            uipath->SetText(p.getUiPath().data());
+            panel->InsertEndChild(uipath);
+        }
+        // si es de tipo config, añadir los botones
+        if (tipo == EXTERNAL_UI_CONFIG || tipo == CONFIG)
+        {
+            tinyxml2::XMLElement* buttonsElement = doc.NewElement("buttons");
+            panel->InsertEndChild(buttonsElement);
+            for (Button b : p.getButtons())
+            {
+                tinyxml2::XMLElement* button = doc.NewElement("button");
+                button->SetAttribute("type",ButtonTypeToString.find(b.getType())->second.data());
+                buttonsElement->InsertEndChild(button);
+                
+                tinyxml2::XMLElement* name = doc.NewElement("name");
+                name->SetText(b.getName().data());
+                button->InsertEndChild(name);
+                if (b.getAction() != NULLBUTTONACTION)
+                {
+                    tinyxml2::XMLElement* action = doc.NewElement("action");
+                    action->SetText(ButtonActionToString.find(b.getAction())->second.data());
+                    button->InsertEndChild(action);
+                }
+                
+            }
+        }
+        
+        // TODO: continuar con condiciones, si no tiene ui, más elementos, etc.
+    }
+    
+    // Save the XML document to file
+    if (doc.SaveFile(xmlPath) == tinyxml2::XML_SUCCESS) {
+        std::cout << "XML file saved successfully." << std::endl;
+    } else {
+        std::cerr << "Error saving XML file." << std::endl;
+    }
 }
 
 string XMLFile::toString() const

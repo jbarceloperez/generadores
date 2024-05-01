@@ -6,7 +6,7 @@
 #include <vector>
 
 enum PanelType {
-    READ_ONLY, CONFIG, EXTERNAL_UI_READ, EXTERNAL_UI_CONFIG, PANELS_END
+    READ_ONLY, CONFIG, EXTERNAL_UI_READ, EXTERNAL_UI_CONFIG, PanelType_END
 };
 
 enum ButtonType {
@@ -14,15 +14,31 @@ enum ButtonType {
 };
 
 enum ButtonAction {
-    APPLY, CANCEL, CHECK, RESET, CUSTOM1, CUSTOM2
+    APPLY, CANCEL, CHECK, RESET, CUSTOM1, CUSTOM2, NULLBUTTONACTION
 };
 
-static std::map<PanelType, std::string> PanelTypeToStrings = {
+static std::map<PanelType, std::string> PanelTypeToString = {
     {READ_ONLY, "readonly"},
     {CONFIG, "config"},
     {EXTERNAL_UI_READ, "ui_readonly"},
     {EXTERNAL_UI_CONFIG, "ui_config"},
-    {PANELS_END, ""}
+    {PanelType_END, ""}
+};
+
+static std::map<ButtonType, std::string> ButtonTypeToString = {
+    {QPUSHBUTTON, "QPushButton"},
+    {QRADIOBUTTON, "QRadioButton"},
+    {QCHECKBOX, "QCheckBox"}
+};
+
+static std::map<ButtonAction, std::string> ButtonActionToString = {
+    {APPLY, "panelApply"},
+    {CANCEL, "panelCancel"},
+    {CHECK, "panelCheck"},
+    {RESET, "panelReset"},
+    {CUSTOM1, "panelCustom1"},
+    {CUSTOM2, "panelCustom2"},
+    {NULLBUTTONACTION, "null"}
 };
 
 class Button {
@@ -36,6 +52,7 @@ public:
     Button(std::string _name, ButtonType _type) {
         name = _name;
         type = _type;
+        action = NULLBUTTONACTION;
     };
     ~Button() {};
 
@@ -49,34 +66,8 @@ public:
 
     std::string toString() {
         std::string str;
-        str = "'" + name + "': type=";
-        if (type==QRADIOBUTTON) str+="QRadioButton, action=";
-        else if(type==QPUSHBUTTON) str+="QPushButton, action=";
-        else str+="QCheckButton, action=";
-        switch (action)
-        {
-        case APPLY:
-            str+="panelApply\n";
-            break;
-        case CANCEL:
-            str+="panelCancel\n";
-            break;
-        case CHECK:
-            str+="panelCheck\n";
-            break;
-        case RESET:
-            str+="panelReset\n";
-            break;
-        case CUSTOM1:
-            str+="panelCustom1\n";
-            break;
-        case CUSTOM2:
-            str+="panelCustom2\n";
-            break;
-        default:
-            str+="null\n";
-            break;
-        }
+        str = "'" + name + "': type=" + ButtonTypeToString.find(type)->second;
+        str+=", action=" + ButtonActionToString.find(action)->second + "\n";
         return str;
     }
 };
@@ -86,6 +77,7 @@ private:
     std::string name;   // Nombre del panel
     int w, h;           // Ancho y altura del panel en píxeles
     PanelType type;     // Propiedad
+    std::string uipath; 
     std::vector<Button> buttons;
 
 public:
@@ -99,6 +91,7 @@ public:
 
     // Getters
     const std::string& getName() const;
+    const std::string& getUiPath() const;
     int getWidth() const;
     int getHeight() const;
     PanelType getType() const;
@@ -106,6 +99,7 @@ public:
 
     // Setters
     void setName(std::string _name);
+    void setUiPath(std::string _ui);
     void setWidth(int newWidth);
     void setHeight(int newHeight);
     void setType(PanelType newTypeValue);

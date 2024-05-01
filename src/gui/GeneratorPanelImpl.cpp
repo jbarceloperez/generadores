@@ -6,6 +6,7 @@
 #include "../model/panel.h"
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QFileInfo>
 
 class GeneratorPanelImpl::PrivateData
 {
@@ -32,6 +33,7 @@ GeneratorPanelImpl::GeneratorPanelImpl()
     connect(p_impl->ui.pbAssociate, &QPushButton::clicked, this, &GeneratorPanelImpl::handleButtonClicked);
     connect(p_impl->ui.pbDeassociate, &QPushButton::clicked, this, &GeneratorPanelImpl::handleButtonClicked);
     connect(p_impl->ui.pbFile, &QPushButton::clicked, this, &GeneratorPanelImpl::handleButtonClicked);
+    connect(p_impl->ui.pbXml, &QPushButton::clicked, this, &GeneratorPanelImpl::handleButtonClicked);
 
     p_impl->ui.comboBox_3->addItem(QString("panelApply"));
     p_impl->ui.comboBox_3->addItem(QString("panelCancel"));
@@ -78,6 +80,10 @@ void GeneratorPanelImpl::handleButtonClicked()
     {
         onPbFilePressed();
     }
+    else if(sender() == p_impl->ui.pbXml)
+    {
+        onPbXmlPressed();
+    }
     updateHmi();    // ¿?
 }
 
@@ -108,10 +114,30 @@ void GeneratorPanelImpl::onPbAssociatePressed()
     }
 }
 
+void GeneratorPanelImpl::onPbXmlPressed()
+{
+    Controller::getInstance().printTrace(DEBUG, "pbXml");
+    QFileInfo check_file("input.xml");
+    if (check_file.exists() && check_file.isFile())
+    {
+        QMessageBox::StandardButton reply = QMessageBox::question(this, "Overwrite?", "'input.xml' alredy exists. Overwrite?",QMessageBox::Yes|QMessageBox::No);
+        if (reply == QMessageBox::No) return;
+    }
+    Controller::getInstance().onPbXmlPressed();
+    QMessageBox::information(this, "Success", "XML config saved in 'input.xml'.");
+}
+
+
 void GeneratorPanelImpl::onPbGeberatePressed()
 {
     Controller::getInstance().printTrace(DEBUG, "pbGenerate");
-    Controller::getInstance().run();
+    QFileInfo check_file("input.xml");
+    if (!check_file.exists() || !check_file.isFile())
+    {
+        QMessageBox::warning(this, "Warning", "'input.xml' does not exist or is not a file.",QMessageBox::Ok);
+        return;
+    }
+    Controller::getInstance().onPbGeneratePressed();
 }
 
 void GeneratorPanelImpl::onPbWithoutUIPressed()

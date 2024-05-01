@@ -216,11 +216,22 @@
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="pbGenerate">
-     <property name="text">
-      <string>Genera</string>
-     </property>
-    </widget>
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <item>
+      <widget class="QPushButton" name="pbXml">
+       <property name="text">
+        <string>Genera XML</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pbGenerate">
+       <property name="text">
+        <string>Genera código</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>

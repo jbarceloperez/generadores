@@ -5,6 +5,8 @@
 #include <vector>
 #include <exception>
 #include "tinyxml2.h"
+#include "../model/panel.h"
+#include "../model/panelcollection.h"
 
 
 #define XMLNULL -1
@@ -107,20 +109,24 @@ private:
     vector<XMLElemento> elements;
     string name;
     string content;
-    void addSubelemento(XMLElemento e);
+    
 
 
 public:
     XMLElemento();
+    XMLElemento(string name, string content);
     XMLElemento(string name, string content, vector<XMLAtributo> atributos, vector<XMLElemento> elements);
 
     string getName() const;
     string getContent() const;
-    vector<XMLAtributo> getAtributos();
-    vector<XMLElemento> getElementos();
+    vector<XMLAtributo> getAttributes();
+    vector<XMLElemento> getElements();
 
     string getAtributoValue(string name);
     XMLElemento getSubelement(string name);
+    void addSubelement(XMLElemento e);   
+    void addAttribute(XMLAtributo a); 
+    void addAttribute(string name, string data);
     int numSubelements() const;
     string toString(int depth) const;
 };
@@ -146,10 +152,14 @@ public:
     XMLFile();
 
     ~XMLFile();
-
+    
+    XMLElemento getRootElement() const;
     char * getXmlPath() const;
     char * getDtdPath() const;
-    XMLElemento getRootElement() const;
+    void setXmlPath(char * path);
+    void setRoot(XMLElemento root);
+    
+    void writeXMLFile(PanelCollection panels);
 
     string toString() const;
 

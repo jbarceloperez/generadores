@@ -29,6 +29,7 @@ private:
     void onPbAssociatePressed();
     void onPbDeassociatePressed();
     void onPbFilePressed();
+    void onPbXmlPressed();
     void updateHmi();
 };
 

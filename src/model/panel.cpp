@@ -1,6 +1,5 @@
 #include "panel.h"
 #include "../controller.h"
-#include <iostream>     // para los cout, no debe quedarse cuando haya logger funcional
 
 #define DEFAULT_W 400
 #define DEFAULT_H 300
@@ -34,6 +33,10 @@ const std::string &GPanel::getName() const
     return name;
 }
 
+const std::string &GPanel::getUiPath() const
+{
+    return uipath;
+}
 
 int GPanel::getWidth() const
 {
@@ -55,12 +58,16 @@ std::vector<Button> GPanel::getButtons() const
     return buttons;
 }
 
+// Setters
 void GPanel::setName(std::string _name)
 {
     name = _name;
 }
+void GPanel::setUiPath(std::string _uipath)
+{
+    uipath = _uipath;
+}
 
-// Setters
 void GPanel::setWidth(int newWidth)
 {
     w = newWidth;
@@ -78,7 +85,7 @@ void GPanel::setType(PanelType newTypeValue)
 
 void GPanel::setType(std::string newTypeValue)
 {
-    for (const auto& pair : PanelTypeToStrings)
+    for (const auto& pair : PanelTypeToString)
     {
         if (!pair.second.compare(newTypeValue))
         {
@@ -86,8 +93,7 @@ void GPanel::setType(std::string newTypeValue)
             return;
         }
     }
-    // TODO: logear esto correctamente
-    std::cerr << "ERROR: PanelType '" << newTypeValue << "' does not exist\n";
+    Controller::getInstance().printTrace(ERROR, "ERROR: PanelType '" + newTypeValue + "' does not exist.");
     // exception?
 }
 
@@ -110,7 +116,7 @@ std::string GPanel::toString() const
     str += "{\n";
     str += " name=[" + name + "]\n";
     str += " size=[w=" + std::to_string(w) + ",h=" + std::to_string(h) + "]\n";
-    str += " type=" + PanelTypeToStrings.find(type)->second + "\n";
+    str += " type=" + PanelTypeToString.find(type)->second + "\n";
     str += " buttons={\n";
     for (Button b : buttons)
     {

@@ -30,8 +30,8 @@ set(PROJECT_SOURCES
         src/gui/GeneratorPanelImpl.h
         src/gui/GeneratorPanel.ui
 
-        src/model/generador.cpp  src/model/panel.cpp
-        src/model/generador.h src/model/panel.h 
+        src/model/generador.cpp  src/model/panel.cpp src/model/panelcollection.cpp
+        src/model/generador.h src/model/panel.h src/model/panelcollection.h
         src/xml/xmlparser.cpp
         src/xml/xmlparser.h
 
