@@ -104,6 +104,12 @@ void GPanel::addButton(ButtonType type, std::string name)
     buttons.push_back(Button(name, type));
 }
 
+void GPanel::addButton(std::string _name, std::string _type, std::string _action)
+{
+    Controller::getInstance().printTrace(TRACE, "Added button [" + name + "]");
+    buttons.push_back(Button(_name, _type, _action));
+}
+
 void GPanel::addActionToButton(int button, ButtonAction action)
 {
     buttons[button].setAction(action);

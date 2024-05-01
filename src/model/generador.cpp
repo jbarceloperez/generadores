@@ -3,8 +3,11 @@
 #include <iostream>
 #include <fstream>
 #include <map>
-#include <algorithm> // for using transform 
-#include <cctype> // for using toUpper
+#include <algorithm>    // for using transform 
+#include <cctype>       // for using toUpper
+#include <cstdio>       // sprintf
+
+#include "templatefunctions.cpp"
 
 namespace fs = std::filesystem;
 using namespace std;
@@ -78,7 +81,7 @@ void generateFiles(GPanel p)
     outQtCb << writeFile(p, properties, QTCB);
     cout << "Creado nuevo fichero -> " << panelQtCbPath.string() << endl;   // TODO: Cambiar esto por logs de la libreria de saes
 
-    if (p.getType() == PanelType::EXTERNAL_UI_CONFIG || p.getType() == PanelType::EXTERNAL_UI_READ)
+    if (p.getType() == PanelType::CONFIG || p.getType() == PanelType::READ_ONLY)
     {
         // Archivo Panel.ui, si no existe previamente
         fs::path panelUiPath = aux_root + ".ui";
@@ -91,11 +94,83 @@ void generateFiles(GPanel p)
 //-----------------------------------------------------------------------------
 
 void fillPropertiesMap(GPanel p, map<TemplateMark, string>& props) {
+    for (int m = NAME; m < END_MARK; m++)
+    {
+        props[static_cast<TemplateMark>(m)] = "";
+    }
     props[NAME] = p.getName();
     string str = p.getName();
     transform(str.begin(), str.end(), str.begin(), ::toupper);
     props[NAME_CAPS] = str;
-
+    for (Button b : p.getButtons())
+    {
+        if (b.getAction()==APPLY)
+        {
+            props[PANEL_APPLY_H] = Functions[PANEL_APPLY_H];
+            char buff[200];
+            string aux = Functions[PANEL_APPLY_CPP];
+            sprintf(buff, aux.data(), p.getName().data());
+            props[PANEL_APPLY_CPP] = buff;
+            aux = Functions[ADD_FOOTER_BUTTON_APPLY];
+            sprintf(buff, aux.data(), ButtonActionToString.find(b.getAction())->second.data());
+            props[ADD_FOOTER_BUTTON_APPLY] = buff;
+        }
+        else if(b.getAction()==CANCEL)
+        {
+            props[PANEL_CANCEL_H] = Functions[PANEL_CANCEL_H];
+            char buff[200];
+            string aux = Functions[PANEL_CANCEL_CPP];
+            sprintf(buff, aux.data(), p.getName().data());
+            props[PANEL_CANCEL_CPP] = buff;
+            aux = Functions[ADD_FOOTER_BUTTON_CANCEL];
+            sprintf(buff, aux.data(), ButtonActionToString.find(b.getAction())->second.data());
+            props[ADD_FOOTER_BUTTON_CANCEL] = buff;
+        }
+        else if(b.getAction()==CHECK)
+        {
+            props[PANEL_CHECK_H] = Functions[PANEL_CHECK_H];
+            char buff[200];
+            string aux = Functions[PANEL_CHECK_CPP];
+            sprintf(buff, aux.data(), p.getName().data());
+            props[PANEL_CHECK_CPP] = buff;
+            aux = Functions[ADD_FOOTER_BUTTON_CHECK];
+            sprintf(buff, aux.data(), ButtonActionToString.find(b.getAction())->second.data());
+            props[ADD_FOOTER_BUTTON_CHECK] = buff;
+        }
+        else if(b.getAction()==RESET)
+        {
+            props[PANEL_RESET_H] = Functions[PANEL_RESET_H];
+            char buff[200];
+            string aux = Functions[PANEL_RESET_CPP];
+            sprintf(buff, aux.data(), p.getName().data());
+            props[PANEL_RESET_CPP] = buff;
+            aux = Functions[ADD_FOOTER_BUTTON_RESET];
+            sprintf(buff, aux.data(), ButtonActionToString.find(b.getAction())->second.data());
+            props[ADD_FOOTER_BUTTON_RESET] = buff;
+        }
+        else if(b.getAction()==CUSTOM1)
+        {
+            props[PANEL_CUSTOM1_H] = Functions[PANEL_CUSTOM1_H];
+            char buff[200];
+            string aux = Functions[PANEL_CUSTOM1_CPP];
+            sprintf(buff, aux.data(), p.getName().data());
+            props[PANEL_CUSTOM1_CPP] = buff;
+            aux = Functions[ADD_FOOTER_BUTTON_CUSTOM1];
+            sprintf(buff, aux.data(), ButtonActionToString.find(b.getAction())->second.data());
+            props[ADD_FOOTER_BUTTON_CUSTOM1] = buff;
+        }
+        else if(b.getAction()==CUSTOM2)
+        {
+            props[PANEL_CUSTOM2_H] = Functions[PANEL_CUSTOM2_H];
+            char buff[200];
+            string aux = Functions[PANEL_CUSTOM2_CPP];
+            sprintf(buff, aux.data(), p.getName().data());
+            props[PANEL_CUSTOM2_CPP] = buff;
+            aux = Functions[ADD_FOOTER_BUTTON_CUSTOM2];
+            sprintf(buff, aux.data(), ButtonActionToString.find(b.getAction())->second.data());
+            props[ADD_FOOTER_BUTTON_CUSTOM2] = buff;
+        }
+    }
 }   
 
 
@@ -149,15 +224,6 @@ void replaceMarks(string &code, const map<TemplateMark, string> &props)
     for (const auto& pair : props) {
         std::string placeholder = "%" + MarkStrings.find(pair.first)->second + "%";
         size_t pos = code.find(placeholder);
-        // switch (pair.first)
-        // {
-        // case /* constant-expression */:
-        //     /* code */
-        //     break;
-        
-        // default:
-        //     break;
-        // }
         while (pos != std::string::npos) {
             code.replace(pos, placeholder.size(), pair.second);
             pos = code.find(placeholder);

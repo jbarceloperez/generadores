@@ -54,6 +54,17 @@ public:
         type = _type;
         action = NULLBUTTONACTION;
     };
+    Button(std::string _name, std::string _type, std::string _action) {
+        name = _name;
+        for (auto const& element : ButtonTypeToString)
+        {
+            if (!element.second.compare(_type)) type = element.first;
+        }
+        for (auto const& element : ButtonActionToString)
+        {
+            if (!element.second.compare(_action)) action = element.first;
+        }
+    };
     ~Button() {};
 
     std::string getName() {return name;}
@@ -106,6 +117,7 @@ public:
     void setType(std::string newTypeValue);
     
     void addButton(ButtonType type, std::string name);
+    void addButton(std::string name, std::string type, std::string action);
     void addActionToButton(int button, ButtonAction action);
 
 

@@ -60,7 +60,7 @@ void Controller::printTrace(DebugLevel level, string msg)
 
 void Controller::onPbGeneratePressed()
 {
-
+    readInputXml("input.xml");
 }
 
 bool Controller::onPbWithUIPressed(string uiPath)
@@ -191,12 +191,8 @@ GPanel Controller::buildPanel(XMLElemento panel)
 
     // otros elementos
     for (XMLElemento e : panel.getElements()) {
-        // TRATAR CADA POSIBLE ELEMENTO QUE SE QUIERA CONTEMPLAR
-
-        // TODO: HACER UN SWITCH-CASE CON UN ENUM DE DIFERENTES
-        // TIPOS DE ELEMENTO XML PARA LA APLICACION
-
         string name = e.getName();
+        // elemento <geometry>
         if (!name.compare("geometry")) {
             try
             {
@@ -208,11 +204,58 @@ GPanel Controller::buildPanel(XMLElemento panel)
                 std::cerr << e.what() << '\n';
             }
         }
+        // elemento <buttons>
+        else if (!name.compare("buttons"))
+        {
+            for (XMLElemento se : e.getElements())
+            {
+                if (se.numSubelements()==1)
+                    panelObject.addButton(se.getSubelement("name").getContent(), se.getAtributoValue("type"), "null");
+                else
+                    panelObject.addButton(se.getSubelement("name").getContent(), se.getAtributoValue("type"), se.getSubelement("action").getContent());
+            }
+        }
+        // elmento <uipath>
+        else if (!name.compare("uipath"))
+        {
+            panelObject.setUiPath(e.getContent());
+        }
     }
 
     return panelObject;
 }
 
+void Controller::readInputXml(string inputFileName)
+{
+    XMLFile doc;
+
+    try
+    {
+        doc = XMLFile(inputFileName.data());
+    }
+    catch(const XMLFileException& e)
+    {
+        std::cerr << e.what() << '\n';
+        std::cerr << "Error loading path '" << inputFileName << "'\n";
+        exit(EXIT_FAILURE);
+    }
+    catch(const XMLParseException& e)
+    {
+        std::cerr << e.what() << '\n';
+        std::cerr << "Missing <panels> element in XML file." << std::endl;
+        exit(EXIT_FAILURE);
+    }
+
+    for(XMLElemento panel : doc.getRootElement().getElements()) {
+        panelCol.addPanel(buildPanel(panel));
+    }
+
+    for(GPanel panel : panelCol.getVector())
+    {
+        generateFiles(panel);
+        cout << "Ended generating files for " + panel.getName() + "\n\n";
+    }
+}
 
 bool Controller::readUiXml(XMLFile ui)
 {

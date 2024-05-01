@@ -24,7 +24,8 @@ public:
     %PANEL_CANCEL_H%
     %PANEL_CHECK_H%
     %PANEL_RESET_H%
-    %PANEL_CUSTOM_H%
+    %PANEL_CUSTOM1_H%
+    %PANEL_CUSTOM2_H%
 
 private Q_SLOTS:    
 

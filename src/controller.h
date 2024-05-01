@@ -28,6 +28,7 @@ private:
     void iterateXML(XMLElemento e);
     bool readUiXml(XMLFile ui);
     GPanel buildPanel(XMLElemento panel);
+    void readInputXml(string file);
 
 public:
     Controller(Controller const&) = delete;
