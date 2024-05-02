@@ -17,7 +17,7 @@ using namespace std;
  * Función que genera la estructura de ficheros para
  * la estructura de clases del panel.
 */
-void generateFiles(GPanel p)
+void generatePanelFiles(GPanel p)
 {
     map<TemplateMark, string> properties;
     fillPropertiesMap(p, properties);
@@ -112,7 +112,7 @@ void fillPropertiesMap(GPanel p, map<TemplateMark, string>& props) {
             sprintf(buff, aux.data(), p.getName().data());
             props[PANEL_APPLY_CPP] = buff;
             aux = Functions[ADD_FOOTER_BUTTON_APPLY];
-            sprintf(buff, aux.data(), ButtonActionToString.find(b.getAction())->second.data());
+            sprintf(buff, aux.data(), b.getName().data());
             props[ADD_FOOTER_BUTTON_APPLY] = buff;
         }
         else if(b.getAction()==CANCEL)
@@ -123,7 +123,7 @@ void fillPropertiesMap(GPanel p, map<TemplateMark, string>& props) {
             sprintf(buff, aux.data(), p.getName().data());
             props[PANEL_CANCEL_CPP] = buff;
             aux = Functions[ADD_FOOTER_BUTTON_CANCEL];
-            sprintf(buff, aux.data(), ButtonActionToString.find(b.getAction())->second.data());
+            sprintf(buff, aux.data(), b.getName().data());
             props[ADD_FOOTER_BUTTON_CANCEL] = buff;
         }
         else if(b.getAction()==CHECK)
@@ -134,7 +134,7 @@ void fillPropertiesMap(GPanel p, map<TemplateMark, string>& props) {
             sprintf(buff, aux.data(), p.getName().data());
             props[PANEL_CHECK_CPP] = buff;
             aux = Functions[ADD_FOOTER_BUTTON_CHECK];
-            sprintf(buff, aux.data(), ButtonActionToString.find(b.getAction())->second.data());
+            sprintf(buff, aux.data(), b.getName().data());
             props[ADD_FOOTER_BUTTON_CHECK] = buff;
         }
         else if(b.getAction()==RESET)
@@ -145,7 +145,7 @@ void fillPropertiesMap(GPanel p, map<TemplateMark, string>& props) {
             sprintf(buff, aux.data(), p.getName().data());
             props[PANEL_RESET_CPP] = buff;
             aux = Functions[ADD_FOOTER_BUTTON_RESET];
-            sprintf(buff, aux.data(), ButtonActionToString.find(b.getAction())->second.data());
+            sprintf(buff, aux.data(), b.getName().data());
             props[ADD_FOOTER_BUTTON_RESET] = buff;
         }
         else if(b.getAction()==CUSTOM1)
@@ -156,7 +156,7 @@ void fillPropertiesMap(GPanel p, map<TemplateMark, string>& props) {
             sprintf(buff, aux.data(), p.getName().data());
             props[PANEL_CUSTOM1_CPP] = buff;
             aux = Functions[ADD_FOOTER_BUTTON_CUSTOM1];
-            sprintf(buff, aux.data(), ButtonActionToString.find(b.getAction())->second.data());
+            sprintf(buff, aux.data(), b.getName().data());
             props[ADD_FOOTER_BUTTON_CUSTOM1] = buff;
         }
         else if(b.getAction()==CUSTOM2)
@@ -167,7 +167,7 @@ void fillPropertiesMap(GPanel p, map<TemplateMark, string>& props) {
             sprintf(buff, aux.data(), p.getName().data());
             props[PANEL_CUSTOM2_CPP] = buff;
             aux = Functions[ADD_FOOTER_BUTTON_CUSTOM2];
-            sprintf(buff, aux.data(), ButtonActionToString.find(b.getAction())->second.data());
+            sprintf(buff, aux.data(), b.getName().data());
             props[ADD_FOOTER_BUTTON_CUSTOM2] = buff;
         }
     }

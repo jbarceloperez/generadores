@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "model/panelcollection.h"
-#include "model/panel.h"    // Include necessary headers for Panel, XMLFile, etc.
+#include "model/panel.h"
 #include "xml/xmlparser.h"
 #include "logs.hpp"
 
@@ -14,9 +14,10 @@ enum DebugLevel {
 
 class Controller {
 private:
-    // std::vector<PanelBuilder> panelBuilders;
-    PanelCollection panelCol;
-    GPanel* currentPanel;
+    // atributos
+
+    PanelCollection panelCol; // conjunto de paneles creados
+    GPanel* currentPanel;     // puntero a un panel de panelCol
     dbg::log mainlog;
     dbg::log tracks;
     int argc;
@@ -29,27 +30,22 @@ private:
     bool readUiXml(XMLFile ui);
     GPanel buildPanel(XMLElemento panel);
     void readInputXml(string file);
+    void generateAllFiles();
 
 public:
-    Controller(Controller const&) = delete;
-    static Controller& getInstance();
+    Controller(Controller const &) = delete;
+    static Controller &getInstance();
 
     void init(int _argc, char* _argv[]);
-    void run();
     void printTrace(DebugLevel level, string msg);
+    GPanel getCurrentPanel() const;
 
     void onPbGeneratePressed();
     bool onPbWithUIPressed(string uiPath);
     void onPbWithoutUIPressed();
-    void onPbFilePressed(string file);
     bool onPbAssociatePressed(int button, int action);
     void onPbDeassociatePressed();
     void onPbXmlPressed();
-
-    GPanel getCurrentPanel() const;
-    
-
-    
 };
 
 #endif /* CONTROLLER_H */

@@ -90,7 +90,7 @@ void GeneratorPanelImpl::handleButtonClicked()
 void GeneratorPanelImpl::onPbFilePressed()
 {
     QString file = QFileDialog::getOpenFileName(this, "Select a ui file", "../");
-    Controller::getInstance().onPbFilePressed(file.toStdString());
+    // Controller::getInstance().onPbFilePressed(file.toStdString());   // pa qué
     
     // update ui
     p_impl->ui.lnePath->setText(file);

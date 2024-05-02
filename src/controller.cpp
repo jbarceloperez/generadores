@@ -4,13 +4,14 @@
 
 #include "model/generador.h"
 
-std::string NULL_STRING = "";
 
+// implementación del singleton
 Controller& Controller::getInstance() {
     static Controller instance;
     return instance;
 }
 
+// inicializa el controlador
 void Controller::init(int _argc, char *_argv[])
 {
     argc = _argc;
@@ -24,7 +25,7 @@ void Controller::init(int _argc, char *_argv[])
 
 }
 
-
+// todo: fix logger
 void Controller::printTrace(DebugLevel level, string msg)
 {   
     if (level >= appLogLevel)
@@ -58,40 +59,56 @@ void Controller::printTrace(DebugLevel level, string msg)
     
 }
 
+GPanel Controller::getCurrentPanel() const
+{
+    return *currentPanel;
+}
+
+//----------------------------- HMI ---------------------------------
+//-------------------------------------------------------------------
+
+/**
+ * Función llamada desde la vista, lee el archivo XML de entrada
+ * y después genera los ficheros correspondientes.
+*/
 void Controller::onPbGeneratePressed()
 {
     readInputXml("input.xml");
+    generateAllFiles();
 }
 
+/**
+ * Funcion llamada desde la vista, maneja la lectura del archivo
+ * .ui y la formación del panel correspondiente. Si el panel ya
+ * existe, devuelve un valor booleano de false a la interfaz para
+ * que avise por pantalla.
+*/
 bool Controller::onPbWithUIPressed(string uiPath)
 {        
     XMLFile uiXml;
     try
     {
-        uiXml = XMLFile(uiPath.data());
-    }   // TODO: Manejar el error en vez de excepción
+        uiXml = XMLFile(uiPath.data()); // lee el archivo .ui
+    }   
     catch(const XMLFileException& e)
-    {
+    {   // TODO: Manejar el error en vez de excepción
         printTrace(CRITICAL, e.what());
         printTrace(CRITICAL, "Error loading path '" + uiPath + "'\n");
     }
-    if (readUiXml(uiXml))
-    {
+    if (readUiXml(uiXml))   // si el panel ya existe devuelve falso
         return true;
-    }
     return false;    
 }
 
 void Controller::onPbWithoutUIPressed()
 {
-
+    // TODO: funcionalidad panel vacío
 }
 
-void Controller::onPbFilePressed(string file)
-{
-
-}
-
+/**
+ * Funcion llamada desde la vista, añade a los botones la accion
+ * seleccionada en el hmi
+*/
 bool Controller::onPbAssociatePressed(int button, int action)
 {
     ButtonAction a = static_cast<ButtonAction>(action);
@@ -105,9 +122,13 @@ bool Controller::onPbAssociatePressed(int button, int action)
 
 void Controller::onPbDeassociatePressed()
 {
-
+    // funcionalidad borrar asociacion boton-accion
 }
 
+/**
+ * Función llamada desde la vista, escribe el objeto XMLFile en
+ * un fichero.
+*/
 void Controller::onPbXmlPressed()
 {
     XMLFile inputXml = XMLFile();
@@ -115,71 +136,63 @@ void Controller::onPbXmlPressed()
     inputXml.writeXMLFile(panelCol);
 }
 
-GPanel Controller::getCurrentPanel() const
+//-------------------------------------------------------------------
+//-------------------------------------------------------------------
+
+/**
+ * Lee el archivo XML con la ui del panel a crear, y crea y añade a la
+ * colección dicho panel con las propiedades detectadas en el .ui
+*/
+bool Controller::readUiXml(XMLFile ui)
 {
-    return *currentPanel;
+    XMLElemento root = ui.getRootElement();
+    // get the name
+    std::string name = root.getSubelement("class").getContent();
+    if (panelCol.containsPanel(name))
+    {
+        printTrace(INFO, "Same panel '" + name + "' alredy loaded. Ignoring.");
+        return false;
+    }
+    // nuevo panel
+    panelCol.addPanel(name);
+    currentPanel = panelCol.getPanelFromPanelCol(name);
+    
+    printTrace(TRACE, "Loaded panel '" + name + "'");
+
+    currentPanel->setUiPath(ui.getXmlPath());
+    iterateXML(root);
+    if (!currentPanel->getButtons().size()) {
+        currentPanel->setType(PanelType::EXTERNAL_UI_READ);
+    }
+    else {
+        currentPanel->setType(PanelType::EXTERNAL_UI_CONFIG);
+    }
+    return true;
 }
 
-void Controller::run()
+/**
+ * Hace un recorrido primero en profundidad el XML, buscando elementos
+ * botón y añadiéndolos al objeto panel.
+*/
+void Controller::iterateXML(XMLElemento e)
 {
-    
-    // Logger
-    tracks.info("Code generator saes initializing...\n");
-    mainlog.info("Traza warning\n");
-    mainlog.critical("starting generating...\n");
-    char* inputFileName = argv[1];
-
-    /* TODO:Detectar si la entrada es un .ui o un .xml, para poder
-            directamente leer el ui y generar la estructura de clases
-            a partir de este, o hace falta generar también el ui
-    */
-   // regex pattern("\\.ui$");
-   // regex_search(string(inputFileName), pattern);
-
-    // XML PARSER
-    XMLFile doc;
-
-    try
+    vector<XMLElemento> subelementos = e.getElements();
+    for (XMLElemento i : subelementos)
     {
-        doc = XMLFile(inputFileName);
-    }
-    catch(const XMLFileException& e)
-    {
-        std::cerr << e.what() << '\n';
-        std::cerr << "Error loading path '" << inputFileName << "'\n";
-        exit(EXIT_FAILURE);
-    }
-    catch(const XMLParseException& e)
-    {
-        std::cerr << e.what() << '\n';
-        std::cerr << "Missing <panels> element in XML file." << std::endl;
-        exit(EXIT_FAILURE);
-    }
-    
-    
-
-    // Aquí comienza a detectar paneles a generar
-
-    for(XMLElemento panel : doc.getRootElement().getElements()) {
-        panelCol.addPanel(buildPanel(panel));
-    }
-
-
-    // a este punto ya debería tener los paneles claros, ahora toca
-    // decidir cómo los va a generar cada uno, en su subcarpeta y con
-    // sus características
-
-    for(GPanel panel : panelCol.getVector())
-    {
-        // std::cout << panel.toString() << std::endl; // DEBUG
-
-        generateFiles(panel);
-
-        cout << "Ended generating files for " + panel.getName() + "\n\n";
+        string aux = i.getAtributoValue("class");
+        if (!aux.compare("QPushButton"))
+        {
+            currentPanel->addButton(QPUSHBUTTON, i.getAtributoValue("name"));
+            Controller::getInstance().printTrace(WARNING, "QPushButton: " + i.getAtributoValue("name"));
+        }
+        iterateXML(i);
     }
 }
 
-
+/**
+ * Dado un elemento panel obtenido del XML de entrada, recorre sus propiedades
+ * y crea un objeto panel acorde a estas propiedades.
+*/
 GPanel Controller::buildPanel(XMLElemento panel)
 {
     // elementos obligatorios
@@ -225,6 +238,11 @@ GPanel Controller::buildPanel(XMLElemento panel)
     return panelObject;
 }
 
+/**
+ * Dado el nombre de un archivo de entrada que es un XML de entrada
+ * del generador, lee el documento XML y por cada elemento panel va
+ * generando un elemento 
+*/
 void Controller::readInputXml(string inputFileName)
 {
     XMLFile doc;
@@ -249,51 +267,17 @@ void Controller::readInputXml(string inputFileName)
     for(XMLElemento panel : doc.getRootElement().getElements()) {
         panelCol.addPanel(buildPanel(panel));
     }
+}
 
-    for(GPanel panel : panelCol.getVector())
+/**
+ * Para cada panel en la colección, llama a la lógica del generador para
+ * generar su estructura de clases.
+*/
+void Controller::generateAllFiles()
+{
+    for (GPanel panel : panelCol.getVector())
     {
-        generateFiles(panel);
+        generatePanelFiles(panel);
         cout << "Ended generating files for " + panel.getName() + "\n\n";
-    }
-}
-
-bool Controller::readUiXml(XMLFile ui)
-{
-    XMLElemento root = ui.getRootElement();
-    // get the name
-    std::string name = root.getSubelement("class").getContent();
-    if (panelCol.containsPanel(name))
-    {
-        printTrace(INFO, "Same panel '" + name + "' alredy loaded. Ignoring.");
-        return false;
-    }
-    // nuevo panel
-    panelCol.addPanel(name);
-    currentPanel = panelCol.getPanelFromPanelCol(name);
-    
-    printTrace(TRACE, "Loaded panel '" + name + "'");
-    currentPanel->setUiPath(ui.getXmlPath());
-    iterateXML(root);
-    if (!currentPanel->getButtons().size()) {
-        currentPanel->setType(PanelType::EXTERNAL_UI_READ);
-    }
-    else {
-        currentPanel->setType(PanelType::EXTERNAL_UI_CONFIG);
-    }
-    return true;
-}
-
-void Controller::iterateXML(XMLElemento e)
-{
-    vector<XMLElemento> subelementos = e.getElements();
-    for (XMLElemento i : subelementos)
-    {
-        string aux = i.getAtributoValue("class");
-        if (!aux.compare("QPushButton"))
-        {
-            currentPanel->addButton(QPUSHBUTTON, i.getAtributoValue("name"));
-            Controller::getInstance().printTrace(WARNING, "QPushButton: " + i.getAtributoValue("name"));
-        }
-        iterateXML(i);
     }
 }

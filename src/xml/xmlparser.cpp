@@ -4,11 +4,9 @@
 #include "../controller.h"
 
 
-//
+// ----------------------------------------------------------------------
 //  XMLAtributo
-//
-
-XMLAtributo::XMLAtributo() {}
+// ----------------------------------------------------------------------
 
 XMLAtributo::XMLAtributo(string name, string valor) : name(name), valor(valor) {}
 
@@ -25,11 +23,10 @@ string XMLAtributo::toString() const
     return string("XMLAributo: [" + name + "] -> " + valor + "\n");
 }
 
-//
+// ----------------------------------------------------------------------
 //  XMLElemento
-//
+// ----------------------------------------------------------------------
 
-XMLElemento::XMLElemento() { }
 
 XMLElemento::XMLElemento(string _name, string _content)
 {
@@ -47,7 +44,6 @@ std::string XMLElemento::getName() const {
 std::string XMLElemento::getContent() const {
     return content;
 }
-
 
 std::vector<XMLAtributo> XMLElemento::getAttributes() {
     return attributes;
@@ -142,16 +138,14 @@ string XMLElemento::toString(int depth) const
     return str;
 }
 
-//
-//  XMLData
-//
-
-
-
-//
+// ----------------------------------------------------------------------
 //  XMLFile
-//
+// ----------------------------------------------------------------------
 
+/**
+ * Desde el constructor se carga el documento XML con la librería externa
+ * y se parsea como un elemento XMLFile con sus respectivos subelementos.
+*/
 XMLFile::XMLFile(char* _xmlPath) {
     xmlPath = _xmlPath;
     tinyxml2::XMLDocument doc;
@@ -160,19 +154,8 @@ XMLFile::XMLFile(char* _xmlPath) {
     }
 
     const tinyxml2::XMLElement* root = doc.FirstChildElement();
-    // const XMLElement* root = doc.FirstChildElement("panels");
-    // if (!root) {
-    //     // throw XMLParseException("Error finding root element: no <panels> element.");
-    //     std::cerr << "No <panels> element \n";
-    //     root = doc.FirstChildElement();
-    // }
-    
     rootElement = parseElement(root);
 }
-
-XMLFile:: XMLFile() {}
-
-XMLFile::~XMLFile() {}
 
 char * XMLFile::getXmlPath() const {
     return xmlPath;
@@ -196,11 +179,14 @@ XMLElemento XMLFile::getRootElement() const {
     return rootElement;
 }
 
+/**
+ * Escribe con formato XML los paneles existentes en panels en el
+ * fichero input.xml, implementa funcionalidad de la libreria externa.
+*/
 void XMLFile::writeXMLFile(PanelCollection panels)
 {
     tinyxml2::XMLDocument doc;
     
-    // Create a declaration (optional)
     tinyxml2::XMLDeclaration* decl = doc.NewDeclaration();
     doc.InsertFirstChild(decl);
     
@@ -211,7 +197,6 @@ void XMLFile::writeXMLFile(PanelCollection panels)
     // insertar cada panel
     for (GPanel p : panels.getVector())
     {
-        // XMLElemento panel = XMLElemento("panel", "");
         tinyxml2::XMLElement* panel = doc.NewElement("panel");
         
         panel->SetAttribute("name",p.getName().data());
@@ -246,18 +231,17 @@ void XMLFile::writeXMLFile(PanelCollection panels)
                     action->SetText(ButtonActionToString.find(b.getAction())->second.data());
                     button->InsertEndChild(action);
                 }
-                
             }
         }
         
         // TODO: continuar con condiciones, si no tiene ui, más elementos, etc.
     }
     
-    // Save the XML document to file
+    // guardar el documento
     if (doc.SaveFile(xmlPath) == tinyxml2::XML_SUCCESS) {
-        std::cout << "XML file saved successfully." << std::endl;
+        Controller::getInstance().printTrace(INFO, "XMLFile succesfully saved in " + std::string(xmlPath));
     } else {
-        std::cerr << "Error saving XML file." << std::endl;
+        Controller::getInstance().printTrace(ERROR, "Error saving file:" + std::string(xmlPath));        
     }
 }
 

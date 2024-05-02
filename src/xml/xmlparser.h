@@ -60,15 +60,6 @@ public:
 };
 
 /**
- * TODO: Clase que agrupe cualquier tipo de dato
- * para desacoplar más el código, ya que funciones no
- * devuelven solo primitivos
-*/
-class XMLData {
-
-};
-
-/**
  * Clase que representa un atributo de un elemento XML. Tiene dos string privados
  * que representan el nombre y el valor del atributo.
 */
@@ -81,8 +72,7 @@ private:
     string valor;
 
 public:
-    // Constructor vacío
-    XMLAtributo();
+    XMLAtributo() {};
     // Constructor que inicializa los atributos
     XMLAtributo(string name, string valor);
     
@@ -109,11 +99,10 @@ private:
     vector<XMLElemento> elements;
     string name;
     string content;
-    
 
 
 public:
-    XMLElemento();
+    XMLElemento() {};
     XMLElemento(string name, string content);
     XMLElemento(string name, string content, vector<XMLAtributo> atributos, vector<XMLElemento> elements);
 
@@ -132,10 +121,9 @@ public:
 };
 
 /**
- * Clase que representa el documento XML a leer. Tiene como atributos
- * el path al xml y al dtd (TODO: IMPLEMENTAR DTD PARSER, BUSCAR ALTERNATIVA
- * A TINYXML2). Tiene el elemento raíz como atributo privado, y es en esta
- * clase donde se implementa la funcionalidad de la librería externa.
+ * Clase que representa el documento XML a leer. Tiene como atributos el
+ * path al xml y al dtd. Tiene el elemento raíz como atributo privado, y es 
+ * en esta clase donde se implementa la funcionalidad de la librería externa.
 */
 class XMLFile {
 
@@ -147,11 +135,10 @@ private:
     XMLElemento parseElement(const tinyxml2::XMLElement* e);
 
 public:
-    // XMLFile(string xmlPath, string dtdPath, XMLElemento rootElement);
     XMLFile(char * xmlPath);
-    XMLFile();
+    XMLFile() {};
 
-    ~XMLFile();
+    ~XMLFile() {};
     
     XMLElemento getRootElement() const;
     char * getXmlPath() const;

@@ -10,6 +10,10 @@ void PanelCollection::addPanel(GPanel p)
     panelCollection.push_back(p);
 }
 
+/**
+ * Retorna un puntero al panel con el nombre 'name'. Si no existe,
+ * devuelve un puntero nulo.
+*/
 GPanel *PanelCollection::getPanelFromPanelCol(std::string name)
 {   
     GPanel* panelPointer = nullptr;

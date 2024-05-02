@@ -40,7 +40,11 @@ static std::map<ButtonAction, std::string> ButtonActionToString = {
     {CUSTOM2, "panelCustom2"},
     {NULLBUTTONACTION, "null"}
 };
-
+/**
+ * Clase que representa un botón del ui, con tres atributos y
+ * sus getters y setters. Los tipos de botón y acción tienen un
+ * mapa que mapea cada enumerado con su etiqueta de texto.
+*/
 class Button {
 private:
     std::string name;
@@ -83,22 +87,23 @@ public:
     }
 };
 
+/**
+ * 
+*/
 class GPanel {
 private:
-    std::string name;   // Nombre del panel
-    int w, h;           // Ancho y altura del panel en píxeles
-    PanelType type;     // Propiedad
-    std::string uipath; 
-    std::vector<Button> buttons;
+    std::string name;               // Nombre del panel
+    int w, h;                       // Ancho y altura del panel en píxeles
+    PanelType type;                 // Propiedad
+    std::string uipath;             // Ruta al archivo ui, si lo tuvise
+    std::vector<Button> buttons;    // Collección de botones
 
 public:
     // Constructor
     GPanel(std::string name, int width, int height, PanelType type);
     GPanel(std::string name);
-    GPanel();
-
-    // Destructor
-    ~GPanel();
+    GPanel() {};
+    ~GPanel() {};
 
     // Getters
     const std::string& getName() const;
@@ -116,10 +121,10 @@ public:
     void setType(PanelType newTypeValue);
     void setType(std::string newTypeValue);
     
+    // Funcionalidad con los botones
     void addButton(ButtonType type, std::string name);
     void addButton(std::string name, std::string type, std::string action);
     void addActionToButton(int button, ButtonAction action);
-
 
     std::string toString() const;
 };

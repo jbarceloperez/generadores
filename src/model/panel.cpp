@@ -22,11 +22,6 @@ GPanel::GPanel(std::string _name)
     type = PanelType::READ_ONLY;
 }
 
-GPanel::GPanel(){}
-
-// Destructor
-GPanel::~GPanel() {}
-
 // Getters
 const std::string &GPanel::getName() const
 {
@@ -93,11 +88,11 @@ void GPanel::setType(std::string newTypeValue)
             return;
         }
     }
-    Controller::getInstance().printTrace(ERROR, "ERROR: PanelType '" + newTypeValue + "' does not exist.");
+    Controller::getInstance().printTrace(CRITICAL, "ERROR: PanelType '" + newTypeValue + "' does not exist.");
     // exception?
 }
 
-
+// Funcionalidad con los botones
 void GPanel::addButton(ButtonType type, std::string name)
 {
     Controller::getInstance().printTrace(TRACE, "Added button [" + name + "]");
@@ -114,6 +109,8 @@ void GPanel::addActionToButton(int button, ButtonAction action)
 {
     buttons[button].setAction(action);
 }
+
+
 
 std::string GPanel::toString() const
 {

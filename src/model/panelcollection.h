@@ -7,6 +7,9 @@
 #include <vector>
 #include <string>
 
+/**
+ * Clase para manejar la colección de paneles del controlador
+*/
 class PanelCollection {
 
 private:

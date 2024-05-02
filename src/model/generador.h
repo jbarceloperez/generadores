@@ -43,7 +43,7 @@ static std::map<TemplateMark, std::string> MarkStrings = {
     {ADD_FOOTER_BUTTON_RESET,   "ADD_FOOTER_BUTTON_RESET"}
 };
 
-void generateFiles(GPanel p);
+void generatePanelFiles(GPanel p);
 
 std::string writeFile(GPanel p, std::map<TemplateMark, std::string>& properties, FileToGenerate file);
 
