@@ -78,6 +78,7 @@ public:
     void setName(std::string _name) {name = _name;}
     void setType(ButtonType _type) {type = _type;}
     void setAction(ButtonAction _action) {action = _action;}
+    void deleteAction() {action = NULLBUTTONACTION;} 
 
     std::string toString() {
         std::string str;
@@ -125,6 +126,7 @@ public:
     void addButton(ButtonType type, std::string name);
     void addButton(std::string name, std::string type, std::string action);
     void addActionToButton(int button, ButtonAction action);
+    void deleteActionToButton(int button);
 
     std::string toString() const;
 };

@@ -120,9 +120,17 @@ bool Controller::onPbAssociatePressed(int button, int action)
     return false;
 }
 
-void Controller::onPbDeassociatePressed()
+/**
+ * Funcion llamada desde la vista, borra la acción de un botón concreto
+*/
+bool Controller::onPbDeassociatePressed(int button, int action)
 {
-    // funcionalidad borrar asociacion boton-accion
+    if (currentPanel->getButtons()[button].getAction() != NULLBUTTONACTION)
+    {   
+        currentPanel->deleteActionToButton(button);
+        return true;
+    }
+    return false;
 }
 
 /**

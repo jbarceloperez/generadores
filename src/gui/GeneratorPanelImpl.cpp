@@ -101,6 +101,12 @@ void GeneratorPanelImpl::onPbFilePressed()
 void GeneratorPanelImpl::onPbDeassociatePressed()
 {
     Controller::getInstance().printTrace(DEBUG, "pbDeassociate");
+    int button = p_impl->ui.comboBox_2->currentIndex();
+    int action = p_impl->ui.comboBox_3->currentIndex();
+    if (Controller::getInstance().onPbDeassociatePressed(button, action))
+    {// update ui
+        updateTxtAssociate();
+    }
 }
 
 void GeneratorPanelImpl::onPbAssociatePressed()

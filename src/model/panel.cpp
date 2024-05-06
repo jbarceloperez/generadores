@@ -110,7 +110,10 @@ void GPanel::addActionToButton(int button, ButtonAction action)
     buttons[button].setAction(action);
 }
 
-
+void GPanel::deleteActionToButton(int button)
+{
+    buttons[button].deleteAction();
+}
 
 std::string GPanel::toString() const
 {
