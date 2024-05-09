@@ -23,9 +23,6 @@ set(PROJECT_SOURCES
         src/main.cpp
         src/controller.cpp
         src/controller.h
-        src/gui/MainPanel.cpp
-        src/gui/MainPanel.h
-        src/gui/MainPanel.ui
         src/gui/GeneratorPanelImpl.cpp
         src/gui/GeneratorPanelImpl.h
         src/gui/GeneratorPanel.ui

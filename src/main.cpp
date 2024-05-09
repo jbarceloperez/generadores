@@ -1,5 +1,5 @@
 #include <QApplication>
-#include "gui/MainPanel.h"
+#include "gui/GeneratorPanelImpl.h"
 #include "controller.h"
 
 
@@ -7,7 +7,7 @@ int main(int argc, char* argv[])
 {
     Controller::getInstance().init(argc, argv);
     QApplication a(argc, argv);
-    MainPanel w;
+    GeneratorPanelImpl w;
     w.show();
 
     return a.exec();
