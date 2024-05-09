@@ -82,7 +82,7 @@ public:
 
     std::string toString() {
         std::string str;
-        str = "'" + name + "': type=" + ButtonTypeToString.find(type)->second;
+        str = "'" + name + "': " + ButtonTypeToString.find(type)->second;
         str+=", action=" + ButtonActionToString.find(action)->second + "\n";
         return str;
     }

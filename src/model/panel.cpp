@@ -118,17 +118,15 @@ void GPanel::deleteActionToButton(int button)
 std::string GPanel::toString() const
 {
     std::string str;
-    str = "Class=GPanel\n";
-    str += "{\n";
-    str += " name=[" + name + "]\n";
-    str += " size=[w=" + std::to_string(w) + ",h=" + std::to_string(h) + "]\n";
-    str += " type=" + PanelTypeToString.find(type)->second + "\n";
-    str += " buttons={\n";
+    str = "PANEL: name=[" + name + "]\n  ";
+    str += "size=[w=" + std::to_string(w) + ",h=" + std::to_string(h) + "]\n  ";
+    str += "type=" + PanelTypeToString.find(type)->second + "\n  ";
+    str += "buttons={\n";
     for (Button b : buttons)
     {
-        str += "  " + b.toString();
+        str += "   " + b.toString();
     }
-    str += "}\n";
+    str += "                    ____________________________________\n";
 
     return str;
 }
