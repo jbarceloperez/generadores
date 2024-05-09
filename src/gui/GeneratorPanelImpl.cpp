@@ -7,6 +7,9 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QFileInfo>
+#include <QListWidgetItem>
+#include <QListWidget>
+#include <map>
 
 class GeneratorPanelImpl::PrivateData
 {
@@ -35,12 +38,10 @@ GeneratorPanelImpl::GeneratorPanelImpl()
     connect(p_impl->ui.pbFile, &QPushButton::clicked, this, &GeneratorPanelImpl::handleButtonClicked);
     connect(p_impl->ui.pbXml, &QPushButton::clicked, this, &GeneratorPanelImpl::handleButtonClicked);
 
-    p_impl->ui.comboBox_3->addItem(QString("panelApply"));
-    p_impl->ui.comboBox_3->addItem(QString("panelCancel"));
-    p_impl->ui.comboBox_3->addItem(QString("panelCheck"));
-    p_impl->ui.comboBox_3->addItem(QString("panelReset"));
-    p_impl->ui.comboBox_3->addItem(QString("panelCustom1"));
-    p_impl->ui.comboBox_3->addItem(QString("panelCustom2"));
+    for (int i = APPLY; i < NULLBUTTONACTION; i++)
+    {
+        p_impl->ui.listWidget_act->addItem(ButtonActionToString.find(static_cast<ButtonAction>(i))->second.data());
+    }
 }
 
 GeneratorPanelImpl::~GeneratorPanelImpl()
@@ -101,9 +102,8 @@ void GeneratorPanelImpl::onPbFilePressed()
 void GeneratorPanelImpl::onPbDeassociatePressed()
 {
     Controller::getInstance().printTrace(DEBUG, "pbDeassociate");
-    int button = p_impl->ui.comboBox_2->currentIndex();
-    int action = p_impl->ui.comboBox_3->currentIndex();
-    if (Controller::getInstance().onPbDeassociatePressed(button, action))
+    int button = p_impl->ui.listWidget_but->currentItem()->listWidget()->row(p_impl->ui.listWidget_but->currentItem());
+    if (Controller::getInstance().onPbDeassociatePressed(button))
     {// update ui
         updateTxtAssociate();
     }
@@ -112,8 +112,8 @@ void GeneratorPanelImpl::onPbDeassociatePressed()
 void GeneratorPanelImpl::onPbAssociatePressed()
 {
     Controller::getInstance().printTrace(DEBUG, "pbAssociate");
-    int button = p_impl->ui.comboBox_2->currentIndex();
-    int action = p_impl->ui.comboBox_3->currentIndex();
+    int button = p_impl->ui.listWidget_but->currentItem()->listWidget()->row(p_impl->ui.listWidget_but->currentItem());
+    int action = p_impl->ui.listWidget_act->currentItem()->listWidget()->row(p_impl->ui.listWidget_act->currentItem());
     if (Controller::getInstance().onPbAssociatePressed(button, action))
     {// update ui
         updateTxtAssociate();
@@ -165,7 +165,7 @@ void GeneratorPanelImpl::onPbWithUIPressed()
         updateTxtAssociate();
         for (Button b : Controller::getInstance().getCurrentPanel().getButtons())
         {
-            p_impl->ui.comboBox_2->addItem(b.getName().data());
+            p_impl->ui.listWidget_but->addItem(b.getName().data());
         }
     }
 }

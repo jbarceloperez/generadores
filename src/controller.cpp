@@ -123,7 +123,7 @@ bool Controller::onPbAssociatePressed(int button, int action)
 /**
  * Funcion llamada desde la vista, borra la acción de un botón concreto
 */
-bool Controller::onPbDeassociatePressed(int button, int action)
+bool Controller::onPbDeassociatePressed(int button)
 {
     if (currentPanel->getButtons()[button].getAction() != NULLBUTTONACTION)
     {   

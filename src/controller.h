@@ -44,7 +44,7 @@ public:
     bool onPbWithUIPressed(string uiPath);
     void onPbWithoutUIPressed();
     bool onPbAssociatePressed(int button, int action);
-    bool onPbDeassociatePressed(int button, int action);
+    bool onPbDeassociatePressed(int button);
     void onPbXmlPressed();
 };
 

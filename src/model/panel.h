@@ -32,12 +32,12 @@ static std::map<ButtonType, std::string> ButtonTypeToString = {
 };
 
 static std::map<ButtonAction, std::string> ButtonActionToString = {
-    {APPLY, "panelApply"},
-    {CANCEL, "panelCancel"},
-    {CHECK, "panelCheck"},
-    {RESET, "panelReset"},
-    {CUSTOM1, "panelCustom1"},
-    {CUSTOM2, "panelCustom2"},
+    {APPLY, "Apply"},
+    {CANCEL, "Cancel"},
+    {CHECK, "Check"},
+    {RESET, "Reset"},
+    {CUSTOM1, "Custom1"},
+    {CUSTOM2, "Custom2"},
     {NULLBUTTONACTION, "null"}
 };
 /**
