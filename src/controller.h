@@ -48,6 +48,7 @@ public:
     void onPbXmlPressed();
     void onPbAddButtonPressed(string name, string type, string action);
     void onPbDelButtonPressed(int button);
+    void changeCurrentPanel(int index);
     string getPanelsInfo();
 };
 

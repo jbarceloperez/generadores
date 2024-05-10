@@ -176,6 +176,11 @@ void Controller::onPbDelButtonPressed(int button)
     currentPanel->deleteButton(button);
 }
 
+void Controller::changeCurrentPanel(int index)
+{
+    currentPanel = panelCol.getPanelFromIndex(index);
+}
+
 string Controller::getPanelsInfo()
 {
     string str = "";

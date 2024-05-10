@@ -29,6 +29,15 @@ GPanel *PanelCollection::getPanelFromPanelCol(std::string name)
     return panelPointer;
 }
 
+GPanel *PanelCollection::getPanelFromIndex(int index)
+{
+    if(index < panelCollection.size())
+    {
+        return &panelCollection[index];
+    }
+    else return nullptr;
+}
+
 GPanel PanelCollection::getPanel(std::string name)
 {
     for (auto & element : panelCollection) 

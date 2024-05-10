@@ -24,6 +24,7 @@ public:
     void addPanel(GPanel p);
     void addPanelToGenerate(GPanel p);
     GPanel* getPanelFromPanelCol(std::string name);
+    GPanel* getPanelFromIndex(int index);
     GPanel getPanel(std::string name);
     bool containsPanel(std::string name);
     std::vector<GPanel> getVector() const;
