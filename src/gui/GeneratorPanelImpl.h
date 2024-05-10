@@ -24,6 +24,7 @@ private:
     class PrivateData;
     std::unique_ptr<PrivateData> p_impl;
     void onPbWithUIPressed();
+    void updateButtons();
     void onPbWithoutUIPressed();
     void onPbGeberatePressed();
     void onPbAssociatePressed();
@@ -31,6 +32,8 @@ private:
     void onPbFilePressed();
     void onPbXmlPressed();
     void updateHmi();
+    void onPbAddButtonPressed();
+    void onPbDelButtonPressed();
 };
 
 #endif // GENERATORPANEL_H

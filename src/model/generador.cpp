@@ -99,81 +99,73 @@ void fillPropertiesMap(GPanel p, map<TemplateMark, string>& props) {
         props[static_cast<TemplateMark>(m)] = "";
     }
     props[NAME] = p.getName();
-    string str = p.getName();
-    transform(str.begin(), str.end(), str.begin(), ::toupper);
-    props[NAME_CAPS] = str;
+    string str_name = p.getName();
+    transform(str_name.begin(), str_name.end(), str_name.begin(), ::toupper);
+    props[NAME_CAPS] = str_name;
+    props[GEOMETRY_H] = to_string(p.getHeight());
+    props[GEOMETRY_W] = to_string(p.getWidth());
+    string str_buttons = "";
     for (Button b : p.getButtons())
     {
-        if (b.getAction()==APPLY)
+        ButtonAction accion = b.getAction();
+        string aux; char buff[200];
+        switch (accion)
         {
-            props[PANEL_APPLY_H] = Functions[PANEL_APPLY_H];
-            char buff[200];
-            string aux = Functions[PANEL_APPLY_CPP];
-            sprintf(buff, aux.data(), p.getName().data());
-            props[PANEL_APPLY_CPP] = buff;
-            aux = Functions[ADD_FOOTER_BUTTON_APPLY];
-            sprintf(buff, aux.data(), b.getName().data());
-            props[ADD_FOOTER_BUTTON_APPLY] = buff;
-        }
-        else if(b.getAction()==CANCEL)
-        {
-            props[PANEL_CANCEL_H] = Functions[PANEL_CANCEL_H];
-            char buff[200];
-            string aux = Functions[PANEL_CANCEL_CPP];
-            sprintf(buff, aux.data(), p.getName().data());
-            props[PANEL_CANCEL_CPP] = buff;
-            aux = Functions[ADD_FOOTER_BUTTON_CANCEL];
-            sprintf(buff, aux.data(), b.getName().data());
-            props[ADD_FOOTER_BUTTON_CANCEL] = buff;
-        }
-        else if(b.getAction()==CHECK)
-        {
-            props[PANEL_CHECK_H] = Functions[PANEL_CHECK_H];
-            char buff[200];
-            string aux = Functions[PANEL_CHECK_CPP];
-            sprintf(buff, aux.data(), p.getName().data());
-            props[PANEL_CHECK_CPP] = buff;
-            aux = Functions[ADD_FOOTER_BUTTON_CHECK];
-            sprintf(buff, aux.data(), b.getName().data());
-            props[ADD_FOOTER_BUTTON_CHECK] = buff;
-        }
-        else if(b.getAction()==RESET)
-        {
-            props[PANEL_RESET_H] = Functions[PANEL_RESET_H];
-            char buff[200];
-            string aux = Functions[PANEL_RESET_CPP];
-            sprintf(buff, aux.data(), p.getName().data());
-            props[PANEL_RESET_CPP] = buff;
-            aux = Functions[ADD_FOOTER_BUTTON_RESET];
-            sprintf(buff, aux.data(), b.getName().data());
-            props[ADD_FOOTER_BUTTON_RESET] = buff;
-        }
-        else if(b.getAction()==CUSTOM1)
-        {
-            props[PANEL_CUSTOM1_H] = Functions[PANEL_CUSTOM1_H];
-            char buff[200];
-            string aux = Functions[PANEL_CUSTOM1_CPP];
-            sprintf(buff, aux.data(), p.getName().data());
-            props[PANEL_CUSTOM1_CPP] = buff;
-            aux = Functions[ADD_FOOTER_BUTTON_CUSTOM1];
-            sprintf(buff, aux.data(), b.getName().data());
-            props[ADD_FOOTER_BUTTON_CUSTOM1] = buff;
-        }
-        else if(b.getAction()==CUSTOM2)
-        {
-            props[PANEL_CUSTOM2_H] = Functions[PANEL_CUSTOM2_H];
-            char buff[200];
-            string aux = Functions[PANEL_CUSTOM2_CPP];
-            sprintf(buff, aux.data(), p.getName().data());
-            props[PANEL_CUSTOM2_CPP] = buff;
-            aux = Functions[ADD_FOOTER_BUTTON_CUSTOM2];
-            sprintf(buff, aux.data(), b.getName().data());
-            props[ADD_FOOTER_BUTTON_CUSTOM2] = buff;
+        case APPLY:
+            setButtonUi(props, p, b, str_buttons, PANEL_APPLY_H, PANEL_APPLY_CPP, ADD_FOOTER_BUTTON_APPLY);
+            str_buttons += Buttons_XML[APPLY];
+            break;
+
+        case CANCEL:
+            setButtonUi(props, p, b, str_buttons, PANEL_CANCEL_H, PANEL_CANCEL_CPP, ADD_FOOTER_BUTTON_CANCEL);
+            str_buttons += Buttons_XML[CANCEL];
+            break;
+
+        case CHECK:
+            setButtonUi(props, p, b, str_buttons, PANEL_CHECK_H, PANEL_CHECK_CPP, ADD_FOOTER_BUTTON_CHECK);
+            str_buttons += Buttons_XML[CHECK];
+            break;
+
+        case RESET:
+            setButtonUi(props, p, b, str_buttons, PANEL_RESET_H, PANEL_RESET_CPP, ADD_FOOTER_BUTTON_RESET);
+            str_buttons += Buttons_XML[RESET];
+            break;
+
+        case CUSTOM1:
+            setButtonUi(props, p, b, str_buttons, PANEL_CUSTOM1_H, PANEL_CUSTOM1_CPP, ADD_FOOTER_BUTTON_CUSTOM1);
+            aux = Buttons_XML[CUSTOM1];
+            sprintf(buff, aux.data(), ButtonTypeToString[b.getType()].data(), b.getName().data(), b.getName().data());
+            str_buttons += buff;
+            break;
+        
+        case CUSTOM2:
+            setButtonUi(props, p, b, str_buttons, PANEL_CUSTOM2_H, PANEL_CUSTOM2_CPP, ADD_FOOTER_BUTTON_CUSTOM2);
+            aux = Buttons_XML[CUSTOM2];
+            sprintf(buff, aux.data(), ButtonTypeToString[b.getType()].data(), b.getName().data(), b.getName().data());
+            str_buttons += buff;
+            break;
+        
+        default:
+            aux = Buttons_XML[NULLBUTTONACTION];
+            sprintf(buff, aux.data(), ButtonTypeToString[b.getType()].data(), b.getName().data(), b.getName().data());
+            str_buttons += buff;
+            break;
         }
     }
-}   
+    props[BUTTONS_UI] += str_buttons;
+}
 
-
+void setButtonUi(std::map<TemplateMark, std::string> &props, GPanel &p, Button &b, std::string &str_buttons, TemplateMark mark1, TemplateMark mark2, TemplateMark mark3)
+{
+    props[mark1] = Functions[mark1];
+    char buff[200];
+    string aux = Functions[mark2];
+    sprintf(buff, aux.data(), p.getName().data());
+    props[mark2] = buff;
+    aux = Functions[mark3];
+    sprintf(buff, aux.data(), b.getName().data());
+    props[mark3] = buff;
+}
 
 string writeFile(GPanel p, map<TemplateMark, string>& properties, FileToGenerate file)
 {   
@@ -219,6 +211,10 @@ string readTemplate(const std::string &filename)
     return content;
 }
 
+/**
+ * Para cada marca del conjunto props, la busca en el codigo de la plantilla.
+ * Cuando la encuentra, reemplaza la marca por su valor correspondiente.  
+*/
 void replaceMarks(string &code, const map<TemplateMark, string> &props)
 {
     for (const auto& pair : props) {

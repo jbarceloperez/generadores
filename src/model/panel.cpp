@@ -93,16 +93,30 @@ void GPanel::setType(std::string newTypeValue)
 }
 
 // Funcionalidad con los botones
-void GPanel::addButton(ButtonType type, std::string name)
+void GPanel::addButton(ButtonType _type, std::string _name)
 {
-    Controller::getInstance().printTrace(TRACE, "Added button [" + name + "]");
-    buttons.push_back(Button(name, type));
+    Controller::getInstance().printTrace(TRACE, "Added button [" + _name + "]");
+    buttons.push_back(Button(_name, _type));
+    if (type == READ_ONLY) type = CONFIG;
+    else if (type == EXTERNAL_UI_READ) type = EXTERNAL_UI_CONFIG;
 }
 
 void GPanel::addButton(std::string _name, std::string _type, std::string _action)
 {
-    Controller::getInstance().printTrace(TRACE, "Added button [" + name + "]");
+    Controller::getInstance().printTrace(TRACE, "Added button [" + _name + "]");
     buttons.push_back(Button(_name, _type, _action));
+    if (type == READ_ONLY) type = CONFIG;
+    else if (type == EXTERNAL_UI_READ) type = EXTERNAL_UI_CONFIG;
+}
+
+void GPanel::deleteButton(int button_index)
+{
+    buttons.erase(buttons.begin() + button_index);
+    if (buttons.size() == 0)
+    {
+        if (type == CONFIG) type = READ_ONLY;
+        else if (type == EXTERNAL_UI_CONFIG) type = EXTERNAL_UI_READ;
+    }
 }
 
 void GPanel::addActionToButton(int button, ButtonAction action)
@@ -118,15 +132,14 @@ void GPanel::deleteActionToButton(int button)
 std::string GPanel::toString() const
 {
     std::string str;
-    str = "PANEL: name=[" + name + "]\n  ";
-    str += "size=[w=" + std::to_string(w) + ",h=" + std::to_string(h) + "]\n  ";
-    str += "type=" + PanelTypeToString.find(type)->second + "\n  ";
-    str += "buttons={\n";
+    str = "PANEL [" + name + "]\n  ";
+    str += "Size:[w=" + std::to_string(w) + ",h=" + std::to_string(h) + "]\n  ";
+    str += "Type: " + PanelTypeToString.find(type)->second + "\n  ";
+    str += "Buttons:\n";
     for (Button b : buttons)
     {
-        str += "   " + b.toString();
+        str += "   > " + b.toString();
     }
-    str += "                    ____________________________________\n";
 
     return str;
 }

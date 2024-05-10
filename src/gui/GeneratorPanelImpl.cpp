@@ -37,7 +37,9 @@ GeneratorPanelImpl::GeneratorPanelImpl()
     connect(p_impl->ui.pbDeassociate, &QPushButton::clicked, this, &GeneratorPanelImpl::handleButtonClicked);
     connect(p_impl->ui.pbFile, &QPushButton::clicked, this, &GeneratorPanelImpl::handleButtonClicked);
     connect(p_impl->ui.pbXml, &QPushButton::clicked, this, &GeneratorPanelImpl::handleButtonClicked);
-
+    connect(p_impl->ui.pb_addButton, &QPushButton::clicked, this, &GeneratorPanelImpl::handleButtonClicked);
+    connect(p_impl->ui.pb_delButton, &QPushButton::clicked, this, &GeneratorPanelImpl::handleButtonClicked);
+    
     for (int i = APPLY; i < NULLBUTTONACTION; i++)
     {
         p_impl->ui.listWidget_act->addItem(ButtonActionToString.find(static_cast<ButtonAction>(i))->second.data());
@@ -49,11 +51,6 @@ GeneratorPanelImpl::~GeneratorPanelImpl()
 
 }
 
-// TODO: Verificar si tiene sentido una unica funcion de update general,
-// o una por botón que actualice solo lo necesario
-void GeneratorPanelImpl::updateHmi()
-{
-}
 
 void GeneratorPanelImpl::handleButtonClicked()
 {
@@ -85,13 +82,48 @@ void GeneratorPanelImpl::handleButtonClicked()
     {
         onPbXmlPressed();
     }
-    updateHmi();    // ¿?
+    else if(sender() == p_impl->ui.pb_addButton)
+    {
+        onPbAddButtonPressed();
+    }
+    else if(sender() == p_impl->ui.pb_delButton)
+    {
+        onPbDelButtonPressed();
+    }
+    updateHmi();    // tras cada botón actualiza el ui
+}
+
+void GeneratorPanelImpl::onPbDelButtonPressed()
+{
+    Controller::getInstance().printTrace(TRACE, "pbDelButton");
+
+    if (p_impl->ui.listWidget_but->selectedItems().size() == 0)
+    {
+        QMessageBox::warning(this, "Warning", "No selected button.",QMessageBox::Ok);
+        return;
+    }
+    int button = p_impl->ui.listWidget_but->currentItem()->listWidget()->row(p_impl->ui.listWidget_but->currentItem());
+    Controller::getInstance().onPbDelButtonPressed(button);
+}
+
+void GeneratorPanelImpl::onPbAddButtonPressed()
+{
+    Controller::getInstance().printTrace(TRACE, "pbAddButton");
+    if (p_impl->ui.cb_apply->isChecked())
+        Controller::getInstance().onPbAddButtonPressed("pbApply", "QPushButton", "Apply");
+    if (p_impl->ui.cb_cancel->isChecked())
+        Controller::getInstance().onPbAddButtonPressed("pbCancel", "QPushButton", "Cancel");
+    if (p_impl->ui.cb_check->isChecked())
+        Controller::getInstance().onPbAddButtonPressed("pbCheck", "QPushButton", "Check");
+    if (p_impl->ui.cb_reset->isChecked())
+        Controller::getInstance().onPbAddButtonPressed("pbReset", "QPushButton", "Reset");
+    if (p_impl->ui.cb_custom->isChecked())
+        Controller::getInstance().onPbAddButtonPressed(p_impl->ui.lneCustom->text().toStdString(), "QPushButton", "Custom1");
 }
 
 void GeneratorPanelImpl::onPbFilePressed()
 {
     QString file = QFileDialog::getOpenFileName(this, "Select a ui file", "../");
-    // Controller::getInstance().onPbFilePressed(file.toStdString());   // pa qué
     
     // update ui
     p_impl->ui.lnePath->setText(file);
@@ -101,28 +133,38 @@ void GeneratorPanelImpl::onPbFilePressed()
 
 void GeneratorPanelImpl::onPbDeassociatePressed()
 {
-    Controller::getInstance().printTrace(DEBUG, "pbDeassociate");
+    Controller::getInstance().printTrace(TRACE, "pbDeassociate");
+    if (p_impl->ui.listWidget_but->selectedItems().size() == 0)
+    {
+        QMessageBox::warning(this, "Warning", "No selected button.",QMessageBox::Ok);
+        return;
+    }
     int button = p_impl->ui.listWidget_but->currentItem()->listWidget()->row(p_impl->ui.listWidget_but->currentItem());
     if (Controller::getInstance().onPbDeassociatePressed(button))
     {// update ui
-        updateTxtAssociate();
+        // updateTxtAssociate();
     }
 }
 
 void GeneratorPanelImpl::onPbAssociatePressed()
 {
-    Controller::getInstance().printTrace(DEBUG, "pbAssociate");
+    Controller::getInstance().printTrace(TRACE, "pbAssociate");
+    if (p_impl->ui.listWidget_act->selectedItems().size() == 0 || p_impl->ui.listWidget_but->selectedItems().size() == 0)
+    {
+        QMessageBox::warning(this, "Warning", "No selected button.",QMessageBox::Ok);
+        return;
+    }
     int button = p_impl->ui.listWidget_but->currentItem()->listWidget()->row(p_impl->ui.listWidget_but->currentItem());
     int action = p_impl->ui.listWidget_act->currentItem()->listWidget()->row(p_impl->ui.listWidget_act->currentItem());
     if (Controller::getInstance().onPbAssociatePressed(button, action))
     {// update ui
-        updateTxtAssociate();
+        // updateTxtAssociate();
     }
 }
 
 void GeneratorPanelImpl::onPbXmlPressed()
 {
-    Controller::getInstance().printTrace(DEBUG, "pbXml");
+    Controller::getInstance().printTrace(TRACE, "pbXml");
     QFileInfo check_file("input.xml");
     if (check_file.exists() && check_file.isFile())
     {
@@ -136,7 +178,7 @@ void GeneratorPanelImpl::onPbXmlPressed()
 
 void GeneratorPanelImpl::onPbGeberatePressed()
 {
-    Controller::getInstance().printTrace(DEBUG, "pbGenerate");
+    Controller::getInstance().printTrace(TRACE, "pbGenerate");
     QFileInfo check_file("input.xml");
     if (!check_file.exists() || !check_file.isFile())
     {
@@ -148,31 +190,54 @@ void GeneratorPanelImpl::onPbGeberatePressed()
 
 void GeneratorPanelImpl::onPbWithoutUIPressed()
 {
-    Controller::getInstance().printTrace(DEBUG, "pbWithoutUi");
-    p_impl->ui.txtAsociate->clear();
+    Controller::getInstance().printTrace(TRACE, "pbWithoutUi");
+    QString name = p_impl->ui.lneName->text();
+    if (name.isEmpty())
+    {
+        QMessageBox::critical(this, "Error", "You must set a name for the panel.");
+    }
+    else if (!Controller::getInstance().onPbWithoutUIPressed(name.toStdString()))
+    {
+        QMessageBox::critical(this, "Error", "Panel alredy exists.");
+    } 
 }
 
 void GeneratorPanelImpl::onPbWithUIPressed()
 {
-    Controller::getInstance().printTrace(DEBUG, "pbWithUi");
+    Controller::getInstance().printTrace(TRACE, "pbWithUi");
     QString file = p_impl->ui.lnePath->text();
     if (file.isEmpty())
     {
         QMessageBox::critical(this, "Error", "A .ui file must be selected.");
     }
-    else if (Controller::getInstance().onPbWithUIPressed(file.toStdString()))
-    { // update ui if something new
+    else if (!Controller::getInstance().onPbWithUIPressed(file.toStdString()))
+    {
+        QMessageBox::critical(this, "Error", "Panel alredy exists.");
+    }
+        
+}
+
+void GeneratorPanelImpl::updateHmi()
+{
+    if (Controller::getInstance().getCurrentPanel() != nullptr)
+    {
+        updateButtons();
         updateTxtAssociate();
-        for (Button b : Controller::getInstance().getCurrentPanel().getButtons())
-        {
-            p_impl->ui.listWidget_but->addItem(b.getName().data());
-        }
     }
 }
 
 void GeneratorPanelImpl::updateTxtAssociate()
 {
-    GPanel currentPanel = Controller::getInstance().getCurrentPanel();
+    std::string str = Controller::getInstance().getPanelsInfo();
     p_impl->ui.txtAsociate->clear();
-    p_impl->ui.txtAsociate->appendPlainText(currentPanel.toString().data());
+    p_impl->ui.txtAsociate->appendPlainText(str.data());
+}
+
+void GeneratorPanelImpl::updateButtons()
+{
+    p_impl->ui.listWidget_but->clear();
+    for (Button b : Controller::getInstance().getCurrentPanel()->getButtons())
+    {
+        p_impl->ui.listWidget_but->addItem(b.getName().data());
+    }
 }

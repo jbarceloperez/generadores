@@ -5,8 +5,8 @@
  <widget class="QWidget" name="%NAME%">
   <property name="geometry">
    <rect>
-    <x>%GEOMETRY_X%</x>
-    <y>%GEOMETRY_Y%</y>
+    <x>0</x>
+    <y>0</y>
     <width>%GEOMETRY_W%</width>
     <height>%GEOMETRY_H%</height>
    </rect>
@@ -14,31 +14,10 @@
   <property name="windowTitle">
    <string>%NAME%</string>
   </property>
-  %BUTTONS_BEGIN%
   <layout class="QHBoxLayout" name="horizontalLayout">
-   <item>
-    <widget class="QPushButton" name="pbShow">
-     <property name="text">
-      <string>Show</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QPushButton" name="pbHide">
-     <property name="text">
-      <string>Hide</string>
-     </property>
-    </widget>
-   </item>
+   %BUTTONS_UI%
   </layout>
-  %BUTTONS_END%
  </widget>
-
-  
-%BUTTONS_BEGIN%
- <layoutdefault spacing="6" margin="11"/>
-%BUTTONS_END%
  <resources/>
- 
  <connections/>
 </ui>

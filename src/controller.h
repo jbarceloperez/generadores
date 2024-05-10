@@ -38,14 +38,17 @@ public:
 
     void init(int _argc, char* _argv[]);
     void printTrace(DebugLevel level, string msg);
-    GPanel getCurrentPanel() const;
+    GPanel* getCurrentPanel() const;
 
     void onPbGeneratePressed();
     bool onPbWithUIPressed(string uiPath);
-    void onPbWithoutUIPressed();
+    bool onPbWithoutUIPressed(string name);
     bool onPbAssociatePressed(int button, int action);
     bool onPbDeassociatePressed(int button);
     void onPbXmlPressed();
+    void onPbAddButtonPressed(string name, string type, string action);
+    void onPbDelButtonPressed(int button);
+    string getPanelsInfo();
 };
 
 #endif /* CONTROLLER_H */

@@ -59,9 +59,9 @@ void Controller::printTrace(DebugLevel level, string msg)
     
 }
 
-GPanel Controller::getCurrentPanel() const
+GPanel* Controller::getCurrentPanel() const
 {
-    return *currentPanel;
+    return currentPanel;
 }
 
 //----------------------------- HMI ---------------------------------
@@ -100,9 +100,20 @@ bool Controller::onPbWithUIPressed(string uiPath)
     return false;    
 }
 
-void Controller::onPbWithoutUIPressed()
+/**
+ * Funcion llamada desde la vista, crea un nuevo panel y lo selecciona
+ * como currentPanel para poder modificarlo desde el HMI. Si ya existe,
+ * devuelve un valor false.
+*/
+bool Controller::onPbWithoutUIPressed(std::string name)
 {
-    // TODO: funcionalidad panel vacío
+    if (panelCol.containsPanel(name))
+    {
+        return false;
+    }
+    panelCol.addPanel(name);
+    currentPanel = panelCol.getPanelFromPanelCol(name);
+    return true;
 }
 
 /**
@@ -142,6 +153,38 @@ void Controller::onPbXmlPressed()
     XMLFile inputXml = XMLFile();
     inputXml.setXmlPath("input.xml");
     inputXml.writeXMLFile(panelCol);
+}
+
+/**
+ * 
+*/
+void Controller::onPbAddButtonPressed(std::string name, std::string type, std::string action)
+{
+    for (Button b : currentPanel->getButtons())
+    {
+        if (!b.getName().compare(name))
+        {
+            printTrace(INFO, "Button " + name + " alredy exists.");
+            return;
+        }
+    }
+    currentPanel->addButton(name, type, action);
+}
+
+void Controller::onPbDelButtonPressed(int button)
+{
+    currentPanel->deleteButton(button);
+}
+
+string Controller::getPanelsInfo()
+{
+    string str = "";
+    for (GPanel p : panelCol.getVector())
+    {
+        str += p.toString();
+        str += "                    ____________________________________\n";
+    }
+    return str;
 }
 
 //-------------------------------------------------------------------
@@ -230,7 +273,7 @@ GPanel Controller::buildPanel(XMLElemento panel)
         {
             for (XMLElemento se : e.getElements())
             {
-                if (se.numSubelements()==1)
+                if (se.numSubelements()==1) // si solo tiene el nombre, no la accion
                     panelObject.addButton(se.getSubelement("name").getContent(), se.getAtributoValue("type"), "null");
                 else
                     panelObject.addButton(se.getSubelement("name").getContent(), se.getAtributoValue("type"), se.getSubelement("action").getContent());
@@ -271,9 +314,9 @@ void Controller::readInputXml(string inputFileName)
         std::cerr << "Missing <panels> element in XML file." << std::endl;
         exit(EXIT_FAILURE);
     }
-
+    cerr << doc.toString();
     for(XMLElemento panel : doc.getRootElement().getElements()) {
-        panelCol.addPanel(buildPanel(panel));
+        panelCol.addPanelToGenerate(buildPanel(panel));
     }
 }
 
@@ -283,7 +326,7 @@ void Controller::readInputXml(string inputFileName)
 */
 void Controller::generateAllFiles()
 {
-    for (GPanel panel : panelCol.getVector())
+    for (GPanel panel : panelCol.getVectorToGenerate())
     {
         generatePanelFiles(panel);
         cout << "Ended generating files for " + panel.getName() + "\n\n";

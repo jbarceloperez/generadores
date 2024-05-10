@@ -10,6 +10,11 @@ void PanelCollection::addPanel(GPanel p)
     panelCollection.push_back(p);
 }
 
+void PanelCollection::addPanelToGenerate(GPanel p)
+{
+    panelToGenerate.push_back(p);
+}
+
 /**
  * Retorna un puntero al panel con el nombre 'name'. Si no existe,
  * devuelve un puntero nulo.
@@ -43,4 +48,9 @@ bool PanelCollection::containsPanel(std::string name)
 std::vector<GPanel> PanelCollection::getVector() const
 {
     return panelCollection;
+}
+
+std::vector<GPanel> PanelCollection::getVectorToGenerate() const
+{
+    return panelToGenerate;
 }

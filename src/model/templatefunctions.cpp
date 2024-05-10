@@ -1,5 +1,6 @@
 #include <map>
 #include "generador.h"
+#include "panel.h"
 
 static std::map<TemplateMark, std::string> Functions = {
     {PANEL_APPLY_H,             "virtual void panelApply()override final;"},
@@ -20,4 +21,14 @@ static std::map<TemplateMark, std::string> Functions = {
     {ADD_FOOTER_BUTTON_CUSTOM1, "addFooterButton(Footer::Button_Custom1, p_impl->ui.%s);"},
     {ADD_FOOTER_BUTTON_CUSTOM2, "addFooterButton(Footer::Button_Custom2, p_impl->ui.%s);"},
     {ADD_FOOTER_BUTTON_RESET,   "addFooterButton(Footer::Button_Reset, p_impl->ui.%s);"}
+};
+
+static std::map<ButtonAction, std::string> Buttons_XML = {
+    {ButtonAction::APPLY,       "\t<item>\n\t    <widget class=\"QPushButton\" name=\"pbApply\">\n\t     <property name=\"text\">\n\t      <string>Apply</string>\n\t     </property>\n\t     </widget>\n\t   </item>\n"},
+    {ButtonAction::CANCEL,      "\t<item>\n\t    <widget class=\"QPushButton\" name=\"pbCancel\">\n\t     <property name=\"text\">\n\t      <string>Cancel</string>\n\t     </property>\n\t     </widget>\n\t   </item>\n"},
+    {ButtonAction::CHECK,       "\t<item>\n\t    <widget class=\"QPushButton\" name=\"pbCheck\">\n\t     <property name=\"text\">\n\t      <string>Check</string>\n\t     </property>\n\t     </widget>\n\t   </item>\n"},
+    {ButtonAction::RESET,       "\t<item>\n\t    <widget class=\"QPushButton\" name=\"pbReset\">\n\t     <property name=\"text\">\n\t      <string>Reset</string>\n\t     </property>\n\t     </widget>\n\t   </item>\n"},
+    {ButtonAction::CUSTOM1,     "\t<item>\n\t    <widget class=\"%s\" name=\"%s\">\n\t     <property name=\"text\">\n\t      <string>%s</string>\n\t     </property>\n\t     </widget>\n\t   </item>\n"},
+    {ButtonAction::CUSTOM2,     "\t<item>\n\t    <widget class=\"%s\" name=\"%s\">\n\t     <property name=\"text\">\n\t      <string>%s</string>\n\t     </property>\n\t     </widget>\n\t   </item>\n"},
+    {ButtonAction::NULLBUTTONACTION,     "\t<item>\n\t    <widget class=\"%s\" name=\"%s\">\n\t     <property name=\"text\">\n\t      <string>%s</string>\n\t     </property>\n\t     </widget>\n\t   </item>\n"}    
 };
