@@ -183,13 +183,14 @@ void Controller::changeCurrentPanel(int index)
 
 string Controller::getPanelsInfo()
 {
-    string str = "";
-    for (GPanel p : panelCol.getVector())
-    {
-        str += p.toString();
-        str += "                    ____________________________________\n";
-    }
-    return str;
+    // string str = "";
+    // for (GPanel p : panelCol.getVector())
+    // {
+    //     str += p.toString();
+    //     str += "                    ____________________________________\n";
+    // }
+    // return str;
+    return currentPanel->toString();
 }
 
 //-------------------------------------------------------------------

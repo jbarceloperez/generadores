@@ -39,8 +39,9 @@ GeneratorPanelImpl::GeneratorPanelImpl()
     connect(p_impl->ui.pbXml, &QPushButton::clicked, this, &GeneratorPanelImpl::handleButtonClicked);
     connect(p_impl->ui.pb_addButton, &QPushButton::clicked, this, &GeneratorPanelImpl::handleButtonClicked);
     connect(p_impl->ui.pb_delButton, &QPushButton::clicked, this, &GeneratorPanelImpl::handleButtonClicked);
-    // Conectar la señal del comobox de los paneles, para que actualice la info del currentPanel
-    connect(p_impl->ui.comboBox_panels, SIGNAL(currentIndexChanged(int)), this, SLOT(handlePanelsCombobox()));
+    // Conectar la señal de la lista de paneles, para que actualice la info del currentPanel
+    // connect(p_impl->ui.comboBox_panels, SIGNAL(currentIndexChanged(int)), this, SLOT(handleSelectedPanel()));
+    connect(p_impl->ui.listWidget_panels, SIGNAL(itemSelectionChanged()), this, SLOT(handleSelectedPanel()));
     
     for (int i = APPLY; i < NULLBUTTONACTION; i++)
     {
@@ -53,13 +54,13 @@ GeneratorPanelImpl::~GeneratorPanelImpl()
     
 }
 
-void GeneratorPanelImpl::handlePanelsCombobox()
+void GeneratorPanelImpl::handleSelectedPanel()
 {
-    Controller::getInstance().printTrace(TRACE, "currentPanel combobox changed");
+    Controller::getInstance().printTrace(TRACE, "currentPanel list changed");
 
-    int index = p_impl->ui.comboBox_panels->currentIndex();
+    int index = p_impl->ui.listWidget_panels->currentRow();
     Controller::getInstance().changeCurrentPanel(index);
-    updateButtons();
+    updateHmi();
 }
 
 
@@ -150,7 +151,7 @@ void GeneratorPanelImpl::onPbDeassociatePressed()
         QMessageBox::warning(this, "Warning", "No selected button.",QMessageBox::Ok);
         return;
     }
-    int button = p_impl->ui.listWidget_but->currentItem()->listWidget()->row(p_impl->ui.listWidget_but->currentItem());
+    int button = p_impl->ui.listWidget_but->currentRow();
     if (Controller::getInstance().onPbDeassociatePressed(button))
     {// update ui
         // updateTxtAssociate();
@@ -165,8 +166,8 @@ void GeneratorPanelImpl::onPbAssociatePressed()
         QMessageBox::warning(this, "Warning", "No selected button.",QMessageBox::Ok);
         return;
     }
-    int button = p_impl->ui.listWidget_but->currentItem()->listWidget()->row(p_impl->ui.listWidget_but->currentItem());
-    int action = p_impl->ui.listWidget_act->currentItem()->listWidget()->row(p_impl->ui.listWidget_act->currentItem());
+    int button = p_impl->ui.listWidget_but->currentRow();
+    int action = p_impl->ui.listWidget_act->currentRow();
     if (Controller::getInstance().onPbAssociatePressed(button, action))
     {// update ui
         // updateTxtAssociate();
@@ -208,10 +209,11 @@ void GeneratorPanelImpl::onPbWithoutUIPressed()
         QMessageBox::critical(this, "Error", "You must set a name for the panel.");
     }
     else if (Controller::getInstance().onPbWithoutUIPressed(name.toStdString()))
-    {   // actualizar combobox paneles
-        p_impl->ui.comboBox_panels->addItem(name);
-        int index = p_impl->ui.comboBox_panels->findText(name);
-        p_impl->ui.comboBox_panels->setCurrentIndex(index);
+    {   // actualizar lista paneles
+
+        p_impl->ui.listWidget_panels->addItem(name);
+        int index = p_impl->ui.listWidget_panels->count() - 1;
+        p_impl->ui.listWidget_panels->setCurrentRow(index);
     }
     else QMessageBox::critical(this, "Error", "Panel alredy exists.");
 }
@@ -227,9 +229,9 @@ void GeneratorPanelImpl::onPbWithUIPressed()
     else if (Controller::getInstance().onPbWithUIPressed(file.toStdString()))
     {   // actualizar combobox paneles
         const char* name = Controller::getInstance().getCurrentPanel()->getName().data();
-        p_impl->ui.comboBox_panels->addItem(name);
-        int index = p_impl->ui.comboBox_panels->findText(name);
-        p_impl->ui.comboBox_panels->setCurrentIndex(index);
+        p_impl->ui.listWidget_panels->addItem(name);
+        int index = p_impl->ui.listWidget_panels->count() - 1;
+        p_impl->ui.listWidget_panels->setCurrentRow(index);
     }
     else QMessageBox::critical(this, "Error", "Panel alredy exists.");
 }

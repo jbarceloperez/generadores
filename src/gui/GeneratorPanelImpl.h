@@ -19,7 +19,7 @@ public:
 
 private slots:
     void handleButtonClicked();
-    void handlePanelsCombobox();
+    void handleSelectedPanel();
 
 private:
     class PrivateData;

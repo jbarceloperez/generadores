@@ -22,34 +22,52 @@
   <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1,0">
    <item>
     <widget class="QGroupBox" name="groupBox">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>140</height>
+      </size>
+     </property>
      <property name="title">
-      <string>Formulario</string>
+      <string>Creación del panel</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="2" column="3">
-       <widget class="QComboBox" name="comboBox_panels"/>
-      </item>
-      <item row="2" column="0">
-       <widget class="QPushButton" name="pbWithoutUI">
-        <property name="text">
-         <string>Vacío</string>
+      <item row="2" column="2">
+       <widget class="QFrame" name="horizontalFrame">
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
         </property>
-        <property name="checkable">
-         <bool>true</bool>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
         </property>
-        <property name="autoExclusive">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="3">
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>Select panel</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignBottom|Qt::AlignHCenter</set>
-        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <property name="leftMargin">
+          <number>9</number>
+         </property>
+         <property name="topMargin">
+          <number>9</number>
+         </property>
+         <property name="rightMargin">
+          <number>9</number>
+         </property>
+         <property name="bottomMargin">
+          <number>9</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>Panel Name:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lneName">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </widget>
       </item>
       <item row="0" column="0">
@@ -73,46 +91,95 @@
         <property name="frameShadow">
          <enum>QFrame::Raised</enum>
         </property>
-        <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,0">
-         <item>
-          <widget class="QLineEdit" name="lnePath"/>
-         </item>
+        <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,1">
          <item>
           <widget class="QPushButton" name="pbFile">
+           <property name="maximumSize">
+            <size>
+             <width>74</width>
+             <height>16777215</height>
+            </size>
+           </property>
            <property name="text">
-            <string>...</string>
+            <string>Select file</string>
            </property>
           </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lnePath"/>
          </item>
         </layout>
        </widget>
       </item>
-      <item row="2" column="2">
-       <widget class="QFrame" name="horizontalFrame">
+      <item row="2" column="0">
+       <widget class="QPushButton" name="pbWithoutUI">
+        <property name="text">
+         <string>Vacío</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+        <property name="autoExclusive">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3" rowspan="3">
+       <widget class="QFrame" name="verticalFrame">
+        <property name="minimumSize">
+         <size>
+          <width>150</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>230</width>
+          <height>105</height>
+         </size>
+        </property>
         <property name="frameShape">
-         <enum>QFrame::StyledPanel</enum>
+         <enum>QFrame::NoFrame</enum>
         </property>
         <property name="frameShadow">
          <enum>QFrame::Raised</enum>
         </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_5">
+        <layout class="QVBoxLayout" name="verticalLayout_6">
          <property name="leftMargin">
-          <number>9</number>
+          <number>10</number>
          </property>
          <property name="topMargin">
-          <number>9</number>
+          <number>0</number>
          </property>
          <property name="rightMargin">
           <number>9</number>
          </property>
          <property name="bottomMargin">
-          <number>9</number>
+          <number>0</number>
          </property>
          <item>
-          <widget class="QLineEdit" name="lneName"/>
-         </item>
-         <item>
-          <widget class="QComboBox" name="comboBox_2"/>
+          <widget class="QGroupBox" name="verticalGroupBox">
+           <property name="title">
+            <string>Paneles</string>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_7">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QListWidget" name="listWidget_panels"/>
+            </item>
+           </layout>
+          </widget>
          </item>
         </layout>
        </widget>
@@ -123,7 +190,7 @@
    <item>
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
-      <string>Controles del panel</string>
+      <string>Modificar controles del panel</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,1">
       <item>
