@@ -3,6 +3,7 @@
 #include <string>
 
 #include "model/generador.h"
+#include <bits/getopt_core.h>
 
 
 // implementación del singleton
@@ -22,7 +23,30 @@ void Controller::init(int _argc, char *_argv[])
     dbg::log::initialize("/home/javi/Documentos/Generadores/src/traces.cfg");
     appLogLevel = TRACE;
     currentPanel = nullptr;
-
+    int c;
+    char* path;
+    int nogui = 0;  // flag
+    while ((c = getopt(_argc, _argv, "hn:")) != -1) {
+    switch (c) 
+        {
+        case 'n':
+            nogui=1;
+            path = optarg;
+            break;
+        case 'h':
+            cout << "codeGenerator [-n NO GUI MODE] input.xml\n";
+            exit(EXIT_FAILURE);
+            break;
+        default:
+            break;   
+        }
+    }
+    if (nogui)   // ejecución nogui
+    {
+        cout << "   - codeGenerator - no gui mode -\n\n";
+        generateAllFiles(path);
+        exit(EXIT_SUCCESS);
+    }
 }
 
 // todo: fix logger
@@ -126,7 +150,7 @@ bool Controller::onPbWithoutUIPressed(std::string name)
 bool Controller::onPbAssociatePressed(int button, int action)
 {
     if (currentPanel == nullptr)
-        return;
+        return false;
     ButtonAction a = static_cast<ButtonAction>(action);
     if (currentPanel->getButtons()[button].getAction() != a)
     {
@@ -142,7 +166,7 @@ bool Controller::onPbAssociatePressed(int button, int action)
 bool Controller::onPbDeassociatePressed(int button)
 {
     if (currentPanel == nullptr)
-        return;
+        return false;
     if (currentPanel->getButtons()[button].getAction() != NULLBUTTONACTION)
     {   
         currentPanel->deleteActionToButton(button);
