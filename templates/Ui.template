@@ -1,5 +1,6 @@
-<!-- Ui generado por generador de código -->
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Code generated with saes codeGenerator v0.1 -->
+
 <ui version="4.0">
  <class>%NAME%</class>
  <widget class="QWidget" name="%NAME%">
