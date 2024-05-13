@@ -36,11 +36,12 @@ GeneratorPanelImpl::GeneratorPanelImpl()
     connect(p_impl->ui.pbAssociate, &QPushButton::clicked, this, &GeneratorPanelImpl::handleButtonClicked);
     connect(p_impl->ui.pbDeassociate, &QPushButton::clicked, this, &GeneratorPanelImpl::handleButtonClicked);
     connect(p_impl->ui.pbFile, &QPushButton::clicked, this, &GeneratorPanelImpl::handleButtonClicked);
-    connect(p_impl->ui.pbXml, &QPushButton::clicked, this, &GeneratorPanelImpl::handleButtonClicked);
+    connect(p_impl->ui.pbSaveXml, &QPushButton::clicked, this, &GeneratorPanelImpl::handleButtonClicked);
+    connect(p_impl->ui.pbLoadXml, &QPushButton::clicked, this, &GeneratorPanelImpl::handleButtonClicked);
     connect(p_impl->ui.pb_addButton, &QPushButton::clicked, this, &GeneratorPanelImpl::handleButtonClicked);
     connect(p_impl->ui.pb_delButton, &QPushButton::clicked, this, &GeneratorPanelImpl::handleButtonClicked);
+    
     // Conectar la señal de la lista de paneles, para que actualice la info del currentPanel
-    // connect(p_impl->ui.comboBox_panels, SIGNAL(currentIndexChanged(int)), this, SLOT(handleSelectedPanel()));
     connect(p_impl->ui.listWidget_panels, SIGNAL(itemSelectionChanged()), this, SLOT(handleSelectedPanel()));
     
     for (int i = APPLY; i < NULLBUTTONACTION; i++)
@@ -90,9 +91,9 @@ void GeneratorPanelImpl::handleButtonClicked()
     {
         onPbFilePressed();
     }
-    else if(sender() == p_impl->ui.pbXml)
+    else if(sender() == p_impl->ui.pbSaveXml)
     {
-        onPbXmlPressed();
+        onPbSaveXmlPressed();
     }
     else if(sender() == p_impl->ui.pb_addButton)
     {
@@ -101,6 +102,10 @@ void GeneratorPanelImpl::handleButtonClicked()
     else if(sender() == p_impl->ui.pb_delButton)
     {
         onPbDelButtonPressed();
+    }
+    else if(sender() == p_impl->ui.pbLoadXml)
+    {
+        onPbLoadXmlPressed();
     }
     updateHmi();    // tras cada botón actualiza el ui
 }
@@ -174,19 +179,32 @@ void GeneratorPanelImpl::onPbAssociatePressed()
     }
 }
 
-void GeneratorPanelImpl::onPbXmlPressed()
+void GeneratorPanelImpl::onPbSaveXmlPressed()
 {
-    Controller::getInstance().printTrace(TRACE, "pbXml");
+    Controller::getInstance().printTrace(TRACE, "pbSaveXml");
     QFileInfo check_file("input.xml");
     if (check_file.exists() && check_file.isFile())
     {
         QMessageBox::StandardButton reply = QMessageBox::question(this, "Overwrite?", "'input.xml' alredy exists. Overwrite?",QMessageBox::Yes|QMessageBox::No);
         if (reply == QMessageBox::No) return;
     }
-    Controller::getInstance().onPbXmlPressed();
+    Controller::getInstance().onPbSaveXmlPressed();
     QMessageBox::information(this, "Success", "XML config saved in 'input.xml'.");
 }
 
+void GeneratorPanelImpl::onPbLoadXmlPressed()
+{
+    Controller::getInstance().printTrace(TRACE, "pbLoadXml");
+    QString file = QFileDialog::getOpenFileName(this, "Choose a file", "../");
+    int addedPanels = Controller::getInstance().onPbLoadXmlPressed(file.toStdString());
+    for (string n : Controller::getInstance().getPanelNames())
+    {
+        p_impl->ui.listWidget_panels->addItem(n.data());
+    }
+    p_impl->ui.listWidget_panels->setCurrentRow(0);   
+    string msg = "Added " + to_string(addedPanels) + " panels succesfully.";
+    QMessageBox::information(this, "Panels added", msg.data(), QMessageBox::Ok);    
+}
 
 void GeneratorPanelImpl::onPbGeberatePressed()
 {

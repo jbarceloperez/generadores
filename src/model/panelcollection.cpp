@@ -1,13 +1,22 @@
 #include "panelcollection.h"
+#include "../controller.h"
 
 void PanelCollection::addPanel(std::string name)
 {
-    panelCollection.push_back(GPanel(name));
+    addPanel(GPanel(name));
 }
 
+/**
+ * Añade un panel nuevo a la colección si no existía previamente.
+*/
 void PanelCollection::addPanel(GPanel p)
 {
-    panelCollection.push_back(p);
+    if (getPanelByName(p.getName()) != nullptr)
+    {
+        Controller::getInstance().printTrace(TRACE, "PanelCollection::addPanel> Panel '" + p.getName() + "' alredy exists.");
+    }
+    else
+        panelCollection.push_back(p);
 }
 
 void PanelCollection::addPanelToGenerate(GPanel p)
@@ -19,7 +28,7 @@ void PanelCollection::addPanelToGenerate(GPanel p)
  * Retorna un puntero al panel con el nombre 'name'. Si no existe,
  * devuelve un puntero nulo.
 */
-GPanel *PanelCollection::getPanelFromPanelCol(std::string name)
+GPanel *PanelCollection::getPanelByName(std::string name)
 {   
     GPanel* panelPointer = nullptr;
     for (auto & p : panelCollection) 
@@ -29,7 +38,11 @@ GPanel *PanelCollection::getPanelFromPanelCol(std::string name)
     return panelPointer;
 }
 
-GPanel *PanelCollection::getPanelFromIndex(int index)
+/**
+ * Devuelve el panel corresponendiente a la posicion index. Si no
+ * existe, devuelve nullptr.
+*/
+GPanel *PanelCollection::getPanelByIndex(int index)
 {
     if(index < panelCollection.size())
     {
@@ -62,4 +75,18 @@ std::vector<GPanel> PanelCollection::getVector() const
 std::vector<GPanel> PanelCollection::getVectorToGenerate() const
 {
     return panelToGenerate;
+}
+
+std::vector<std::string> PanelCollection::getNames() const
+{
+    std::vector<std::string> v;
+    for (GPanel p : panelCollection) {
+        v.push_back(p.getName()); 
+    }
+    return v;
+}
+
+int PanelCollection::getPanelCollectionSize()
+{
+    return panelCollection.size();
 }

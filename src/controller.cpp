@@ -64,6 +64,10 @@ GPanel* Controller::getCurrentPanel() const
     return currentPanel;
 }
 
+vector<string> Controller::getPanelNames() {
+    return panelCol.getNames();
+}
+
 //----------------------------- HMI ---------------------------------
 //-------------------------------------------------------------------
 
@@ -73,8 +77,7 @@ GPanel* Controller::getCurrentPanel() const
 */
 void Controller::onPbGeneratePressed()
 {
-    readInputXml("input.xml");
-    generateAllFiles();
+    generateAllFiles("input.xml");
 }
 
 /**
@@ -112,7 +115,7 @@ bool Controller::onPbWithoutUIPressed(std::string name)
         return false;
     }
     panelCol.addPanel(name);
-    currentPanel = panelCol.getPanelFromPanelCol(name);
+    currentPanel = panelCol.getPanelByName(name);
     return true;
 }
 
@@ -148,7 +151,7 @@ bool Controller::onPbDeassociatePressed(int button)
  * Función llamada desde la vista, escribe el objeto XMLFile en
  * un fichero.
 */
-void Controller::onPbXmlPressed()
+void Controller::onPbSaveXmlPressed()
 {
     XMLFile inputXml = XMLFile();
     inputXml.setXmlPath("input.xml");
@@ -156,7 +159,20 @@ void Controller::onPbXmlPressed()
 }
 
 /**
- * 
+ * Función llamada desde la vista, lee un fichero XML con la configuración
+ * del generador y devuelve el numero de paneles añadidos.
+*/
+int Controller::onPbLoadXmlPressed(string xmlPath)
+{
+    readInputXml(xmlPath);
+    int addedPanels = panelCol.getPanelCollectionSize();
+    currentPanel = panelCol.getPanelByIndex(0); // selecciona el primer panel
+    return panelCol.getPanelCollectionSize();
+}
+
+/**
+ * Funcion que añade un botón al currentPanel con la información recibida
+ * como parametros desde la vista.
 */
 void Controller::onPbAddButtonPressed(std::string name, std::string type, std::string action)
 {
@@ -171,6 +187,9 @@ void Controller::onPbAddButtonPressed(std::string name, std::string type, std::s
     currentPanel->addButton(name, type, action);
 }
 
+/**
+ * Función que elimina un botón del current panel.
+*/
 void Controller::onPbDelButtonPressed(int button)
 {
     currentPanel->deleteButton(button);
@@ -178,7 +197,7 @@ void Controller::onPbDelButtonPressed(int button)
 
 void Controller::changeCurrentPanel(int index)
 {
-    currentPanel = panelCol.getPanelFromIndex(index);
+    currentPanel = panelCol.getPanelByIndex(index);
 }
 
 string Controller::getPanelsInfo()
@@ -212,7 +231,7 @@ bool Controller::readUiXml(XMLFile ui)
     }
     // nuevo panel
     panelCol.addPanel(name);
-    currentPanel = panelCol.getPanelFromPanelCol(name);
+    currentPanel = panelCol.getPanelByName(name);
     
     printTrace(TRACE, "Loaded panel '" + name + "'");
 
@@ -298,7 +317,7 @@ GPanel Controller::buildPanel(XMLElemento panel)
 /**
  * Dado el nombre de un archivo de entrada que es un XML de entrada
  * del generador, lee el documento XML y por cada elemento panel va
- * generando un elemento 
+ * generando un elemento y añadiendolo a la colección de paneles.
 */
 void Controller::readInputXml(string inputFileName)
 {
@@ -314,24 +333,35 @@ void Controller::readInputXml(string inputFileName)
         std::cerr << "Error loading path '" << inputFileName << "'\n";
         exit(EXIT_FAILURE);
     }
-    catch(const XMLParseException& e)
+    for(XMLElemento panel : doc.getRootElement().getElements()) {
+        panelCol.addPanel(buildPanel(panel));
+    }
+}
+
+/**
+ * Función que genera ficheros. Primero, lee el archivo xml de entrada
+ * con la configuración de los ficheros a generar. Después, para
+ * cada panel en la colección, llama a la lógica del generador para
+ * generar su estructura de clases.
+*/
+void Controller::generateAllFiles(string inputFile)
+{
+    XMLFile doc;
+
+    try
+    {
+        doc = XMLFile(inputFile.data());
+    }
+    catch(const XMLFileException& e)
     {
         std::cerr << e.what() << '\n';
-        std::cerr << "Missing <panels> element in XML file." << std::endl;
+        std::cerr << "Error loading path '" << inputFile << "'\n";
         exit(EXIT_FAILURE);
     }
     cerr << doc.toString();
     for(XMLElemento panel : doc.getRootElement().getElements()) {
         panelCol.addPanelToGenerate(buildPanel(panel));
     }
-}
-
-/**
- * Para cada panel en la colección, llama a la lógica del generador para
- * generar su estructura de clases.
-*/
-void Controller::generateAllFiles()
-{
     for (GPanel panel : panelCol.getVectorToGenerate())
     {
         generatePanelFiles(panel);

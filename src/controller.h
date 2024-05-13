@@ -30,7 +30,7 @@ private:
     bool readUiXml(XMLFile ui);
     GPanel buildPanel(XMLElemento panel);
     void readInputXml(string file);
-    void generateAllFiles();
+    void generateAllFiles(string inputFile);
 
 public:
     Controller(Controller const &) = delete;
@@ -39,13 +39,15 @@ public:
     void init(int _argc, char* _argv[]);
     void printTrace(DebugLevel level, string msg);
     GPanel* getCurrentPanel() const;
+    vector<string> getPanelNames();
 
     void onPbGeneratePressed();
     bool onPbWithUIPressed(string uiPath);
     bool onPbWithoutUIPressed(string name);
     bool onPbAssociatePressed(int button, int action);
     bool onPbDeassociatePressed(int button);
-    void onPbXmlPressed();
+    void onPbSaveXmlPressed();
+    int onPbLoadXmlPressed(string xmlPath);
     void onPbAddButtonPressed(string name, string type, string action);
     void onPbDelButtonPressed(int button);
     void changeCurrentPanel(int index);

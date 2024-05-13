@@ -31,10 +31,11 @@ private:
     void onPbAssociatePressed();
     void onPbDeassociatePressed();
     void onPbFilePressed();
-    void onPbXmlPressed();
+    void onPbSaveXmlPressed();
     void updateHmi();
     void onPbAddButtonPressed();
     void onPbDelButtonPressed();
+    void onPbLoadXmlPressed();
 };
 
 #endif // GENERATORPANEL_H

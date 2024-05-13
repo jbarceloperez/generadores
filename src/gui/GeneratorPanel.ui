@@ -389,9 +389,16 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_4">
      <item>
-      <widget class="QPushButton" name="pbXml">
+      <widget class="QPushButton" name="pbLoadXml">
        <property name="text">
-        <string>Genera XML</string>
+        <string>Cargar XML</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pbSaveXml">
+       <property name="text">
+        <string>Guardar XML</string>
        </property>
       </widget>
      </item>
