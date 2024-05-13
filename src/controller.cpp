@@ -125,6 +125,8 @@ bool Controller::onPbWithoutUIPressed(std::string name)
 */
 bool Controller::onPbAssociatePressed(int button, int action)
 {
+    if (currentPanel == nullptr)
+        return;
     ButtonAction a = static_cast<ButtonAction>(action);
     if (currentPanel->getButtons()[button].getAction() != a)
     {
@@ -139,6 +141,8 @@ bool Controller::onPbAssociatePressed(int button, int action)
 */
 bool Controller::onPbDeassociatePressed(int button)
 {
+    if (currentPanel == nullptr)
+        return;
     if (currentPanel->getButtons()[button].getAction() != NULLBUTTONACTION)
     {   
         currentPanel->deleteActionToButton(button);
@@ -176,6 +180,8 @@ int Controller::onPbLoadXmlPressed(string xmlPath)
 */
 void Controller::onPbAddButtonPressed(std::string name, std::string type, std::string action)
 {
+    if (currentPanel == nullptr)
+        return;
     for (Button b : currentPanel->getButtons())
     {
         if (!b.getName().compare(name))
@@ -192,6 +198,8 @@ void Controller::onPbAddButtonPressed(std::string name, std::string type, std::s
 */
 void Controller::onPbDelButtonPressed(int button)
 {
+    if (currentPanel == nullptr)
+        return;
     currentPanel->deleteButton(button);
 }
 
