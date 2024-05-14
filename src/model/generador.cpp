@@ -113,44 +113,28 @@ void fillPropertiesMap(GPanel p, map<TemplateMark, string>& props) {
         {
         case APPLY:
             setButtonUi(props, p, b, str_buttons, PANEL_APPLY_H, PANEL_APPLY_CPP, ADD_FOOTER_BUTTON_APPLY);
-            str_buttons += Buttons_XML[APPLY];
             break;
-
         case CANCEL:
             setButtonUi(props, p, b, str_buttons, PANEL_CANCEL_H, PANEL_CANCEL_CPP, ADD_FOOTER_BUTTON_CANCEL);
-            str_buttons += Buttons_XML[CANCEL];
             break;
-
         case CHECK:
             setButtonUi(props, p, b, str_buttons, PANEL_CHECK_H, PANEL_CHECK_CPP, ADD_FOOTER_BUTTON_CHECK);
-            str_buttons += Buttons_XML[CHECK];
             break;
-
         case RESET:
             setButtonUi(props, p, b, str_buttons, PANEL_RESET_H, PANEL_RESET_CPP, ADD_FOOTER_BUTTON_RESET);
-            str_buttons += Buttons_XML[RESET];
             break;
-
         case CUSTOM1:
             setButtonUi(props, p, b, str_buttons, PANEL_CUSTOM1_H, PANEL_CUSTOM1_CPP, ADD_FOOTER_BUTTON_CUSTOM1);
-            aux = Buttons_XML[CUSTOM1];
-            sprintf(buff, aux.data(), ButtonTypeToString[b.getType()].data(), b.getName().data(), b.getName().data());
-            str_buttons += buff;
             break;
-        
         case CUSTOM2:
             setButtonUi(props, p, b, str_buttons, PANEL_CUSTOM2_H, PANEL_CUSTOM2_CPP, ADD_FOOTER_BUTTON_CUSTOM2);
-            aux = Buttons_XML[CUSTOM2];
-            sprintf(buff, aux.data(), ButtonTypeToString[b.getType()].data(), b.getName().data(), b.getName().data());
-            str_buttons += buff;
             break;
-        
         default:
-            aux = Buttons_XML[NULLBUTTONACTION];
-            sprintf(buff, aux.data(), ButtonTypeToString[b.getType()].data(), b.getName().data(), b.getName().data());
-            str_buttons += buff;
             break;
         }
+        aux = CodeSnippets[UIXMLBUTTON];
+        sprintf(buff, aux.data(), ButtonTypeToString[b.getType()].data(), b.getName().data(), b.getName().data());
+        str_buttons += buff;
     }
     props[BUTTONS_UI] += str_buttons;
 }
