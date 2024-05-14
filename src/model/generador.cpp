@@ -1,4 +1,5 @@
 #include "generador.h"
+#include "../controller.h"
 #include <filesystem>
 #include <iostream>
 #include <fstream>
@@ -28,20 +29,21 @@ void generatePanelFiles(GPanel p)
     if (fs::exists(folderPath)) {
         try {
             fs::remove_all(folderPath);
-            cout << "Directorio ./" << name << " ya existente. Eliminando...\n";
+            Controller::getInstance().printTrace(INFO, "Directorio ./" + name + " ya existente. Eliminando...");
         } catch (const fs::filesystem_error& e) {
-            cerr << "Error eliminando el directorio existente: " << e.what() << endl;
+            Controller::getInstance().printTrace(CRITICAL, "Error eliminando el directorio existente.");
+            Controller::getInstance().printTrace(CRITICAL, e.what());
             exit(EXIT_FAILURE);
         }
     }
 
     fs::create_directory(folderPath);
-    cout << "Creado nuevo directorio -> " << folderPath.string() << endl;   // TODO: Cambiar esto por logs de la libreria de saes
-    
+    Controller::getInstance().printTrace(INFO, "Creado nuevo directorio -> " + folderPath.string());
+
     // Carpeta con los ficheros del panel
     fs::path srcDirPath = name + "/src_inc";
     fs::create_directory(srcDirPath);
-    cout << "Creado nuevo directorio -> " << srcDirPath.string() << endl;   // TODO: Cambiar esto por logs de la libreria de saes
+    Controller::getInstance().printTrace(INFO, "Creado nuevo directorio -> " + srcDirPath.string());
 
     string aux_root = name + "/src_inc/" + name;
 
@@ -49,37 +51,37 @@ void generatePanelFiles(GPanel p)
     fs::path cmakePath = name + "/CMakeLists.txt";
     ofstream outCmakeLists(cmakePath);
     outCmakeLists << writeFile(p, properties, CMAKELISTS);    
-    cout << "Creado nuevo fichero -> " << cmakePath.string() << endl;   // TODO: Cambiar esto por logs de la libreria de saes
+    Controller::getInstance().printTrace(INFO, "Creado nuevo fichero -> " + srcDirPath.string());
 
     // Archivo panel.h
     fs::path panelHeaderPath = aux_root + ".h";
     ofstream outHeader(panelHeaderPath);
     outHeader << writeFile(p, properties, HEADER);
-    cout << "Creado nuevo fichero -> " << panelHeaderPath.string() << endl;   // TODO: Cambiar esto por logs de la libreria de saes
+    Controller::getInstance().printTrace(INFO, "Creado nuevo fichero -> " + srcDirPath.string());
 
     // Archivo PanelGw.h
     fs::path panelGwHeaderPath = aux_root + "Gw.h";
     ofstream outGwHeader(panelGwHeaderPath);
     outGwHeader << writeFile(p, properties, GWHEADER);
-    cout << "Creado nuevo fichero -> " << panelGwHeaderPath.string() << endl;   // TODO: Cambiar esto por logs de la libreria de saes
+    Controller::getInstance().printTrace(INFO, "Creado nuevo fichero -> " + srcDirPath.string());
 
     // Archivo PanelGw.cpp
     fs::path panelGwPath = aux_root + "Gw.cpp";
     ofstream outGw(panelGwPath);
     outGw << writeFile(p, properties, GW);
-    cout << "Creado nuevo fichero -> " << panelGwPath.string() << endl;   // TODO: Cambiar esto por logs de la libreria de saes
+    Controller::getInstance().printTrace(INFO, "Creado nuevo fichero -> " + srcDirPath.string());
 
     // Archivo PanelQtCb.h
     fs::path panelQtCbHeaderPath = aux_root + "QtCb.h";
     ofstream outQtCbHeader(panelQtCbHeaderPath);
     outQtCbHeader << writeFile(p, properties, QTCBHEADER);
-    cout << "Creado nuevo fichero -> " << panelQtCbHeaderPath.string() << endl;   // TODO: Cambiar esto por logs de la libreria de saes
+    Controller::getInstance().printTrace(INFO, "Creado nuevo fichero -> " + srcDirPath.string());
 
     // Archivo PanelQtCb.cpp
     fs::path panelQtCbPath = aux_root + "QtCb.cpp";
     ofstream outQtCb(panelQtCbPath);
     outQtCb << writeFile(p, properties, QTCB);
-    cout << "Creado nuevo fichero -> " << panelQtCbPath.string() << endl;   // TODO: Cambiar esto por logs de la libreria de saes
+    Controller::getInstance().printTrace(INFO, "Creado nuevo fichero -> " + srcDirPath.string());
 
     if (p.getType() == PanelType::CONFIG || p.getType() == PanelType::READ_ONLY)
     {
@@ -87,7 +89,7 @@ void generatePanelFiles(GPanel p)
         fs::path panelUiPath = aux_root + ".ui";
         ofstream outUi(panelUiPath);
         outUi << writeFile(p, properties, UI);
-        cout << "Creado nuevo fichero -> " << panelUiPath.string() << endl;   // TODO: Cambiar esto por logs de la libreria de saes
+        Controller::getInstance().printTrace(INFO, "Creado nuevo fichero -> " + srcDirPath.string());
     }
 }
 

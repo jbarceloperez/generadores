@@ -69,10 +69,10 @@ void Controller::printTrace(DebugLevel level, string msg)
             mainlog.warning(msg.c_str());
             break;
         case ERROR:
-            mainlog.warning(msg.c_str());
+            mainlog.error(msg.c_str());
             break;
         case CRITICAL:
-            mainlog.warning(msg.c_str());
+            mainlog.critical(msg.c_str());
             break;
         
         default:
@@ -397,6 +397,6 @@ void Controller::generateAllFiles(string inputFile)
     for (GPanel panel : panelCol.getVectorToGenerate())
     {
         generatePanelFiles(panel);
-        cout << "Ended generating files for " + panel.getName() + "\n\n";
+        printTrace(INFO, "Ended generating files for " + panel.getName() + "\n");
     }
 }
