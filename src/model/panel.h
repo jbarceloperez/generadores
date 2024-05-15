@@ -5,16 +5,10 @@
 #include <map>
 #include <vector>
 
+#include "button.h"
+
 enum PanelType {
     READ_ONLY, CONFIG, EXTERNAL_UI_READ, EXTERNAL_UI_CONFIG, PanelType_END
-};
-
-enum ButtonType {
-    QPUSHBUTTON, QRADIOBUTTON, QCHECKBOX
-};
-
-enum ButtonAction {
-    APPLY, CANCEL, CHECK, RESET, CUSTOM1, CUSTOM2, NULLBUTTONACTION
 };
 
 static std::map<PanelType, std::string> PanelTypeToString = {
@@ -25,71 +19,9 @@ static std::map<PanelType, std::string> PanelTypeToString = {
     {PanelType_END, ""}
 };
 
-static std::map<ButtonType, std::string> ButtonTypeToString = {
-    {QPUSHBUTTON, "QPushButton"},
-    {QRADIOBUTTON, "QRadioButton"},
-    {QCHECKBOX, "QCheckBox"}
-};
-
-static std::map<ButtonAction, std::string> ButtonActionToString = {
-    {APPLY, "Apply"},
-    {CANCEL, "Cancel"},
-    {CHECK, "Check"},
-    {RESET, "Reset"},
-    {CUSTOM1, "Custom1"},
-    {CUSTOM2, "Custom2"},
-    {NULLBUTTONACTION, "null"}
-};
 /**
- * Clase que representa un botón del ui, con tres atributos y
- * sus getters y setters. Los tipos de botón y acción tienen un
- * mapa que mapea cada enumerado con su etiqueta de texto.
-*/
-class Button {
-private:
-    std::string name;
-    ButtonType type;
-    ButtonAction action;
-
-public:
-    Button() {};
-    Button(std::string _name, ButtonType _type) {
-        name = _name;
-        type = _type;
-        action = NULLBUTTONACTION;
-    };
-    Button(std::string _name, std::string _type, std::string _action) {
-        name = _name;
-        for (auto const& element : ButtonTypeToString)
-        {
-            if (!element.second.compare(_type)) type = element.first;
-        }
-        for (auto const& element : ButtonActionToString)
-        {
-            if (!element.second.compare(_action)) action = element.first;
-        }
-    };
-    ~Button() {};
-
-    std::string getName() {return name;}
-    ButtonType getType() {return type;}
-    ButtonAction getAction() {return action;}
-
-    void setName(std::string _name) {name = _name;}
-    void setType(ButtonType _type) {type = _type;}
-    void setAction(ButtonAction _action) {action = _action;}
-    void deleteAction() {action = NULLBUTTONACTION;} 
-
-    std::string toString() {
-        std::string str;
-        str = "'" + name + "': " + ButtonTypeToString.find(type)->second;
-        str+=", action=" + ButtonActionToString.find(action)->second + "\n";
-        return str;
-    }
-};
-
-/**
- * 
+ * Clase que representa un panel. El atributo clave es el nombre,
+ * y contiene distintas propiedades además de una colección de botones.
 */
 class GPanel {
 private:
