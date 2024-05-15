@@ -40,7 +40,7 @@ GeneratorPanelImpl::GeneratorPanelImpl()
     connect(p_impl->ui.pbLoadXml, &QPushButton::clicked, this, &GeneratorPanelImpl::handleButtonClicked);
     connect(p_impl->ui.pb_addButton, &QPushButton::clicked, this, &GeneratorPanelImpl::handleButtonClicked);
     connect(p_impl->ui.pb_delButton, &QPushButton::clicked, this, &GeneratorPanelImpl::handleButtonClicked);
-    
+    connect(p_impl->ui.pbDeletePanel, &QPushButton::clicked, this, &GeneratorPanelImpl::handleButtonClicked);
     // Conectar la señal de la lista de paneles, para que actualice la info del currentPanel
     connect(p_impl->ui.listWidget_panels, SIGNAL(itemSelectionChanged()), this, SLOT(handleSelectedPanel()));
     
@@ -107,7 +107,36 @@ void GeneratorPanelImpl::handleButtonClicked()
     {
         onPbLoadXmlPressed();
     }
+    else if(sender() == p_impl->ui.pbDeletePanel)
+    {
+        onPbDeletePanelPressed();
+    }
     updateHmi();    // tras cada botón actualiza el ui
+}
+
+void GeneratorPanelImpl::onPbDeletePanelPressed()
+{
+    Controller::getInstance().printTrace(TRACE, "pbDeletePanel");
+    int index = p_impl->ui.listWidget_panels->currentRow();
+    if (index != -1)
+    {
+        string panel = p_impl->ui.listWidget_panels->currentItem()->text().toStdString();
+        int panelesRestantes = Controller::getInstance().onPbDeletePanelPressed(panel);
+        // update panels
+        QListWidgetItem *it = p_impl->ui.listWidget_panels->takeItem(p_impl->ui.listWidget_panels->currentRow());
+        delete it;
+        int index = p_impl->ui.listWidget_panels->count() - 1;
+        p_impl->ui.listWidget_panels->setCurrentRow(index);
+        if (panelesRestantes == 0)
+        {
+            p_impl->ui.listWidget_but->clear();
+            p_impl->ui.txtAsociate->clear();
+        }
+    }
+    else
+    {
+        Controller::getInstance().printTrace(INFO, "No panel selected");
+    }
 }
 
 void GeneratorPanelImpl::onPbDelButtonPressed()
@@ -213,9 +242,11 @@ void GeneratorPanelImpl::onPbGeberatePressed()
     if (!check_file.exists() || !check_file.isFile())
     {
         QMessageBox::warning(this, "Warning", "'input.xml' does not exist or is not a file.",QMessageBox::Ok);
-        return;
+        onPbSaveXmlPressed();
     }
     Controller::getInstance().onPbGeneratePressed();
+    string msg = "Files succesfully generated in " + check_file.absolutePath().toStdString() + ".";
+    QMessageBox::information(this, "Files generated", msg.data(), QMessageBox::Ok);
 }
 
 void GeneratorPanelImpl::onPbWithoutUIPressed()
@@ -228,10 +259,10 @@ void GeneratorPanelImpl::onPbWithoutUIPressed()
     }
     else if (Controller::getInstance().onPbWithoutUIPressed(name.toStdString()))
     {   // actualizar lista paneles
-
         p_impl->ui.listWidget_panels->addItem(name);
         int index = p_impl->ui.listWidget_panels->count() - 1;
         p_impl->ui.listWidget_panels->setCurrentRow(index);
+
     }
     else QMessageBox::critical(this, "Error", "Panel alredy exists.");
 }
@@ -250,6 +281,7 @@ void GeneratorPanelImpl::onPbWithUIPressed()
         p_impl->ui.listWidget_panels->addItem(name);
         int index = p_impl->ui.listWidget_panels->count() - 1;
         p_impl->ui.listWidget_panels->setCurrentRow(index);
+
     }
     else QMessageBox::critical(this, "Error", "Panel alredy exists.");
 }
@@ -265,7 +297,7 @@ void GeneratorPanelImpl::updateHmi()
 
 void GeneratorPanelImpl::updateTxtAssociate()
 {
-    std::string str = Controller::getInstance().getPanelsInfo();
+    std::string str = Controller::getInstance().panelInfo();
     p_impl->ui.txtAsociate->clear();
     p_impl->ui.txtAsociate->appendPlainText(str.data());
 }

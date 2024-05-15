@@ -49,9 +49,10 @@ public:
     void onPbSaveXmlPressed();
     int onPbLoadXmlPressed(string xmlPath);
     void onPbAddButtonPressed(string name, string type, string action);
+    int onPbDeletePanelPressed(string panel);
     void onPbDelButtonPressed(int button);
     void changeCurrentPanel(int index);
-    string getPanelsInfo();
+    string panelInfo();
 };
 
 #endif /* CONTROLLER_H */

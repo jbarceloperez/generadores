@@ -23,6 +23,8 @@ public:
     void addPanel(std::string name);
     void addPanel(GPanel p);
     void addPanelToGenerate(GPanel p);
+    void delPanel(std::string panel);
+    int getLength();
     GPanel* getPanelByName(std::string name);
     GPanel* getPanelByIndex(int index);
     GPanel getPanel(std::string name);

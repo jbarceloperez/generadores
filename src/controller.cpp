@@ -218,6 +218,19 @@ void Controller::onPbAddButtonPressed(std::string name, std::string type, std::s
 }
 
 /**
+ * Borra el panel en la posición pasada como parámetro. Devuelve el número
+ * de paneles restantes. Setea el currentPanel al ultimo panel de la
+ * coleccion.
+*/
+int Controller::onPbDeletePanelPressed(std::string panel)
+{
+    panelCol.delPanel(panel);
+    int newSize = panelCol.getLength();
+    currentPanel = panelCol.getPanelByIndex(newSize - 1);
+    return newSize;
+}
+
+/**
  * Función que elimina un botón del current panel.
 */
 void Controller::onPbDelButtonPressed(int button)
@@ -232,7 +245,7 @@ void Controller::changeCurrentPanel(int index)
     currentPanel = panelCol.getPanelByIndex(index);
 }
 
-string Controller::getPanelsInfo()
+string Controller::panelInfo()
 {
     // string str = "";
     // for (GPanel p : panelCol.getVector())

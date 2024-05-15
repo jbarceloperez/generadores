@@ -24,6 +24,25 @@ void PanelCollection::addPanelToGenerate(GPanel p)
     panelToGenerate.push_back(p);
 }
 
+void PanelCollection::delPanel(std::string panel)
+{
+    std::vector<GPanel>::iterator iter;
+    for (iter = panelCollection.begin(); iter != panelCollection.end(); ) {
+        if (!iter->getName().compare(panel))
+        {
+            iter = panelCollection.erase(iter);
+            Controller::getInstance().printTrace(TRACE, "PanelCollection::delPanel> Deleted panel " + panel + ".");
+        }
+        else
+            ++iter;
+    }
+}
+
+int PanelCollection::getLength()
+{
+    return panelCollection.size();
+}
+
 /**
  * Retorna un puntero al panel con el nombre 'name'. Si no existe,
  * devuelve un puntero nulo.
