@@ -405,9 +405,9 @@ void Controller::generateAllFiles(string inputFile)
     }
     cerr << doc.toString();
     for(XMLElemento panel : doc.getRootElement().getElements()) {
-        panelCol.addPanelToGenerate(buildPanel(panel));
+        panelGen.addPanel(buildPanel(panel));
     }
-    for (GPanel panel : panelCol.getVectorToGenerate())
+    for (GPanel panel : panelGen.getVector())
     {
         generatePanelFiles(panel);
         printTrace(INFO, "Ended generating files for " + panel.getName() + "\n");
