@@ -15,7 +15,7 @@
   <property name="windowTitle">
    <string>%NAME%</string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout">
+  <layout class="%LAYOUT_UI%" name="generatedLayout">
    %BUTTONS_UI%
   </layout>
  </widget>

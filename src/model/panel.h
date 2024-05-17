@@ -5,6 +5,21 @@
 #include <map>
 #include <vector>
 
+#define DEFAULT_W 400
+#define DEFAULT_H 300
+#define DEFAULT_LAYOUT QHBOXLAYOUT
+
+enum LayoutType {
+    QHBOXLAYOUT, QVBOXLAYOUT, QGRIDLAYOUT, EXTERNAL_UI
+};
+
+static std::map<LayoutType, std::string> LayoutTypeToString = {
+    {QGRIDLAYOUT, "QGridLayout"},
+    {QHBOXLAYOUT, "QHBoxLayout"},
+    {QVBOXLAYOUT, "QVBoxLayout"},
+    {EXTERNAL_UI, "<EXTERNAL UI>"}
+};
+
 enum PanelType {
     READ_ONLY, CONFIG, EXTERNAL_UI_READ, EXTERNAL_UI_CONFIG, PanelType_END
 };
@@ -96,6 +111,7 @@ private:
     std::string name;               // Nombre del panel
     int w, h;                       // Ancho y altura del panel en píxeles
     PanelType type;                 // Propiedad
+    LayoutType layout;              // Tipo de layout del panel
     std::string uipath;             // Ruta al archivo ui, si lo tuvise
     std::vector<Button> buttons;    // Collección de botones
 
@@ -112,6 +128,7 @@ public:
     int getWidth() const;
     int getHeight() const;
     PanelType getType() const;
+    LayoutType getLayout() const;
     std::vector<Button> getButtons() const;
 
     // Setters
@@ -121,7 +138,9 @@ public:
     void setHeight(int newHeight);
     void setType(PanelType newTypeValue);
     void setType(std::string newTypeValue);
-    
+    void setLayout(std::string newLayout);
+    void setLayout(LayoutType newLayout);
+
     // Funcionalidad con los botones
     void addButton(ButtonType type, std::string name);
     void addButton(std::string name, std::string type, std::string action);

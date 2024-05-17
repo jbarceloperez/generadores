@@ -13,17 +13,19 @@ class GeneratorPanelImpl : public QFrame
 
 public:
     GeneratorPanelImpl();
-    ~GeneratorPanelImpl();    
+    ~GeneratorPanelImpl();
 
 private slots:
     void handleButtonClicked();
     void handleSelectedPanel();
+    void handleLayoutCombobox();
+    void handleSpinBoxWidth();
+    void handleSpinBoxHeight();
 
 private:
     class PrivateData;
     std::unique_ptr<PrivateData> p_impl;
     void onPbWithUIPressed();
-    void updatePanels();
     void onPbWithoutUIPressed();
     void onPbGeberatePressed();
     void onPbAssociatePressed();
@@ -34,9 +36,11 @@ private:
     void onPbDelButtonPressed();
     void onPbLoadXmlPressed();
     void onPbDeletePanelPressed();
+    void onSizeChanged(int h, int w);
 
     void updateHmi();
     void updateButtons();
+    void updatePanelSettings();
     void updateTxtAssociate();
 };
 

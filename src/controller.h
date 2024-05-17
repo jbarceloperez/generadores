@@ -52,6 +52,8 @@ public:
     int onPbDeletePanelPressed(string panel);
     void onPbDelButtonPressed(int button);
     void changeCurrentPanel(int index);
+    bool onComboPanelsChanged(int index);
+    bool changeCurrentPanelSize(int h, int w);
     string panelInfo();
 };
 

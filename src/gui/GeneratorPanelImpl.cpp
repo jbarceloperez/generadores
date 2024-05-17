@@ -43,7 +43,12 @@ GeneratorPanelImpl::GeneratorPanelImpl()
     connect(p_impl->ui.pbDeletePanel, &QPushButton::clicked, this, &GeneratorPanelImpl::handleButtonClicked);
     // Conectar la señal de la lista de paneles, para que actualice la info del currentPanel
     connect(p_impl->ui.listWidget_panels, SIGNAL(itemSelectionChanged()), this, SLOT(handleSelectedPanel()));
-    
+    // Conectar la señal del combobox de los layout
+    connect(p_impl->ui.comboLayout, SIGNAL(currentIndexChanged(int)), this, SLOT(handleLayoutCombobox()));
+    // Conectar la señal de los spinBox del tamaño de los paneles
+    connect(p_impl->ui.sbHeigth, SIGNAL(valueChanged(int)), this, SLOT(handleSpinBoxHeight()));
+    connect(p_impl->ui.sbWidth, SIGNAL(valueChanged(int)), this, SLOT(handleSpinBoxWidth()));    
+
     for (int i = APPLY; i < NULLBUTTONACTION; i++)
     {
         p_impl->ui.listWidget_act->addItem(ButtonActionToString.find(static_cast<ButtonAction>(i))->second.data());
@@ -52,7 +57,36 @@ GeneratorPanelImpl::GeneratorPanelImpl()
 
 GeneratorPanelImpl::~GeneratorPanelImpl()
 {
-    
+
+}
+
+void GeneratorPanelImpl::handleSpinBoxWidth()
+{
+    Controller::getInstance().printTrace(TRACE, "currentPanel width changed");
+    int h = Controller::getInstance().getCurrentPanel()->getHeight();
+    int w = p_impl->ui.sbWidth->value();
+    onSizeChanged(h,w);
+}
+
+void GeneratorPanelImpl::handleSpinBoxHeight()
+{
+    Controller::getInstance().printTrace(TRACE, "currentPanel height changed");
+    int h = p_impl->ui.sbHeigth->value();
+    int w = Controller::getInstance().getCurrentPanel()->getWidth();
+    onSizeChanged(h,w);
+}
+
+
+void GeneratorPanelImpl::onSizeChanged(int h, int w)
+{
+    if (Controller::getInstance().changeCurrentPanelSize(h,w))
+    {
+        updateTxtAssociate();
+    }
+    else
+    {
+        QMessageBox::warning(this, "Warning", "Panel with external UI, cannot modify.",QMessageBox::Ok);
+    }
 }
 
 void GeneratorPanelImpl::handleSelectedPanel()
@@ -64,6 +98,15 @@ void GeneratorPanelImpl::handleSelectedPanel()
     updateHmi();
 }
 
+void GeneratorPanelImpl::handleLayoutCombobox()
+{
+    Controller::getInstance().printTrace(TRACE, "layout combobox changed");
+
+    int index = p_impl->ui.comboLayout->currentIndex();
+    if (Controller::getInstance().onComboPanelsChanged(index))
+        updateTxtAssociate();
+    
+}
 
 void GeneratorPanelImpl::handleButtonClicked()
 {
@@ -170,7 +213,11 @@ void GeneratorPanelImpl::onPbAddButtonPressed()
 void GeneratorPanelImpl::onPbFilePressed()
 {
     QString file = QFileDialog::getOpenFileName(this, "Select a ui file", "../");
-    
+    if (file.isEmpty())
+    {
+        Controller::getInstance().printTrace(TRACE, "onPbFilePressed> No file selected.");
+        return;
+    }
     // update ui
     p_impl->ui.lnePath->setText(file);
     Controller::getInstance().printTrace(INFO, "Selected file: " + file.toStdString());
@@ -225,6 +272,11 @@ void GeneratorPanelImpl::onPbLoadXmlPressed()
 {
     Controller::getInstance().printTrace(TRACE, "pbLoadXml");
     QString file = QFileDialog::getOpenFileName(this, "Choose a file", "../");
+    if (file.isEmpty())
+    {
+        Controller::getInstance().printTrace(TRACE, "onPbLoadXmlPressed> No file selected.");
+        return;
+    }
     int addedPanels = Controller::getInstance().onPbLoadXmlPressed(file.toStdString());
     for (string n : Controller::getInstance().getPanelNames())
     {
@@ -292,6 +344,7 @@ void GeneratorPanelImpl::updateHmi()
     {
         updateButtons();
         updateTxtAssociate();
+        updatePanelSettings();
     }
 }
 
@@ -309,4 +362,17 @@ void GeneratorPanelImpl::updateButtons()
     {
         p_impl->ui.listWidget_but->addItem(b.getName().data());
     }
+}
+
+void GeneratorPanelImpl::updatePanelSettings()
+{
+    if (Controller::getInstance().getCurrentPanel()->getLayout()!=EXTERNAL_UI)
+    {
+        int h = Controller::getInstance().getCurrentPanel()->getHeight();
+        int w = Controller::getInstance().getCurrentPanel()->getWidth();
+        p_impl->ui.sbHeigth->setValue(h);
+        p_impl->ui.sbWidth->setValue(w);
+    }
+    LayoutType layout = Controller::getInstance().getCurrentPanel()->getLayout();
+    p_impl->ui.comboLayout->setCurrentIndex(layout);
 }

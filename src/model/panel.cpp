@@ -1,9 +1,6 @@
 #include "panel.h"
 #include "../controller.h"
 
-#define DEFAULT_W 400
-#define DEFAULT_H 300
-
 
 // Constructor
 GPanel::GPanel(std::string _name, int _w, int _h, PanelType _type)
@@ -12,6 +9,7 @@ GPanel::GPanel(std::string _name, int _w, int _h, PanelType _type)
     w = _w == -1 ? DEFAULT_W : _w;
     h = _h == -1 ? DEFAULT_H : _h;
     type = _type;
+    layout = DEFAULT_LAYOUT;
 }
 
 GPanel::GPanel(std::string _name)
@@ -20,6 +18,7 @@ GPanel::GPanel(std::string _name)
     w = DEFAULT_W;
     h = DEFAULT_H;
     type = PanelType::READ_ONLY;
+    layout = DEFAULT_LAYOUT;
 }
 
 // Getters
@@ -46,6 +45,11 @@ int GPanel::getHeight() const
 PanelType GPanel::getType() const
 {
     return type;
+}
+
+LayoutType GPanel::getLayout() const
+{
+    return layout;
 }
 
 std::vector<Button> GPanel::getButtons() const
@@ -84,12 +88,30 @@ void GPanel::setType(std::string newTypeValue)
     {
         if (!pair.second.compare(newTypeValue))
         {
-            type = pair.first;
+            setType(pair.first);
             return;
         }
     }
     Controller::getInstance().printTrace(CRITICAL, "ERROR: PanelType '" + newTypeValue + "' does not exist.");
     // exception?
+}
+
+void GPanel::setLayout(std::string newLayout)
+{
+    for (const auto& pair : LayoutTypeToString)
+    {
+        if (!pair.second.compare(newLayout))
+        {
+            setLayout(pair.first);
+            return;
+        }
+    }
+    setLayout(DEFAULT_LAYOUT);
+}
+
+void GPanel::setLayout(LayoutType newLayout)
+{
+    layout = newLayout;
 }
 
 // Funcionalidad con los botones
@@ -135,6 +157,7 @@ std::string GPanel::toString() const
     str = "PANEL [" + name + "]\n  ";
     str += "Size:[w=" + std::to_string(w) + ",h=" + std::to_string(h) + "]\n  ";
     str += "Type: " + PanelTypeToString.find(type)->second + "\n  ";
+    str += "Layout: " + LayoutTypeToString.find(layout)->second + "\n  ";
     str += "Buttons:\n";
     for (Button b : buttons)
     {

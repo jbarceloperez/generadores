@@ -200,8 +200,29 @@ void XMLFile::writeXMLFile(PanelCollection panels)
         tinyxml2::XMLElement* panel = doc.NewElement("panel");
         
         panel->SetAttribute("name",p.getName().data());
-        panel->SetAttribute("type",PanelTypeToString.find(p.getType())->second.data());
+        panel->SetAttribute("type",PanelTypeToString[p.getType()].data());
         root->InsertEndChild(panel);
+
+        // añadir su layout si no es el default
+        if (p.getLayout()!=DEFAULT_LAYOUT)
+        {
+            tinyxml2::XMLElement* layout = doc.NewElement("layout");
+            layout->SetText(LayoutTypeToString[p.getLayout()].data());
+            panel->InsertEndChild(layout);
+        }
+        
+        // añadir el tamaño si no es el default
+        if (p.getHeight()!=DEFAULT_H || p.getWidth()!=DEFAULT_W)
+        {
+            tinyxml2::XMLElement* geometry = doc.NewElement("geometry");
+            tinyxml2::XMLElement* height = doc.NewElement("h");
+            tinyxml2::XMLElement* width = doc.NewElement("w");
+            height->SetText(p.getHeight());
+            width->SetText(p.getWidth());
+            geometry->InsertEndChild(height);
+            geometry->InsertEndChild(width);
+            panel->InsertEndChild(geometry);
+        }
 
         PanelType tipo = p.getType();
         // si es de tipo ui externo, añadir el path del ui
@@ -219,7 +240,7 @@ void XMLFile::writeXMLFile(PanelCollection panels)
             for (Button b : p.getButtons())
             {
                 tinyxml2::XMLElement* button = doc.NewElement("button");
-                button->SetAttribute("type",ButtonTypeToString.find(b.getType())->second.data());
+                button->SetAttribute("type",ButtonTypeToString[b.getType()].data());
                 buttonsElement->InsertEndChild(button);
                 
                 tinyxml2::XMLElement* name = doc.NewElement("name");
@@ -228,12 +249,11 @@ void XMLFile::writeXMLFile(PanelCollection panels)
                 if (b.getAction() != NULLBUTTONACTION)
                 {
                     tinyxml2::XMLElement* action = doc.NewElement("action");
-                    action->SetText(ButtonActionToString.find(b.getAction())->second.data());
+                    action->SetText(ButtonActionToString[b.getAction()].data());
                     button->InsertEndChild(action);
                 }
             }
         }
-        
         // TODO: continuar con condiciones, si no tiene ui, más elementos, etc.
     }
     

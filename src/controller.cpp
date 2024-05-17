@@ -245,6 +245,48 @@ void Controller::changeCurrentPanel(int index)
     currentPanel = panelCol.getPanelByIndex(index);
 }
 
+/**
+ * Función que trata de cambiar el layout del currentPanel. Devuelve
+ * true en caso de cambiarlo y false en otro caso.
+*/
+bool Controller::onComboPanelsChanged(int index) 
+{
+    if (currentPanel != nullptr)
+    {
+        if(currentPanel->getLayout()!=EXTERNAL_UI) // si el ui ya viene dado, no cambiar nada
+        {
+            if (index==EXTERNAL_UI) // no se debe poder asignar este layout
+            {
+                printTrace(CRITICAL, "Controller::onComboPanelsChanged> cannot set EXTERNAL_UI layout");
+            }
+            else 
+            {
+                currentPanel->setLayout(static_cast<LayoutType>(index));
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+/**
+ * Función que trata de cambiar el tamaño del currentPanel. Devuelbe
+ * true en caso de cambiarlo y false en otro caso.
+*/
+bool Controller::changeCurrentPanelSize(int h, int w)
+{
+    if (currentPanel != nullptr)
+    {
+        if(currentPanel->getLayout()!=EXTERNAL_UI) // si el ui ya viene dado, no cambiar nada
+        {
+            currentPanel->setHeight(h);
+            currentPanel->setWidth(w);
+            return true;
+        }
+    }
+    return false;
+}
+
 string Controller::panelInfo()
 {
     // string str = "";
@@ -281,6 +323,7 @@ bool Controller::readUiXml(XMLFile ui)
     printTrace(TRACE, "Loaded panel '" + name + "'");
 
     currentPanel->setUiPath(ui.getXmlPath());
+    currentPanel->setLayout(EXTERNAL_UI);       // no hay ui, no hay layout
     iterateXML(root);
     if (!currentPanel->getButtons().size()) {
         currentPanel->setType(PanelType::EXTERNAL_UI_READ);
@@ -353,6 +396,11 @@ GPanel Controller::buildPanel(XMLElemento panel)
         else if (!name.compare("uipath"))
         {
             panelObject.setUiPath(e.getContent());
+        }
+        // elemento <layout>
+        else if (!name.compare("layout"))
+        {
+            panelObject.setLayout(e.getContent());
         }
     }
 
