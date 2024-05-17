@@ -15,13 +15,13 @@ enum DebugLevel {
 class Controller {
 private:
     // atributos
-
-    PanelCollection panelCol; // conjunto de paneles creados
-    GPanel* currentPanel;     // puntero a un panel de panelCol
+    PanelCollection panelCol;   // conjunto de paneles creados
+    PanelCollection panelGen;   // conjunto de paneles leidos del XML, para generarlos
+    GPanel* currentPanel;       // puntero a un panel de panelCol
     dbg::log mainlog;
     dbg::log tracks;
     int argc;
-    int appLogLevel;
+    int appLogLevel;            // nivel de log, el programa no mostrará logs por debajo de este
     char* argv[];
     
     Controller() {};

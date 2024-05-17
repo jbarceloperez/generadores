@@ -19,11 +19,6 @@ void PanelCollection::addPanel(GPanel p)
         panelCollection.push_back(p);
 }
 
-void PanelCollection::addPanelToGenerate(GPanel p)
-{
-    panelToGenerate.push_back(p);
-}
-
 void PanelCollection::delPanel(std::string panel)
 {
     std::vector<GPanel>::iterator iter;
@@ -89,11 +84,6 @@ bool PanelCollection::containsPanel(std::string name)
 std::vector<GPanel> PanelCollection::getVector() const
 {
     return panelCollection;
-}
-
-std::vector<GPanel> PanelCollection::getVectorToGenerate() const
-{
-    return panelToGenerate;
 }
 
 std::vector<std::string> PanelCollection::getNames() const
