@@ -291,11 +291,12 @@ void GeneratorPanelImpl::onPbGeberatePressed()
 {
     Controller::getInstance().printTrace(TRACE, "pbGenerate");
     QFileInfo check_file("input.xml");
-    if (!check_file.exists() || !check_file.isFile())
-    {
-        QMessageBox::warning(this, "Warning", "'input.xml' does not exist or is not a file.",QMessageBox::Ok);
-        onPbSaveXmlPressed();
-    }
+    // if (!check_file.exists() || !check_file.isFile())
+    // {
+    //     QMessageBox::warning(this, "Warning", "'input.xml' does not exist or is not a file.",QMessageBox::Ok);
+    //     onPbSaveXmlPressed();
+    // }
+    onPbSaveXmlPressed();
     Controller::getInstance().onPbGeneratePressed();
     string msg = "Files succesfully generated in " + check_file.absolutePath().toStdString() + ".";
     QMessageBox::information(this, "Files generated", msg.data(), QMessageBox::Ok);
