@@ -11,13 +11,14 @@
 #define DEFAULT_LAYOUT QHBOXLAYOUT
 
 enum LayoutType {
-    QHBOXLAYOUT, QVBOXLAYOUT, QGRIDLAYOUT, EXTERNAL_UI
+    QHBOXLAYOUT, QVBOXLAYOUT, QGRIDLAYOUT, QFORMLAYOUT, EXTERNAL_UI
 };
 
 static std::map<LayoutType, std::string> LayoutTypeToString = {
     {QGRIDLAYOUT, "QGridLayout"},
     {QHBOXLAYOUT, "QHBoxLayout"},
     {QVBOXLAYOUT, "QVBoxLayout"},
+    {QFORMLAYOUT, "QFormLayout"},
     {EXTERNAL_UI, "<EXTERNAL UI>"}
 };
 

@@ -49,9 +49,15 @@ GeneratorPanelImpl::GeneratorPanelImpl()
     connect(p_impl->ui.sbHeigth, SIGNAL(valueChanged(int)), this, SLOT(handleSpinBoxHeight()));
     connect(p_impl->ui.sbWidth, SIGNAL(valueChanged(int)), this, SLOT(handleSpinBoxWidth()));    
 
+    // añadir acciones de botones a la lista
     for (int i = APPLY; i < NULLBUTTONACTION; i++)
     {
-        p_impl->ui.listWidget_act->addItem(ButtonActionToString.find(static_cast<ButtonAction>(i))->second.data());
+        p_impl->ui.listWidget_act->addItem(ButtonActionToString[static_cast<ButtonAction>(i)].data());
+    }
+    // añadir los layout al combo
+    for (int i = QHBOXLAYOUT; i < LayoutType::EXTERNAL_UI; i++)
+    {   
+        p_impl->ui.comboLayout->addItem(LayoutTypeToString[static_cast<LayoutType>(i)].data());
     }
 }
 
