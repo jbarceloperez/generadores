@@ -1,6 +1,5 @@
 #include <map>
 #include "generador.h"
-#include "panel.h"
 
 static std::map<TemplateMark, std::string> Functions = {
     {PANEL_APPLY_H,             "virtual void panelApply()override final;"},
@@ -25,9 +24,10 @@ static std::map<TemplateMark, std::string> Functions = {
 
 enum CodeSnippet
 {
-    UIXMLBUTTON
+    UIXMLBUTTON, UIXMLBUTTON_WITHPOS 
 };
 
 static std::map<CodeSnippet, std::string> CodeSnippets = {
-    {UIXMLBUTTON,     "\t<item>\n\t    <widget class=\"%s\" name=\"%s\">\n\t     <property name=\"text\">\n\t      <string>%s</string>\n\t     </property>\n\t     </widget>\n\t   </item>\n"}    
+    {UIXMLBUTTON,           "\t<item>\n\t    <widget class=\"%s\" name=\"%s\">\n\t     <property name=\"text\">\n\t      <string>%s</string>\n\t     </property>\n\t     </widget>\n\t   </item>\n"},
+    {UIXMLBUTTON_WITHPOS,   "\t<item row=\"%d\" column=\"%d\">\n\t    <widget class=\"%s\" name=\"%s\">\n\t     <property name=\"text\">\n\t      <string>%s</string>\n\t     </property>\n\t     </widget>\n\t   </item>\n"}   
 };

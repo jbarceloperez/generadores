@@ -24,6 +24,8 @@ void generatePanelFiles(GPanel p)
     fillPropertiesMap(p, properties);
 
     string name = p.getName();
+    string aux_root = name + "/src_inc/" + name;
+    string srcDirPath = name + "/src_inc";
     fs::path folderPath = name;
 
     if (fs::exists(folderPath)) {
@@ -37,69 +39,42 @@ void generatePanelFiles(GPanel p)
         }
     }
 
+    // Crea la carpeta donde se guardará el cmakelists y la carpeta src_inc
     fs::create_directory(folderPath);
     Controller::getInstance().printTrace(INFO, "Creado nuevo directorio -> " + folderPath.string());
 
     // Carpeta con los ficheros del panel
-    fs::path srcDirPath = name + "/src_inc";
     fs::create_directory(srcDirPath);
-    Controller::getInstance().printTrace(INFO, "Creado nuevo directorio -> " + srcDirPath.string());
-
-    string aux_root = name + "/src_inc/" + name;
-
-     // CMakeLists del panel
-    fs::path cmakePath = name + "/CMakeLists.txt";
-    ofstream outCmakeLists(cmakePath);
-    outCmakeLists << writeFile(p, properties, CMAKELISTS);    
-    Controller::getInstance().printTrace(INFO, "Creado nuevo fichero -> " + srcDirPath.string());
-
-    // Archivo panel.h
-    fs::path panelHeaderPath = aux_root + ".h";
-    ofstream outHeader(panelHeaderPath);
-    outHeader << writeFile(p, properties, HEADER);
-    Controller::getInstance().printTrace(INFO, "Creado nuevo fichero -> " + srcDirPath.string());
-
-    // Archivo PanelGw.h
-    fs::path panelGwHeaderPath = aux_root + "Gw.h";
-    ofstream outGwHeader(panelGwHeaderPath);
-    outGwHeader << writeFile(p, properties, GWHEADER);
-    Controller::getInstance().printTrace(INFO, "Creado nuevo fichero -> " + srcDirPath.string());
-
-    // Archivo PanelGw.cpp
-    fs::path panelGwPath = aux_root + "Gw.cpp";
-    ofstream outGw(panelGwPath);
-    outGw << writeFile(p, properties, GW);
-    Controller::getInstance().printTrace(INFO, "Creado nuevo fichero -> " + srcDirPath.string());
-
-    // Archivo PanelQtCb.h
-    fs::path panelQtCbHeaderPath = aux_root + "QtCb.h";
-    ofstream outQtCbHeader(panelQtCbHeaderPath);
-    outQtCbHeader << writeFile(p, properties, QTCBHEADER);
-    Controller::getInstance().printTrace(INFO, "Creado nuevo fichero -> " + srcDirPath.string());
-
-    // Archivo PanelQtCb.cpp
-    fs::path panelQtCbPath = aux_root + "QtCb.cpp";
-    ofstream outQtCb(panelQtCbPath);
-    outQtCb << writeFile(p, properties, QTCB);
-    Controller::getInstance().printTrace(INFO, "Creado nuevo fichero -> " + srcDirPath.string());
-
+    Controller::getInstance().printTrace(INFO, "Creado nuevo directorio -> " + srcDirPath);
+    
+    // Genera todos los ficheros
+    writeFile(name + "/CMakeLists.txt", srcDirPath, p, properties, CMAKELISTS);
+    writeFile(aux_root + ".h", srcDirPath, p, properties, HEADER);
+    writeFile(aux_root + "Gw.h", srcDirPath, p, properties, GWHEADER);
+    writeFile(aux_root + "Gw.cpp", srcDirPath, p, properties, GW);
+    writeFile(aux_root + "QtCb.h", srcDirPath, p, properties, QTCBHEADER);
+    writeFile(aux_root + "QtCb.cpp", srcDirPath, p, properties, QTCB);
     if (p.getType() == PanelType::CONFIG || p.getType() == PanelType::READ_ONLY)
     {
-        // Archivo Panel.ui, si no existe previamente
-        fs::path panelUiPath = aux_root + ".ui";
-        ofstream outUi(panelUiPath);
-        outUi << writeFile(p, properties, UI);
-        Controller::getInstance().printTrace(INFO, "Creado nuevo fichero -> " + srcDirPath.string());
+        writeFile(aux_root + ".ui", srcDirPath, p, properties, UI);
     }
 }
 
 //-----------------------------------------------------------------------------
 
+void writeFile(const string& path, const string& srcDirPath, GPanel &p, std::map<TemplateMark, std::string> &properties, FileToGenerate file)
+{
+    ofstream out(path); // abre el ofstream al path correspondiente
+    string code;
+    code = readTemplate(FileTemplatePath[file]); // lee el contenido de la plantilla a code
+    replaceMarks(code, properties); // procesa la plantilla y rellena las marcas
+    out << code;    // escribe el contenido en el ofstream
+    Controller::getInstance().printTrace(INFO, "Creado nuevo fichero -> " + srcDirPath);
+}
+
 void fillPropertiesMap(GPanel p, map<TemplateMark, string>& props) {
-    for (int m = NAME; m < END_MARK; m++)
-    {
+    for (int m = NAME; m < END_MARK; m++)   // inicializar propiedades a 0
         props[static_cast<TemplateMark>(m)] = "";
-    }
     props[NAME] = p.getName();
     string str_name = p.getName();
     transform(str_name.begin(), str_name.end(), str_name.begin(), ::toupper);
@@ -109,6 +84,7 @@ void fillPropertiesMap(GPanel p, map<TemplateMark, string>& props) {
     props[LAYOUT_UI] = LayoutTypeToString[p.getLayout()];
     // generacion de los botones
     string str_buttons = "";
+    int n_buttons = 0;
     for (Button b : p.getButtons())
     {
         ButtonAction accion = b.getAction();
@@ -116,34 +92,48 @@ void fillPropertiesMap(GPanel p, map<TemplateMark, string>& props) {
         switch (accion)
         {
         case APPLY:
-            setButtonUi(props, p, b, str_buttons, PANEL_APPLY_H, PANEL_APPLY_CPP, ADD_FOOTER_BUTTON_APPLY);
+            setButtonData(props, p, b, str_buttons, PANEL_APPLY_H, PANEL_APPLY_CPP, ADD_FOOTER_BUTTON_APPLY);
             break;
         case CANCEL:
-            setButtonUi(props, p, b, str_buttons, PANEL_CANCEL_H, PANEL_CANCEL_CPP, ADD_FOOTER_BUTTON_CANCEL);
+            setButtonData(props, p, b, str_buttons, PANEL_CANCEL_H, PANEL_CANCEL_CPP, ADD_FOOTER_BUTTON_CANCEL);
             break;
         case CHECK:
-            setButtonUi(props, p, b, str_buttons, PANEL_CHECK_H, PANEL_CHECK_CPP, ADD_FOOTER_BUTTON_CHECK);
+            setButtonData(props, p, b, str_buttons, PANEL_CHECK_H, PANEL_CHECK_CPP, ADD_FOOTER_BUTTON_CHECK);
             break;
         case RESET:
-            setButtonUi(props, p, b, str_buttons, PANEL_RESET_H, PANEL_RESET_CPP, ADD_FOOTER_BUTTON_RESET);
+            setButtonData(props, p, b, str_buttons, PANEL_RESET_H, PANEL_RESET_CPP, ADD_FOOTER_BUTTON_RESET);
             break;
         case CUSTOM1:
-            setButtonUi(props, p, b, str_buttons, PANEL_CUSTOM1_H, PANEL_CUSTOM1_CPP, ADD_FOOTER_BUTTON_CUSTOM1);
+            setButtonData(props, p, b, str_buttons, PANEL_CUSTOM1_H, PANEL_CUSTOM1_CPP, ADD_FOOTER_BUTTON_CUSTOM1);
             break;
         case CUSTOM2:
-            setButtonUi(props, p, b, str_buttons, PANEL_CUSTOM2_H, PANEL_CUSTOM2_CPP, ADD_FOOTER_BUTTON_CUSTOM2);
+            setButtonData(props, p, b, str_buttons, PANEL_CUSTOM2_H, PANEL_CUSTOM2_CPP, ADD_FOOTER_BUTTON_CUSTOM2);
             break;
         default:
             break;
         }
-        aux = CodeSnippets[UIXMLBUTTON];
-        sprintf(buff, aux.data(), ButtonTypeToString[b.getType()].data(), b.getName().data(), b.getName().data());
+        // generar el texto a insertar en el .ui por botón
+        if (p.getLayout() == QGRIDLAYOUT || p.getLayout() == QFORMLAYOUT)
+        {
+            aux = CodeSnippets[UIXMLBUTTON_WITHPOS];
+            int row = 0, col = n_buttons;
+            sprintf(buff, aux.data(), row, col, ButtonTypeToString[b.getType()].data(), b.getName().data(), b.getName().data());
+        }
+        else {
+            aux = CodeSnippets[UIXMLBUTTON];
+            sprintf(buff, aux.data(), ButtonTypeToString[b.getType()].data(), b.getName().data(), b.getName().data());
+        }
         str_buttons += buff;
+        n_buttons++;
     }
     props[BUTTONS_UI] += str_buttons;
 }
 
-void setButtonUi(std::map<TemplateMark, std::string> &props, GPanel &p, Button &b, std::string &str_buttons, TemplateMark mark1, TemplateMark mark2, TemplateMark mark3)
+/**
+ * Función que genera el texto correspondiente a las acciones de los botones en los
+ * archivos QtCb.cpp y QtCb.h 
+*/
+void setButtonData(std::map<TemplateMark, std::string> &props, GPanel &p, Button &b, std::string &str_buttons, TemplateMark mark1, TemplateMark mark2, TemplateMark mark3)
 {
     props[mark1] = Functions[mark1];
     char buff[200];
@@ -153,42 +143,6 @@ void setButtonUi(std::map<TemplateMark, std::string> &props, GPanel &p, Button &
     aux = Functions[mark3];
     sprintf(buff, aux.data(), b.getName().data());
     props[mark3] = buff;
-}
-
-string writeFile(GPanel p, map<TemplateMark, string>& properties, FileToGenerate file)
-{   
-    string code;
-
-    switch (file)
-    {
-    case HEADER:
-        code = readTemplate("../templates/Header.template");
-        break;
-    case GWHEADER:
-        code = readTemplate("../templates/GwHeader.template");
-        break;
-    case GW:
-        code = readTemplate("../templates/Gw.template");
-        break;
-    case QTCBHEADER:
-        code = readTemplate("../templates/QtCbHeader.template");
-        break;
-    case QTCB:
-        code = readTemplate("../templates/QtCb.template");
-        break;
-    case CMAKELISTS:
-        code = readTemplate("../templates/CMakeLists.template");
-        break;
-    case UI:
-        code = readTemplate("../templates/Ui.template");
-        break;
-    default:
-        // unreachable
-        exit(EXIT_FAILURE);
-    }
-
-    replaceMarks(code, properties);
-    return code;
 }
 
 string readTemplate(const std::string &filename)

@@ -20,6 +20,15 @@ enum TemplateMark
     GEOMETRY_H, BUTTONS_UI, LAYOUT_UI, END_MARK
 };
 
+static std::map<FileToGenerate, std::string> FileTemplatePath = {
+    {HEADER,        "../templates/Header.template"},
+    {GWHEADER,      "../templates/GwHeader.template"},
+    {GW,            "../templates/Gw.template"},
+    {QTCBHEADER,    "../templates/QtCbHeader.template"},
+    {QTCB,          "../templates/QtCb.template"},
+    {UI,            "../templates/Ui.template"},
+    {CMAKELISTS,    "../templates/CMakeLists.template"}
+};
 
 static std::map<TemplateMark, std::string> MarkStrings = {
     {NAME,                      "NAME"},
@@ -50,12 +59,11 @@ static std::map<TemplateMark, std::string> MarkStrings = {
 
 void generatePanelFiles(GPanel p);
 
-std::string writeFile(GPanel p, std::map<TemplateMark, std::string>& properties, FileToGenerate file);
-
-std::string readTemplate(const std::string& filename);
-void replaceMarks(std::string& code, const std::map<TemplateMark, std::string>& properties);
+void writeFile(const std::string& path, const std::string& srcDirPath, GPanel &p, std::map<TemplateMark, std::string> &properties, FileToGenerate file);
+std::string readTemplate(const std::string &filename);
+void replaceMarks(std::string &code, const std::map<TemplateMark, std::string> &properties);
 void fillPropertiesMap(GPanel p, std::map<TemplateMark, std::string> &properties);
 
-void setButtonUi(std::map<TemplateMark, std::string> &props, GPanel &p, Button &b, std::string &str_buttons, TemplateMark mark1, TemplateMark mark2, TemplateMark mark3);
+void setButtonData(std::map<TemplateMark, std::string> &props, GPanel &p, Button &b, std::string &str_buttons, TemplateMark mark1, TemplateMark mark2, TemplateMark mark3);
 
 #endif // GENERATOR_H
