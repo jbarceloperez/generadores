@@ -4,12 +4,13 @@
 #include <string>
 #include <vector>
 #include <exception>
-#include "tinyxml2.h"
 #include "../model/panel.h"
 #include "../model/panelcollection.h"
 
-
-#define XMLNULL -1
+// Librería externa para wrappear las clases XML
+#include <QXmlStreamReader>
+#include <QFile>
+#include <QString>
 
 using namespace std;
 
@@ -63,7 +64,7 @@ public:
  * Clase que representa un atributo de un elemento XML. Tiene dos string privados
  * que representan el nombre y el valor del atributo.
 */
-class XMLAtributo {
+class XMLAttribute {
 
 private:
     // Nombre del atributo
@@ -72,9 +73,9 @@ private:
     string valor;
 
 public:
-    XMLAtributo() {};
+    XMLAttribute() {};
     // Constructor que inicializa los atributos
-    XMLAtributo(string name, string valor);
+    XMLAttribute(string name, string valor);
     
     string getName() const;
     string getValor() const;
@@ -86,35 +87,35 @@ public:
 /**
  * Clase que representa un elemento del fichero XML. Tiene cadenas que 
  * representan el nombre y el valor del elemento, si lo tuviese. Además,
- * tiene dos colecciones, un es vector<XMLAtributo> que representa los
- * atributos del elemento, y otro vector<XMLElemento> que representa los
+ * tiene dos colecciones, un es vector<XMLAttribute> que representa los
+ * atributos del elemento, y otro vector<XMLElement> que representa los
  * hijos que pueda tener el elemento.
  * 
  * TODO: Implementar relaciones padre-hijo entre elementos de alguna manera
 */
-class XMLElemento {
+class XMLElement {
 
 private:
-    vector<XMLAtributo> attributes;
-    vector<XMLElemento> elements;
+    vector<XMLAttribute> attributes;
+    vector<XMLElement> elements;
     string name;
     string content;
 
 
 public:
-    XMLElemento() {};
-    XMLElemento(string name, string content);
-    XMLElemento(string name, string content, vector<XMLAtributo> atributos, vector<XMLElemento> elements);
+    XMLElement() {};
+    XMLElement(string name, string content);
+    XMLElement(string name, string content, vector<XMLAttribute> atributos, vector<XMLElement> elements);
 
     string getName() const;
     string getContent() const;
-    vector<XMLAtributo> getAttributes();
-    vector<XMLElemento> getElements();
+    vector<XMLAttribute> getAttributes();
+    vector<XMLElement> getElements();
 
-    string getAtributoValue(string name);
-    XMLElemento getSubelement(string name);
-    void addSubelement(XMLElemento e);   
-    void addAttribute(XMLAtributo a); 
+    string getAttributeValue(string name);
+    XMLElement getSubelement(string name);
+    void addSubelement(XMLElement e);   
+    void addAttribute(XMLAttribute a); 
     void addAttribute(string name, string data);
     int numSubelements() const;
     string toString(int depth) const;
@@ -130,21 +131,22 @@ class XMLFile {
 private:
     char * xmlPath;
     char * dtdPath;
-    XMLElemento rootElement;
+    XMLElement rootElement;
 
-    XMLElemento parseElement(const tinyxml2::XMLElement* e);
+    XMLElement parseElement(QXmlStreamReader& xml);
 
 public:
     XMLFile(char * xmlPath);
     XMLFile() {};
 
     ~XMLFile() {};
-    
-    XMLElemento getRootElement() const;
+
+    void read();
+    XMLElement getRootElement() const;
     char * getXmlPath() const;
     char * getDtdPath() const;
     void setXmlPath(char * path);
-    void setRoot(XMLElemento root);
+    void setRoot(XMLElement root);
     
     void writeXMLFile(PanelCollection panels);
 

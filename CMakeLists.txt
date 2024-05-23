@@ -55,7 +55,7 @@ else()
     endif()
 endif()
 
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::Widgets tinyxml2 logs)
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::Widgets logs)
 
 # Properties here
 set_target_properties(${PROJECT_NAME} PROPERTIES 

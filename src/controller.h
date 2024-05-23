@@ -26,9 +26,9 @@ private:
     
     Controller() {};
 
-    void iterateXML(XMLElemento e);
+    void iterateXML(XMLElement e);
     bool readUiXml(XMLFile ui);
-    GPanel buildPanel(XMLElemento panel);
+    GPanel buildPanel(XMLElement panel);
     void readInputXml(string file);
     void generateAllFiles(string inputFile);
 

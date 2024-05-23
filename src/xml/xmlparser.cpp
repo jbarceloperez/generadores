@@ -1,24 +1,25 @@
 #include "xmlparser.h"
 #include <string>
+#include <iostream>
 
 #include "../controller.h"
 
 
 // ----------------------------------------------------------------------
-//  XMLAtributo
+//  XMLAttribute
 // ----------------------------------------------------------------------
 
-XMLAtributo::XMLAtributo(string name, string valor) : name(name), valor(valor) {}
+XMLAttribute::XMLAttribute(string name, string valor) : name(name), valor(valor) {}
 
-std::string XMLAtributo::getName() const {
+std::string XMLAttribute::getName() const {
     return name;
 }
 
-std::string XMLAtributo::getValor() const {
+std::string XMLAttribute::getValor() const {
     return valor;
 }
 
-string XMLAtributo::toString() const
+string XMLAttribute::toString() const
 {
     return string("XMLAributo: [" + name + "] -> " + valor + "\n");
 }
@@ -28,28 +29,28 @@ string XMLAtributo::toString() const
 // ----------------------------------------------------------------------
 
 
-XMLElemento::XMLElemento(string _name, string _content)
+XMLElement::XMLElement(string _name, string _content)
 {
     name = _name;
     content = _content;
 }
 
-XMLElemento::XMLElemento(std::string name, std::string content, std::vector<XMLAtributo> atributos, std::vector<XMLElemento> elements) : 
+XMLElement::XMLElement(std::string name, std::string content, std::vector<XMLAttribute> atributos, std::vector<XMLElement> elements) : 
     name(name), content(content), attributes(atributos), elements(elements) {}
 
-std::string XMLElemento::getName() const {
+std::string XMLElement::getName() const {
     return name;
 }
 
-std::string XMLElemento::getContent() const {
+std::string XMLElement::getContent() const {
     return content;
 }
 
-std::vector<XMLAtributo> XMLElemento::getAttributes() {
+std::vector<XMLAttribute> XMLElement::getAttributes() {
     return attributes;
 }
 
-std::vector<XMLElemento> XMLElemento::getElements() {
+std::vector<XMLElement> XMLElement::getElements() {
     return elements;
 }
 
@@ -59,9 +60,9 @@ std::vector<XMLElemento> XMLElemento::getElements() {
  * @param name Cadena con el nombre del atributo
  * @return Cadena con el valor del atributo, o cadena vacía en caso de fallo.
 */
-std::string XMLElemento::getAtributoValue(std::string name)
+std::string XMLElement::getAttributeValue(std::string name)
 {
-    for (XMLAtributo atributo : attributes)
+    for (XMLAttribute atributo : attributes)
     {
         if (!atributo.getName().compare(name))
             return atributo.getValor();
@@ -71,7 +72,7 @@ std::string XMLElemento::getAtributoValue(std::string name)
 }
 
 /**
- * Función que busca entre los subelementos de un objeto XMLElemento, y 
+ * Función que busca entre los subelementos de un objeto XMLElement, y 
  * devuelve el primero que encuentre con el nombre deseado.
  * 
  * @param name Cadena con el nombre del subelemento
@@ -79,9 +80,9 @@ std::string XMLElemento::getAtributoValue(std::string name)
  * @throws XMLElementNotFoundException en caso de que no exista un subelemento
  * con ese nombre.
 */
-XMLElemento XMLElemento::getSubelement(string name)
+XMLElement XMLElement::getSubelement(string name)
 {
-    for (XMLElemento e : elements)
+    for (XMLElement e : elements)
     {
         if (!e.getName().compare(name))
             return e;
@@ -90,28 +91,28 @@ XMLElemento XMLElemento::getSubelement(string name)
     throw XMLElementNotFoundException(what.c_str());
 }
 
-void XMLElemento::addSubelement(XMLElemento e) 
+void XMLElement::addSubelement(XMLElement e) 
 {
     elements.push_back(e);
 }
 
-void XMLElemento::addAttribute(XMLAtributo a)
+void XMLElement::addAttribute(XMLAttribute a)
 {
     attributes.push_back(a);
 }
 
-void XMLElemento::addAttribute(string name, string data)
+void XMLElement::addAttribute(string name, string data)
 {
-    XMLAtributo a = XMLAtributo(name, data);
+    XMLAttribute a = XMLAttribute(name, data);
     attributes.push_back(a);
 }
 
-int XMLElemento::numSubelements() const
+int XMLElement::numSubelements() const
 {
     return elements.size();
 }
 
-string XMLElemento::toString(int depth) const
+string XMLElement::toString(int depth) const
 {   
     string str, space = "";
 
@@ -120,17 +121,17 @@ string XMLElemento::toString(int depth) const
         space += "| ";
     }
     depth++;
-    str += "XMLElemento: [" + name + "]";
+    str += "XMLElement: [" + name + "]";
     if (!content.empty())
     {
         str += " -> " + content;
     }
     str += "\n";
-    for (XMLAtributo a : attributes)
+    for (XMLAttribute a : attributes)
     {
         str += space + a.toString();
     }
-    for (XMLElemento e : elements)
+    for (XMLElement e : elements)
     {
         str += space + e.toString(depth);
     }
@@ -148,13 +149,21 @@ string XMLElemento::toString(int depth) const
 */
 XMLFile::XMLFile(char* _xmlPath) {
     xmlPath = _xmlPath;
-    tinyxml2::XMLDocument doc;
-    if (doc.LoadFile(xmlPath) != tinyxml2::XML_SUCCESS) {
-        throw XMLBaseException("Error loading XML file");
+    read();
+}
+
+void XMLFile::read()
+{
+    QFile file(xmlPath);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        throw XMLFileException("Error al abrir el archivo XML.");
     }
 
-    const tinyxml2::XMLElement* root = doc.FirstChildElement();
-    rootElement = parseElement(root);
+    QXmlStreamReader xmlReader(&file);
+    xmlReader.readNextStartElement();
+    rootElement = parseElement(xmlReader);
+    std::cerr << toString();    // DEBUG
 }
 
 char * XMLFile::getXmlPath() const {
@@ -170,12 +179,12 @@ void XMLFile::setXmlPath(char *path)
     xmlPath = path;
 }
 
-void XMLFile::setRoot(XMLElemento root)
+void XMLFile::setRoot(XMLElement root)
 {
     rootElement = root;
 }
 
-XMLElemento XMLFile::getRootElement() const {
+XMLElement XMLFile::getRootElement() const {
     return rootElement;
 }
 
@@ -185,84 +194,84 @@ XMLElemento XMLFile::getRootElement() const {
 */
 void XMLFile::writeXMLFile(PanelCollection panels)
 {
-    tinyxml2::XMLDocument doc;
+    // tinyxml2::XMLDocument doc;
     
-    tinyxml2::XMLDeclaration* decl = doc.NewDeclaration();
-    doc.InsertFirstChild(decl);
+    // tinyxml2::XMLDeclaration* decl = doc.NewDeclaration();
+    // doc.InsertFirstChild(decl);
     
-    // root element <panels>
-    tinyxml2::XMLElement* root = doc.NewElement("panels");
-    doc.InsertEndChild(root);
+    // // root element <panels>
+    // tinyxml2::XMLElement* root = doc.NewElement("panels");
+    // doc.InsertEndChild(root);
 
-    // insertar cada panel
-    for (GPanel p : panels.getVector())
-    {
-        tinyxml2::XMLElement* panel = doc.NewElement("panel");
+    // // insertar cada panel
+    // for (GPanel p : panels.getVector())
+    // {
+    //     tinyxml2::XMLElement* panel = doc.NewElement("panel");
         
-        panel->SetAttribute("name",p.getName().data());
-        panel->SetAttribute("type",PanelTypeToString[p.getType()].data());
-        root->InsertEndChild(panel);
+    //     panel->SetAttribute("name",p.getName().data());
+    //     panel->SetAttribute("type",PanelTypeToString[p.getType()].data());
+    //     root->InsertEndChild(panel);
 
-        // añadir su layout si no es el default
-        if (p.getLayout()!=DEFAULT_LAYOUT)
-        {
-            tinyxml2::XMLElement* layout = doc.NewElement("layout");
-            layout->SetText(LayoutTypeToString[p.getLayout()].data());
-            panel->InsertEndChild(layout);
-        }
+    //     // añadir su layout si no es el default
+    //     if (p.getLayout()!=DEFAULT_LAYOUT)
+    //     {
+    //         tinyxml2::XMLElement* layout = doc.NewElement("layout");
+    //         layout->SetText(LayoutTypeToString[p.getLayout()].data());
+    //         panel->InsertEndChild(layout);
+    //     }
         
-        // añadir el tamaño si no es el default
-        if (p.getHeight()!=DEFAULT_H || p.getWidth()!=DEFAULT_W)
-        {
-            tinyxml2::XMLElement* geometry = doc.NewElement("geometry");
-            tinyxml2::XMLElement* height = doc.NewElement("h");
-            tinyxml2::XMLElement* width = doc.NewElement("w");
-            height->SetText(p.getHeight());
-            width->SetText(p.getWidth());
-            geometry->InsertEndChild(height);
-            geometry->InsertEndChild(width);
-            panel->InsertEndChild(geometry);
-        }
+    //     // añadir el tamaño si no es el default
+    //     if (p.getHeight()!=DEFAULT_H || p.getWidth()!=DEFAULT_W)
+    //     {
+    //         tinyxml2::XMLElement* geometry = doc.NewElement("geometry");
+    //         tinyxml2::XMLElement* height = doc.NewElement("h");
+    //         tinyxml2::XMLElement* width = doc.NewElement("w");
+    //         height->SetText(p.getHeight());
+    //         width->SetText(p.getWidth());
+    //         geometry->InsertEndChild(height);
+    //         geometry->InsertEndChild(width);
+    //         panel->InsertEndChild(geometry);
+    //     }
 
-        PanelType tipo = p.getType();
-        // si es de tipo ui externo, añadir el path del ui
-        if (tipo == EXTERNAL_UI_CONFIG || tipo == EXTERNAL_UI_READ)
-        {
-            tinyxml2::XMLElement* uipath = doc.NewElement("uipath");
-            uipath->SetText(p.getUiPath().data());
-            panel->InsertEndChild(uipath);
-        }
-        // si es de tipo config, añadir los botones
-        if (tipo == EXTERNAL_UI_CONFIG || tipo == CONFIG)
-        {
-            tinyxml2::XMLElement* buttonsElement = doc.NewElement("buttons");
-            panel->InsertEndChild(buttonsElement);
-            for (Button b : p.getButtons())
-            {
-                tinyxml2::XMLElement* button = doc.NewElement("button");
-                button->SetAttribute("type",ButtonTypeToString[b.getType()].data());
-                buttonsElement->InsertEndChild(button);
+    //     PanelType tipo = p.getType();
+    //     // si es de tipo ui externo, añadir el path del ui
+    //     if (tipo == EXTERNAL_UI_CONFIG || tipo == EXTERNAL_UI_READ)
+    //     {
+    //         tinyxml2::XMLElement* uipath = doc.NewElement("uipath");
+    //         uipath->SetText(p.getUiPath().data());
+    //         panel->InsertEndChild(uipath);
+    //     }
+    //     // si es de tipo config, añadir los botones
+    //     if (tipo == EXTERNAL_UI_CONFIG || tipo == CONFIG)
+    //     {
+    //         tinyxml2::XMLElement* buttonsElement = doc.NewElement("buttons");
+    //         panel->InsertEndChild(buttonsElement);
+    //         for (Button b : p.getButtons())
+    //         {
+    //             tinyxml2::XMLElement* button = doc.NewElement("button");
+    //             button->SetAttribute("type",ButtonTypeToString[b.getType()].data());
+    //             buttonsElement->InsertEndChild(button);
                 
-                tinyxml2::XMLElement* name = doc.NewElement("name");
-                name->SetText(b.getName().data());
-                button->InsertEndChild(name);
-                if (b.getAction() != NULLBUTTONACTION)
-                {
-                    tinyxml2::XMLElement* action = doc.NewElement("action");
-                    action->SetText(ButtonActionToString[b.getAction()].data());
-                    button->InsertEndChild(action);
-                }
-            }
-        }
-        // TODO: continuar con condiciones, si no tiene ui, más elementos, etc.
-    }
+    //             tinyxml2::XMLElement* name = doc.NewElement("name");
+    //             name->SetText(b.getName().data());
+    //             button->InsertEndChild(name);
+    //             if (b.getAction() != NULLBUTTONACTION)
+    //             {
+    //                 tinyxml2::XMLElement* action = doc.NewElement("action");
+    //                 action->SetText(ButtonActionToString[b.getAction()].data());
+    //                 button->InsertEndChild(action);
+    //             }
+    //         }
+    //     }
+    //     // TODO: continuar con condiciones, si no tiene ui, más elementos, etc.
+    // }
     
-    // guardar el documento
-    if (doc.SaveFile(xmlPath) == tinyxml2::XML_SUCCESS) {
-        Controller::getInstance().printTrace(INFO, "XMLFile succesfully saved in " + std::string(xmlPath));
-    } else {
-        Controller::getInstance().printTrace(ERROR, "Error saving file:" + std::string(xmlPath));        
-    }
+    // // guardar el documento
+    // if (doc.SaveFile(xmlPath) == tinyxml2::XML_SUCCESS) {
+    //     Controller::getInstance().printTrace(INFO, "XMLFile succesfully saved in " + std::string(xmlPath));
+    // } else {
+    //     Controller::getInstance().printTrace(ERROR, "Error saving file:" + std::string(xmlPath));        
+    // }
 }
 
 string XMLFile::toString() const
@@ -281,30 +290,51 @@ string XMLFile::toString() const
 /**
  * Implementa la funcionalidad de la librería externa. Rellena el objeto XMLFile
  * con los elementos y atributos correspondientes que va creando a medida que
- * tinyxml2 va parseando el documento.
+ * el QXmlStreamReader de Qt va parseando el documento.
 */
-XMLElemento XMLFile::parseElement(const tinyxml2::XMLElement* e) {
-    // elementos directamente obtenibles
-    string name = e->Name();
-    string content;
-    if (e->GetText()) {
-        content = e->GetText();
-    }
-    // si hubiese atributos también son directamente obtenibles
-    vector<XMLAtributo> atributos;
-    for (const tinyxml2::XMLAttribute* attr = e->FirstAttribute(); attr; attr = attr->Next()) {
-        atributos.push_back(XMLAtributo(attr->Name(), attr->Value()));
+XMLElement XMLFile::parseElement(QXmlStreamReader& xmlReader) {
+
+    // nombre y atributos del elemento
+    QString name = xmlReader.name().toString();
+    
+    // procesa los atributos
+    vector<XMLAttribute> atributos;
+    const QXmlStreamAttributes xmlAttributes = xmlReader.attributes();
+    for (const QXmlStreamAttribute& attr : xmlAttributes)   // lista de atributos
+    {
+        atributos.push_back(XMLAttribute(attr.name().toString().toStdString(), attr.value().toString().toStdString()));
     }
 
+    // añade el texto del elemento
+    QString content("");
+    // xmlReader.readNext();
+    // if (xmlReader.tokenType() == QXmlStreamReader::Characters && !xmlReader.isWhitespace())
+    // {
+    //     if (!xmlReader.readElementText().isEmpty()) 
+    //     {
+    //         content = xmlReader.readElementText();
+    //     }
+    // }
+
     // de forma recursiva va parseando elementos y subelementos
-    vector<XMLElemento> subelementos;
-    for (const tinyxml2::XMLElement* subelement = e->FirstChildElement(); subelement; subelement = subelement->NextSiblingElement()) {
-        subelementos.push_back(parseElement(subelement));
+    vector<XMLElement> subelementos;
+    // while (xmlReader.readNextStartElement())
+    // {
+    //     subelementos.push_back(parseElement(xmlReader));
+    // }
+    while (!(xmlReader.tokenType() == QXmlStreamReader::EndElement && xmlReader.name() == name)) {
+        xmlReader.readNext();
+        if (xmlReader.tokenType() == QXmlStreamReader::StartElement) 
+        {
+            subelementos.push_back(parseElement(xmlReader));
+        } 
+        else if (xmlReader.tokenType() == QXmlStreamReader::Characters && !xmlReader.isWhitespace()) 
+        {
+            content = xmlReader.text().toString();
+        }
     }
 
     // cuando tiene todo parseado devuelve el elemento a la función anterior
     
-    return XMLElemento(name, content, atributos, subelementos);
-
-    
+    return XMLElement(name.toStdString(), content.toStdString(), atributos, subelementos);
 }

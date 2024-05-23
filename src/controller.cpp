@@ -308,7 +308,7 @@ string Controller::panelInfo()
 */
 bool Controller::readUiXml(XMLFile ui)
 {
-    XMLElemento root = ui.getRootElement();
+    XMLElement root = ui.getRootElement();
     // get the name
     std::string name = root.getSubelement("class").getContent();
     if (panelCol.containsPanel(name))
@@ -338,16 +338,16 @@ bool Controller::readUiXml(XMLFile ui)
  * Hace un recorrido primero en profundidad el XML, buscando elementos
  * botón y añadiéndolos al objeto panel.
 */
-void Controller::iterateXML(XMLElemento e)
+void Controller::iterateXML(XMLElement e)
 {
-    vector<XMLElemento> subelementos = e.getElements();
-    for (XMLElemento i : subelementos)
+    vector<XMLElement> subelementos = e.getElements();
+    for (XMLElement i : subelementos)
     {
-        string aux = i.getAtributoValue("class");
+        string aux = i.getAttributeValue("class");
         if (!aux.compare("QPushButton"))
         {
-            currentPanel->addButton(QPUSHBUTTON, i.getAtributoValue("name"));
-            Controller::getInstance().printTrace(WARNING, "QPushButton: " + i.getAtributoValue("name"));
+            currentPanel->addButton(QPUSHBUTTON, i.getAttributeValue("name"));
+            Controller::getInstance().printTrace(WARNING, "QPushButton: " + i.getAttributeValue("name"));
         }
         iterateXML(i);
     }
@@ -357,17 +357,17 @@ void Controller::iterateXML(XMLElemento e)
  * Dado un elemento panel obtenido del XML de entrada, recorre sus propiedades
  * y crea un objeto panel acorde a estas propiedades.
 */
-GPanel Controller::buildPanel(XMLElemento panel)
+GPanel Controller::buildPanel(XMLElement panel)
 {
     // elementos obligatorios
-    string type = panel.getAtributoValue("type");
-    string name = panel.getAtributoValue("name");
+    string type = panel.getAttributeValue("type");
+    string name = panel.getAttributeValue("name");
 
     GPanel panelObject = GPanel(name);
     panelObject.setType(type);
 
     // otros elementos
-    for (XMLElemento e : panel.getElements()) {
+    for (XMLElement e : panel.getElements()) {
         string name = e.getName();
         // elemento <geometry>
         if (!name.compare("geometry")) {
@@ -384,12 +384,12 @@ GPanel Controller::buildPanel(XMLElemento panel)
         // elemento <buttons>
         else if (!name.compare("buttons"))
         {
-            for (XMLElemento se : e.getElements())
+            for (XMLElement se : e.getElements())
             {
                 if (se.numSubelements()==1) // si solo tiene el nombre, no la accion
-                    panelObject.addButton(se.getSubelement("name").getContent(), se.getAtributoValue("type"), "null");
+                    panelObject.addButton(se.getSubelement("name").getContent(), se.getAttributeValue("type"), "null");
                 else
-                    panelObject.addButton(se.getSubelement("name").getContent(), se.getAtributoValue("type"), se.getSubelement("action").getContent());
+                    panelObject.addButton(se.getSubelement("name").getContent(), se.getAttributeValue("type"), se.getSubelement("action").getContent());
             }
         }
         // elmento <uipath>
@@ -426,7 +426,7 @@ void Controller::readInputXml(string inputFileName)
         std::cerr << "Error loading path '" << inputFileName << "'\n";
         exit(EXIT_FAILURE);
     }
-    for(XMLElemento panel : doc.getRootElement().getElements()) {
+    for(XMLElement panel : doc.getRootElement().getElements()) {
         panelCol.addPanel(buildPanel(panel));
     }
 }
@@ -452,7 +452,7 @@ void Controller::generateAllFiles(string inputFile)
         exit(EXIT_FAILURE);
     }
     cerr << doc.toString();
-    for(XMLElemento panel : doc.getRootElement().getElements()) {
+    for(XMLElement panel : doc.getRootElement().getElements()) {
         panelGen.addPanel(buildPanel(panel));
     }
     for (GPanel panel : panelGen.getVector())
