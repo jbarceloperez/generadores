@@ -2,10 +2,13 @@
 #define CONTROLLER_H
 
 #include <vector>
+#include <string>
 
 #include "model/panelcollection.h"
 #include "model/panel.h"
-#include "xml/xmlparser.h"
+#include "xml/xmlelement.h"
+#include "xml/xmlfile.h"
+#include "xml/xmlexception.h"
 #include "logs.hpp"
 
 enum DebugLevel {

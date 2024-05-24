@@ -30,6 +30,10 @@ set(PROJECT_SOURCES
         src/model/generador.cpp src/model/panel.cpp src/model/panelcollection.cpp src/model/button.cpp
         src/model/generador.h src/model/panel.h src/model/panelcollection.h src/model/button.h
         src/xml/xmlparser.cpp src/xml/xmlparser.h
+        src/xml/xmlfile.cpp src/xml/xmlfile.h
+        src/xml/xmlattribute.cpp src/xml/xmlattribute.h
+        src/xml/xmlelement.cpp src/xml/xmlelement.h
+        src/xml/xmlexception.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

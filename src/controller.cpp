@@ -1,8 +1,8 @@
 #include "controller.h"
 #include <iostream>
-#include <string>
 
 #include "model/generador.h"
+#include "xml/xmlparser.h"
 #include <bits/getopt_core.h>
 
 
@@ -112,10 +112,10 @@ void Controller::onPbGeneratePressed()
 */
 bool Controller::onPbWithUIPressed(string uiPath)
 {        
-    XMLFile uiXml;
+    XMLFile uiXml(uiPath.data());
     try
     {
-        uiXml = XMLFile(uiPath.data()); // lee el archivo .ui
+        uiXml.read(); // lee el archivo .ui
     }   
     catch(const XMLFileException& e)
     {   // TODO: Manejar el error en vez de excepción
@@ -181,9 +181,8 @@ bool Controller::onPbDeassociatePressed(int button)
 */
 void Controller::onPbSaveXmlPressed()
 {
-    XMLFile inputXml = XMLFile();
-    inputXml.setXmlPath("input.xml");
-    inputXml.writeXMLFile(panelCol);
+    XMLFile inputXml = XMLFile("input.xml");
+    // inputXml.writeXMLFile(panelCol);
 }
 
 /**
@@ -359,52 +358,7 @@ void Controller::iterateXML(XMLElement e)
 */
 GPanel Controller::buildPanel(XMLElement panel)
 {
-    // elementos obligatorios
-    string type = panel.getAttributeValue("type");
-    string name = panel.getAttributeValue("name");
-
-    GPanel panelObject = GPanel(name);
-    panelObject.setType(type);
-
-    // otros elementos
-    for (XMLElement e : panel.getElements()) {
-        string name = e.getName();
-        // elemento <geometry>
-        if (!name.compare("geometry")) {
-            try
-            {
-                panelObject.setWidth(atoi(e.getSubelement("w").getContent().c_str()));
-                panelObject.setHeight(atoi(e.getSubelement("h").getContent().c_str()));
-            }
-            catch(const XMLElementNotFoundException e)
-            {
-                std::cerr << e.what() << '\n';
-            }
-        }
-        // elemento <buttons>
-        else if (!name.compare("buttons"))
-        {
-            for (XMLElement se : e.getElements())
-            {
-                if (se.numSubelements()==1) // si solo tiene el nombre, no la accion
-                    panelObject.addButton(se.getSubelement("name").getContent(), se.getAttributeValue("type"), "null");
-                else
-                    panelObject.addButton(se.getSubelement("name").getContent(), se.getAttributeValue("type"), se.getSubelement("action").getContent());
-            }
-        }
-        // elmento <uipath>
-        else if (!name.compare("uipath"))
-        {
-            panelObject.setUiPath(e.getContent());
-        }
-        // elemento <layout>
-        else if (!name.compare("layout"))
-        {
-            panelObject.setLayout(e.getContent());
-        }
-    }
-
-    return panelObject;
+    return panel.buildPanel();
 }
 
 /**
@@ -414,11 +368,11 @@ GPanel Controller::buildPanel(XMLElement panel)
 */
 void Controller::readInputXml(string inputFileName)
 {
-    XMLFile doc;
+    XMLFile doc(inputFileName.data());
 
     try
     {
-        doc = XMLFile(inputFileName.data());
+        doc.read();
     }
     catch(const XMLFileException& e)
     {
@@ -439,11 +393,11 @@ void Controller::readInputXml(string inputFileName)
 */
 void Controller::generateAllFiles(string inputFile)
 {
-    XMLFile doc;
+    XMLFile doc(inputFile.data());
 
     try
     {
-        doc = XMLFile(inputFile.data());
+        doc.read();
     }
     catch(const XMLFileException& e)
     {
