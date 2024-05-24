@@ -31,7 +31,6 @@ private:
 
     void iterateXML(XMLElement e);
     bool readUiXml(XMLFile ui);
-    GPanel buildPanel(XMLElement panel);
     void readInputXml(string file);
     void generateAllFiles(string inputFile);
 

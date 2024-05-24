@@ -13,8 +13,8 @@ XMLElement::XMLElement(string _name, string _content)
     content = _content;
 }
 
-XMLElement::XMLElement(std::string name, std::string content, std::vector<XMLAttribute> atributos, std::vector<XMLElement> elements) : 
-    name(name), content(content), attributes(atributos), elements(elements) {}
+XMLElement::XMLElement(std::string name, std::string content, std::vector<XMLAttribute> attributes, std::vector<XMLElement> elements) : 
+    name(name), content(content), attributes(attributes), elements(elements) {}
 
 std::string XMLElement::getName() const {
     return name;
@@ -43,7 +43,7 @@ std::string XMLElement::getAttributeValue(std::string name)
     for (XMLAttribute atributo : attributes)
     {
         if (!atributo.getName().compare(name))
-            return atributo.getValor();
+            return atributo.getValue();
     }
     Controller::getInstance().printTrace(DEBUG, "Attribute '" + name + "' does not exist.");
     return "";
@@ -69,20 +69,20 @@ XMLElement XMLElement::getSubelement(string name)
     throw XMLElementNotFoundException(what.c_str());
 }
 
-void XMLElement::addSubelement(XMLElement e) 
+void XMLElement::addSubelement(XMLElement elem) 
 {
-    elements.push_back(e);
+    elements.push_back(elem);
 }
 
-void XMLElement::addAttribute(XMLAttribute a)
+void XMLElement::addAttribute(XMLAttribute attr)
 {
-    attributes.push_back(a);
+    attributes.push_back(attr);
 }
 
 void XMLElement::addAttribute(string name, string data)
 {
-    XMLAttribute a = XMLAttribute(name, data);
-    attributes.push_back(a);
+    XMLAttribute attr = XMLAttribute(name, data);
+    attributes.push_back(attr);
 }
 
 int XMLElement::numSubelements() const
@@ -118,8 +118,10 @@ string XMLElement::toString(int depth) const
 }
 
 /**
- * Dado un elemento panel obtenido del XML de entrada, recorre sus propiedades
- * y crea un objeto panel acorde a estas propiedades.
+ * Función que construye un panel a partir de los atributos y subelementos
+ * de este elemento. Debe ser un elemento <panel>, si no devuelve un panel
+ * vacío. Chequea todos los atributos y subelementos y devuelve un objeto
+ * GPanel con el panel correspondiente.
 */
 GPanel XMLElement::buildPanel()
 {

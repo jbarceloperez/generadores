@@ -10,18 +10,16 @@
 class XMLAttribute {
 
 private:
-    // Nombre del atributo
-    std::string name;
-    // Cadena con el valor del atributo
-    std::string valor;
+    std::string name;   // Nombre del atributo
+    std::string value;  // Cadena con el valor del atributo
 
 public:
     XMLAttribute() {};
     // Constructor que inicializa los atributos
-    XMLAttribute(std::string name, std::string valor);
+    XMLAttribute(std::string name, std::string value);
     
     std::string getName() const;
-    std::string getValor() const;
+    std::string getValue() const;
 
     std::string toString() const;
     

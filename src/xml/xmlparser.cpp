@@ -1,6 +1,5 @@
 #include "xmlparser.h"
 
-#include <iostream>
 #include "../controller.h"
 
 
@@ -15,15 +14,54 @@ XMLElement XMLParser::readXml(char *xmlPath)
     QXmlStreamReader xmlReader(&file);
     xmlReader.readNextStartElement();
     XMLElement e = parseElement(xmlReader);
-    std::cerr << e.toString(0);    // DEBUG
     return e;
+}
+
+
+/**
+ * Implementa la funcionalidad de la librería externa. Rellena el objeto XMLFile
+ * con los elementos y atributos correspondientes que va creando a medida que
+ * el QXmlStreamReader de Qt va parseando el documento.
+*/
+XMLElement XMLParser::parseElement(QXmlStreamReader& xmlReader) {
+
+    // nombre y atributos del elemento
+    QString name = xmlReader.name().toString();
+    
+    // procesa los atributos
+    vector<XMLAttribute> atributos;
+    const QXmlStreamAttributes xmlAttributes = xmlReader.attributes();
+    for (const QXmlStreamAttribute& attr : xmlAttributes)   // lista de atributos
+    {
+        atributos.push_back(XMLAttribute(attr.name().toString().toStdString(), attr.value().toString().toStdString()));
+    }
+
+    QString content("");    // cadena del contenido del elemento
+
+    // de forma recursiva va parseando texto y subelementos
+    vector<XMLElement> subelementos;
+    while (!(xmlReader.tokenType() == QXmlStreamReader::EndElement && xmlReader.name() == name)) {
+        xmlReader.readNext();
+        if (xmlReader.tokenType() == QXmlStreamReader::StartElement) 
+        {   // si el token es un inicio de elemento, procesa el subelemento
+            subelementos.push_back(parseElement(xmlReader));
+        } 
+        else if (xmlReader.tokenType() == QXmlStreamReader::Characters && !xmlReader.isWhitespace()) 
+        {   // si el token es caracteres, procesa el contenido del elemento
+            content = xmlReader.text().toString();
+        }
+    }
+
+    // cuando tiene todo parseado devuelve el elemento a la función anterior
+    
+    return XMLElement(name.toStdString(), content.toStdString(), atributos, subelementos);
 }
 
 /**
  * Escribe con formato XML los paneles existentes en panels en el
  * fichero input.xml, implementa funcionalidad de la libreria externa.
 */
-void writeXMLFile(PanelCollection panels, string xmlPath)
+void XMLParser::writeXMLFile(PanelCollection panels, string xmlPath)
 {
     QFile file(xmlPath.data());
     if (!file.open(QIODevice::WriteOnly)) {
@@ -104,43 +142,4 @@ void writeXMLFile(PanelCollection panels, string xmlPath)
     {
         Controller::getInstance().printTrace(ERROR, "Error saving file:" + std::string(xmlPath));        
     }
-}
-
-/**
- * Implementa la funcionalidad de la librería externa. Rellena el objeto XMLFile
- * con los elementos y atributos correspondientes que va creando a medida que
- * el QXmlStreamReader de Qt va parseando el documento.
-*/
-XMLElement XMLParser::parseElement(QXmlStreamReader& xmlReader) {
-
-    // nombre y atributos del elemento
-    QString name = xmlReader.name().toString();
-    
-    // procesa los atributos
-    vector<XMLAttribute> atributos;
-    const QXmlStreamAttributes xmlAttributes = xmlReader.attributes();
-    for (const QXmlStreamAttribute& attr : xmlAttributes)   // lista de atributos
-    {
-        atributos.push_back(XMLAttribute(attr.name().toString().toStdString(), attr.value().toString().toStdString()));
-    }
-
-    QString content("");    // cadena del contenido del elemento
-
-    // de forma recursiva va parseando texto y subelementos
-    vector<XMLElement> subelementos;
-    while (!(xmlReader.tokenType() == QXmlStreamReader::EndElement && xmlReader.name() == name)) {
-        xmlReader.readNext();
-        if (xmlReader.tokenType() == QXmlStreamReader::StartElement) 
-        {   // si el token es un inicio de elemento, procesa el subelemento
-            subelementos.push_back(parseElement(xmlReader));
-        } 
-        else if (xmlReader.tokenType() == QXmlStreamReader::Characters && !xmlReader.isWhitespace()) 
-        {   // si el token es caracteres, procesa el contenido del elemento
-            content = xmlReader.text().toString();
-        }
-    }
-
-    // cuando tiene todo parseado devuelve el elemento a la función anterior
-    
-    return XMLElement(name.toStdString(), content.toStdString(), atributos, subelementos);
 }

@@ -18,13 +18,17 @@
 
 using namespace std;
 
+/**
+ * Clase con la funcionalidad para leer y escribir ficheros XML. Implementa
+ * funcionalidad de la librería externa (Qt) para esta funcionalidad.
+*/
 class XMLParser {
 
 public:
     XMLParser() {};
     XMLElement readXml(char *path);
     XMLElement parseElement(QXmlStreamReader& xml);
-    void writeXMLFile(PanelCollection panels);
+    void writeXMLFile(PanelCollection panels, string xmlPath);
 };
 
 #endif

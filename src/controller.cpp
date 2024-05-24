@@ -181,8 +181,8 @@ bool Controller::onPbDeassociatePressed(int button)
 */
 void Controller::onPbSaveXmlPressed()
 {
-    XMLFile inputXml = XMLFile("input.xml");
-    // inputXml.writeXMLFile(panelCol);
+    XMLParser parser;
+    parser.writeXMLFile(panelCol, "input.xml");
 }
 
 /**
@@ -353,15 +353,6 @@ void Controller::iterateXML(XMLElement e)
 }
 
 /**
- * Dado un elemento panel obtenido del XML de entrada, recorre sus propiedades
- * y crea un objeto panel acorde a estas propiedades.
-*/
-GPanel Controller::buildPanel(XMLElement panel)
-{
-    return panel.buildPanel();
-}
-
-/**
  * Dado el nombre de un archivo de entrada que es un XML de entrada
  * del generador, lee el documento XML y por cada elemento panel va
  * generando un elemento y añadiendolo a la colección de paneles.
@@ -381,7 +372,7 @@ void Controller::readInputXml(string inputFileName)
         exit(EXIT_FAILURE);
     }
     for(XMLElement panel : doc.getRootElement().getElements()) {
-        panelCol.addPanel(buildPanel(panel));
+        panelCol.addPanel(panel.buildPanel());
     }
 }
 
@@ -407,7 +398,7 @@ void Controller::generateAllFiles(string inputFile)
     }
     cerr << doc.toString();
     for(XMLElement panel : doc.getRootElement().getElements()) {
-        panelGen.addPanel(buildPanel(panel));
+        panelGen.addPanel(panel.buildPanel());
     }
     for (GPanel panel : panelGen.getVector())
     {

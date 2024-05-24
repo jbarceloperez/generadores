@@ -27,7 +27,7 @@ private:
 public:
     XMLElement() {};
     XMLElement(string name, string content);
-    XMLElement(string name, string content, vector<XMLAttribute> atributos, vector<XMLElement> elements);
+    XMLElement(string name, string content, vector<XMLAttribute> attributes, vector<XMLElement> elements);
 
     string getName() const;
     string getContent() const;
@@ -36,8 +36,8 @@ public:
 
     string getAttributeValue(string name);
     XMLElement getSubelement(string name);
-    void addSubelement(XMLElement e);   
-    void addAttribute(XMLAttribute a); 
+    void addSubelement(XMLElement elem);   
+    void addAttribute(XMLAttribute attr); 
     void addAttribute(string name, string data);
     int numSubelements() const;
     string toString(int depth) const;

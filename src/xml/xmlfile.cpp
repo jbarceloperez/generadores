@@ -11,7 +11,6 @@
 */
 XMLFile::XMLFile(char* _xmlPath) {
     xmlPath = _xmlPath;
-    read();
 }
 
 void XMLFile::read()
