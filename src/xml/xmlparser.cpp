@@ -23,86 +23,87 @@ XMLElement XMLParser::readXml(char *xmlPath)
  * Escribe con formato XML los paneles existentes en panels en el
  * fichero input.xml, implementa funcionalidad de la libreria externa.
 */
-void writeXMLFile(PanelCollection panels)
+void writeXMLFile(PanelCollection panels, string xmlPath)
 {
-    // tinyxml2::XMLDocument doc;
-    
-    // tinyxml2::XMLDeclaration* decl = doc.NewDeclaration();
-    // doc.InsertFirstChild(decl);
-    
-    // // root element <panels>
-    // tinyxml2::XMLElement* root = doc.NewElement("panels");
-    // doc.InsertEndChild(root);
+    QFile file(xmlPath.data());
+    if (!file.open(QIODevice::WriteOnly)) {
+        Controller::getInstance().printTrace(ERROR, "Error opening file:" + std::string(xmlPath));
+        return;
+    }
 
-    // // insertar cada panel
-    // for (GPanel p : panels.getVector())
-    // {
-    //     tinyxml2::XMLElement* panel = doc.NewElement("panel");
+    QXmlStreamWriter xmlWriter(&file);
+    xmlWriter.setAutoFormatting(true);
+    xmlWriter.writeStartDocument();
+    
+    // root element <panels>
+    xmlWriter.writeStartElement("panels");  // <panels>
+
+    // insertar cada panel
+    for (GPanel p : panels.getVector())
+    {
+        xmlWriter.writeStartElement("panel");   // <panel>
         
-    //     panel->SetAttribute("name",p.getName().data());
-    //     panel->SetAttribute("type",PanelTypeToString[p.getType()].data());
-    //     root->InsertEndChild(panel);
+        xmlWriter.writeAttribute("name", QString::fromStdString(p.getName()));
+        xmlWriter.writeAttribute("type", QString::fromStdString(PanelTypeToString[p.getType()]));
 
-    //     // añadir su layout si no es el default
-    //     if (p.getLayout()!=DEFAULT_LAYOUT)
-    //     {
-    //         tinyxml2::XMLElement* layout = doc.NewElement("layout");
-    //         layout->SetText(LayoutTypeToString[p.getLayout()].data());
-    //         panel->InsertEndChild(layout);
-    //     }
+        // añadir su layout si no es el default
+        if (p.getLayout()!=DEFAULT_LAYOUT)
+        {
+            xmlWriter.writeStartElement("layout");  // <layout>
+            xmlWriter.writeCharacters(QString::fromStdString(LayoutTypeToString[p.getLayout()]));
+            xmlWriter.writeEndElement(); // </layout>
+        }
         
-    //     // añadir el tamaño si no es el default
-    //     if (p.getHeight()!=DEFAULT_H || p.getWidth()!=DEFAULT_W)
-    //     {
-    //         tinyxml2::XMLElement* geometry = doc.NewElement("geometry");
-    //         tinyxml2::XMLElement* height = doc.NewElement("h");
-    //         tinyxml2::XMLElement* width = doc.NewElement("w");
-    //         height->SetText(p.getHeight());
-    //         width->SetText(p.getWidth());
-    //         geometry->InsertEndChild(height);
-    //         geometry->InsertEndChild(width);
-    //         panel->InsertEndChild(geometry);
-    //     }
+        // añadir el tamaño si no es el default
+        if (p.getHeight()!=DEFAULT_H || p.getWidth()!=DEFAULT_W)
+        {
+            xmlWriter.writeStartElement("geometry");    // <geometry>
+            xmlWriter.writeTextElement("h", QString::number(p.getHeight()));
+            xmlWriter.writeTextElement("w", QString::number(p.getWidth()));
+            xmlWriter.writeEndElement(); // </geometry>
+        }
 
-    //     PanelType tipo = p.getType();
-    //     // si es de tipo ui externo, añadir el path del ui
-    //     if (tipo == EXTERNAL_UI_CONFIG || tipo == EXTERNAL_UI_READ)
-    //     {
-    //         tinyxml2::XMLElement* uipath = doc.NewElement("uipath");
-    //         uipath->SetText(p.getUiPath().data());
-    //         panel->InsertEndChild(uipath);
-    //     }
-    //     // si es de tipo config, añadir los botones
-    //     if (tipo == EXTERNAL_UI_CONFIG || tipo == CONFIG)
-    //     {
-    //         tinyxml2::XMLElement* buttonsElement = doc.NewElement("buttons");
-    //         panel->InsertEndChild(buttonsElement);
-    //         for (Button b : p.getButtons())
-    //         {
-    //             tinyxml2::XMLElement* button = doc.NewElement("button");
-    //             button->SetAttribute("type",ButtonTypeToString[b.getType()].data());
-    //             buttonsElement->InsertEndChild(button);
-                
-    //             tinyxml2::XMLElement* name = doc.NewElement("name");
-    //             name->SetText(b.getName().data());
-    //             button->InsertEndChild(name);
-    //             if (b.getAction() != NULLBUTTONACTION)
-    //             {
-    //                 tinyxml2::XMLElement* action = doc.NewElement("action");
-    //                 action->SetText(ButtonActionToString[b.getAction()].data());
-    //                 button->InsertEndChild(action);
-    //             }
-    //         }
-    //     }
-    //     // TODO: continuar con condiciones, si no tiene ui, más elementos, etc.
-    // }
-    
-    // // guardar el documento
-    // if (doc.SaveFile(xmlPath) == tinyxml2::XML_SUCCESS) {
-    //     Controller::getInstance().printTrace(INFO, "XMLFile succesfully saved in " + std::string(xmlPath));
-    // } else {
-    //     Controller::getInstance().printTrace(ERROR, "Error saving file:" + std::string(xmlPath));        
-    // }
+        PanelType tipo = p.getType();
+        // si es de tipo ui externo, añadir el path del ui
+        if (tipo == EXTERNAL_UI_CONFIG || tipo == EXTERNAL_UI_READ)
+        {
+            xmlWriter.writeStartElement("uipath");  // <uipath>
+            xmlWriter.writeCharacters(QString::fromStdString(p.getUiPath()));
+            xmlWriter.writeEndElement(); // </uipath>
+        }
+        // si es de tipo config, añadir los botones
+        if (tipo == EXTERNAL_UI_CONFIG || tipo == CONFIG)
+        {
+            xmlWriter.writeStartElement("buttons"); // <buttons>
+
+            for (Button b : p.getButtons())
+            {
+                xmlWriter.writeStartElement("button");  // <button>
+                xmlWriter.writeAttribute("type", QString::fromStdString(ButtonTypeToString[b.getType()]));
+                xmlWriter.writeTextElement("name", QString::fromStdString(b.getName()));
+                if (b.getAction() != NULLBUTTONACTION)
+                {
+                    xmlWriter.writeTextElement("action", QString::fromStdString(ButtonActionToString[b.getAction()]));
+                }
+                xmlWriter.writeEndElement(); // </button>
+            }
+            xmlWriter.writeEndElement(); // </buttons>
+        }
+        xmlWriter.writeEndElement(); // </panel>
+    }
+    xmlWriter.writeEndElement();    // </panels>
+    xmlWriter.writeEndDocument();
+
+    // guardar el documento
+    file.close();
+    if (file.error() == QFile::NoError) 
+    {
+        Controller::getInstance().printTrace(INFO, "XMLFile successfully saved in " + std::string(xmlPath));
+    } 
+    else 
+    {
+        Controller::getInstance().printTrace(ERROR, "Error saving file:" + std::string(xmlPath));        
+    }
 }
 
 /**

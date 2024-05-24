@@ -12,6 +12,7 @@
 
 // Librería externa para wrappear las clases XML
 #include <QXmlStreamReader>
+#include <QXmlStreamWriter>
 #include <QFile>
 #include <QString>
 
