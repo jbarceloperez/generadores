@@ -1,3 +1,8 @@
+/**
+ * @file %NAME%Gw.h
+ * @brief Header para la clase %NAME%Gw.
+ * @details Fichero generado por generador de código de paneles.
+ */
 #ifndef __%NAME_CAPS%GW_H__
 #define __%NAME_CAPS%GW_H__
 
@@ -8,14 +13,31 @@
 class %NAME%Gw : public %NAME%QtCb
 {
 public:
-    %NAME%Gw(BaseClass * parent = 0);
+    /**
+     * @brief Constructor de la clase %NAME%Gw.
+     * @param parent Puntero al objeto BaseClass padre (nullptr por defecto).
+     */
+    %NAME%Gw(BaseClass* parent = 0);
+    /**
+     * @brief Destructor de la clase %NAME%Gw.
+     */
     virtual ~%NAME%Gw();
 
 protected:
+    /**
+     * @brief Info del método exportGetParameterLimit()
+     * @return devuelve un puntero a un objeto de tipo ParameterLimitData
+    */
     virtual const ParameterLimitData* exportGetParameterLimit()override final;
+    /**
+     * @brief Info del método exportAction()
+    */
     virtual void exportAction(const Common::Action& , const boost::any&)override final;
+    /**
+     * @brief Info del método exportMessage()
+    */
     virtual void exportMessage(const Format::MessageKind&, const Format::MessageBody&)override final;    
 
 };
 
-#endif
+#endif  // __%NAME_CAPS%GW_H__
