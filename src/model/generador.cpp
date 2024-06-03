@@ -82,6 +82,7 @@ void fillPropertiesMap(GPanel p, map<TemplateMark, string>& props) {
     props[GEOMETRY_H] = to_string(p.getHeight());
     props[GEOMETRY_W] = to_string(p.getWidth());
     props[LAYOUT_UI] = LayoutTypeToString[p.getLayout()];
+    props[SAES_HEADER] = p.getHeaderString();
     // generacion de los botones
     string str_buttons = "";
     int n_buttons = 0;

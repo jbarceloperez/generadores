@@ -65,14 +65,6 @@ GPanel *PanelCollection::getPanelByIndex(int index)
     else return nullptr;
 }
 
-GPanel PanelCollection::getPanel(std::string name)
-{
-    for (auto & element : panelCollection) 
-    {
-        return element;
-    }
-}
-
 bool PanelCollection::containsPanel(std::string name)
 {
     for (GPanel p : panelCollection) {

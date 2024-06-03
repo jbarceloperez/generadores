@@ -84,6 +84,22 @@ void XMLParser::writeXMLFile(PanelCollection panels, string xmlPath)
         xmlWriter.writeAttribute("name", QString::fromStdString(p.getName()));
         xmlWriter.writeAttribute("type", QString::fromStdString(PanelTypeToString[p.getType()]));
 
+        // añadir header
+        xmlWriter.writeStartElement("header");  // <header>
+        for (int i=0; i < HeaderElement::NOELEMENTS; i++)
+        {
+            HeaderElement he = static_cast<HeaderElement>(i);
+            if (p.getHeaderElement(he).compare("")) // si no está vacio, escribe el header
+            {
+                xmlWriter.writeStartElement(QString::fromStdString(HeaderElementXMLMap[he]));  // <headerElement>
+                xmlWriter.writeCharacters(QString::fromStdString(p.getHeaderElement(he)));
+                xmlWriter.writeEndElement();    // </headerElement>
+            }
+        }
+        xmlWriter.writeEndElement(); // </header>
+        
+
+
         // añadir su layout si no es el default
         if (p.getLayout()!=DEFAULT_LAYOUT)
         {

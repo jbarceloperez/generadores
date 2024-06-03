@@ -170,6 +170,22 @@ GPanel XMLElement::buildPanel()
         {
             panelObject.setLayout(e.getContent());
         }
+        // elemento <header>
+        else if (!name.compare("header"))
+        {
+            for (XMLElement se : e.getElements())
+            {
+                for (auto &i : HeaderElementXMLMap) 
+                {
+                    if (i.second == se.getName()) 
+                    {
+                        panelObject.setHeaderElement(i.first, se.getContent());
+                        break; 
+                    }
+                }
+            }
+        }
+        
     }
 
     return panelObject;

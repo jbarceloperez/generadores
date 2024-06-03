@@ -6,6 +6,7 @@
 
 #include "model/panelcollection.h"
 #include "model/panel.h"
+#include "model/saesheader.h"
 #include "xml/xmlelement.h"
 #include "xml/xmlfile.h"
 #include "xml/xmlexception.h"
@@ -55,6 +56,7 @@ public:
     void onPbDelButtonPressed(int button);
     void changeCurrentPanel(int index);
     bool onComboPanelsChanged(int index);
+    void onHeaderSavePressed(SaesHeader* header);
     bool changeCurrentPanelSize(int h, int w);
     string panelInfo();
 };

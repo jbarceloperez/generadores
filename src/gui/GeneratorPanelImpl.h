@@ -5,6 +5,7 @@
 
 #include <QFrame>
 #include <memory>
+#include "HeaderConfigPanel.h"
 
 
 class GeneratorPanelImpl : public QFrame
@@ -42,6 +43,8 @@ private:
     void updateButtons();
     void updatePanelSettings();
     void updateTxtAssociate();
+
+    std::unique_ptr<HeaderConfigPanelImpl> headerPanel;
 };
 
 #endif // GENERATORPANEL_H

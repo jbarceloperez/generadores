@@ -28,7 +28,8 @@ GeneratorPanelImpl::GeneratorPanelImpl()
     : p_impl(new PrivateData())
 {
     p_impl->ui.setupUi(this);
-
+    headerPanel.reset(new HeaderConfigPanelImpl());
+    
     // Conectar la señal clicked() de los botones a la ranura handleButtonClicked()
     connect(p_impl->ui.pbWithoutUI, &QPushButton::clicked, this, &GeneratorPanelImpl::handleButtonClicked);
     connect(p_impl->ui.pbWithUI, &QPushButton::clicked, this, &GeneratorPanelImpl::handleButtonClicked);
@@ -41,6 +42,7 @@ GeneratorPanelImpl::GeneratorPanelImpl()
     connect(p_impl->ui.pb_addButton, &QPushButton::clicked, this, &GeneratorPanelImpl::handleButtonClicked);
     connect(p_impl->ui.pb_delButton, &QPushButton::clicked, this, &GeneratorPanelImpl::handleButtonClicked);
     connect(p_impl->ui.pbDeletePanel, &QPushButton::clicked, this, &GeneratorPanelImpl::handleButtonClicked);
+    connect(p_impl->ui.pbCabecera, &QPushButton::clicked, this, &GeneratorPanelImpl::handleButtonClicked);
     // Conectar la señal de la lista de paneles, para que actualice la info del currentPanel
     connect(p_impl->ui.listWidget_panels, SIGNAL(itemSelectionChanged()), this, SLOT(handleSelectedPanel()));
     // Conectar la señal del combobox de los layout
@@ -159,6 +161,11 @@ void GeneratorPanelImpl::handleButtonClicked()
     else if(sender() == p_impl->ui.pbDeletePanel)
     {
         onPbDeletePanelPressed();
+    }
+    else if(sender() == p_impl->ui.pbCabecera)
+    {
+        headerPanel->show();
+        headerPanel->updateValues();
     }
     updateHmi();    // tras cada botón actualiza el ui
 }

@@ -335,6 +335,13 @@
            </property>
           </widget>
          </item>
+         <item>
+          <widget class="QPushButton" name="pbCabecera">
+           <property name="text">
+            <string>Cabecera</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </widget>
       </item>

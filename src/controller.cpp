@@ -268,6 +268,18 @@ bool Controller::onComboPanelsChanged(int index)
     return false;
 }
 
+void Controller::onHeaderSavePressed(SaesHeader* header)
+{
+    if (currentPanel != nullptr)
+    {
+        for(int i = 0; i < HeaderElement::NOELEMENTS; i++)
+        {   
+            HeaderElement elem = static_cast<HeaderElement>(i);
+            currentPanel->setHeaderElement(elem, header->getHeaderElement(elem));
+        }
+    }
+}
+
 /**
  * Función que trata de cambiar el tamaño del currentPanel. Devuelbe
  * true en caso de cambiarlo y false en otro caso.
@@ -396,7 +408,7 @@ void Controller::generateAllFiles(string inputFile)
         std::cerr << "Error loading path '" << inputFile << "'\n";
         exit(EXIT_FAILURE);
     }
-    cerr << doc.toString();
+    // cerr << doc.toString();  // DEBUG
     for(XMLElement panel : doc.getRootElement().getElements()) {
         panelGen.addPanel(panel.buildPanel());
     }

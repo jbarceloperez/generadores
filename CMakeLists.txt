@@ -26,9 +26,12 @@ set(PROJECT_SOURCES
         src/gui/GeneratorPanelImpl.cpp
         src/gui/GeneratorPanelImpl.h
         src/gui/GeneratorPanel.ui
+        src/gui/HeaderConfigPanel.ui
+        src/gui/HeaderConfigPanel.cpp
+        src/gui/HeaderConfigPanel.h
 
-        src/model/generador.cpp src/model/panel.cpp src/model/panelcollection.cpp src/model/button.cpp
-        src/model/generador.h src/model/panel.h src/model/panelcollection.h src/model/button.h
+        src/model/generador.cpp src/model/panel.cpp src/model/panelcollection.cpp src/model/button.cpp src/model/saesheader.cpp
+        src/model/generador.h src/model/panel.h src/model/panelcollection.h src/model/button.h src/model/saesheader.h
         src/xml/xmlparser.cpp src/xml/xmlparser.h
         src/xml/xmlfile.cpp src/xml/xmlfile.h
         src/xml/xmlattribute.cpp src/xml/xmlattribute.h

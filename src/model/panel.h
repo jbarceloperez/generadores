@@ -5,6 +5,7 @@
 #include <map>
 #include <vector>
 #include "button.h"
+#include "saesheader.h"
 
 #define DEFAULT_W 400
 #define DEFAULT_H 300
@@ -46,6 +47,7 @@ private:
     LayoutType layout;              // Tipo de layout del panel
     std::string uipath;             // Ruta al archivo ui, si lo tuvise
     std::vector<Button> buttons;    // Collección de botones
+    SaesHeader header;              // Cabecera SAES del panel
 
 public:
     // Constructor
@@ -62,6 +64,7 @@ public:
     PanelType getType() const;
     LayoutType getLayout() const;
     std::vector<Button> getButtons() const;
+    SaesHeader getHeader() const;
 
     // Setters
     void setName(std::string _name);
@@ -79,6 +82,11 @@ public:
     void deleteButton(int button);
     void addActionToButton(int button, ButtonAction action);
     void deleteActionToButton(int button);
+
+    // Funcionalidad con la cabecera
+    void setHeaderElement(HeaderElement element, std::string value);
+    std::string getHeaderElement(HeaderElement element);
+    std::string getHeaderString();
 
     std::string toString() const;
 };

@@ -10,6 +10,7 @@ GPanel::GPanel(std::string _name, int _w, int _h, PanelType _type)
     h = _h == -1 ? DEFAULT_H : _h;
     type = _type;
     layout = DEFAULT_LAYOUT;
+    header = SaesHeader(name);
 }
 
 GPanel::GPanel(std::string _name)
@@ -19,6 +20,7 @@ GPanel::GPanel(std::string _name)
     h = DEFAULT_H;
     type = PanelType::READ_ONLY;
     layout = DEFAULT_LAYOUT;
+    header = SaesHeader(name);
 }
 
 // Getters
@@ -55,6 +57,11 @@ LayoutType GPanel::getLayout() const
 std::vector<Button> GPanel::getButtons() const
 {
     return buttons;
+}
+
+SaesHeader GPanel::getHeader() const
+{
+    return header;
 }
 
 // Setters
@@ -149,6 +156,21 @@ void GPanel::addActionToButton(int button, ButtonAction action)
 void GPanel::deleteActionToButton(int button)
 {
     buttons[button].deleteAction();
+}
+
+void GPanel::setHeaderElement(HeaderElement element, std::string value)
+{
+    header.setHeaderElement(element, value);
+}
+
+std::string GPanel::getHeaderElement(HeaderElement element)
+{
+    return header.getHeaderElement(element);
+}
+
+std::string GPanel::getHeaderString()
+{
+    return header.toString();
 }
 
 std::string GPanel::toString() const

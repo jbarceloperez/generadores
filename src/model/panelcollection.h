@@ -25,7 +25,6 @@ public:
     int getLength();
     GPanel* getPanelByName(std::string name);
     GPanel* getPanelByIndex(int index);
-    GPanel getPanel(std::string name);
     bool containsPanel(std::string name);
     std::vector<GPanel> getVector() const;
     std::vector<std::string> getNames() const;

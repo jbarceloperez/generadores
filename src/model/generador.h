@@ -17,7 +17,7 @@ enum TemplateMark
     PANEL_CUSTOM2_CPP, ADD_FOOTER_BUTTON_APPLY, ADD_FOOTER_BUTTON_CANCEL, 
     ADD_FOOTER_BUTTON_CHECK, ADD_FOOTER_BUTTON_RESET, 
     ADD_FOOTER_BUTTON_CUSTOM1, ADD_FOOTER_BUTTON_CUSTOM2, GEOMETRY_W, 
-    GEOMETRY_H, BUTTONS_UI, LAYOUT_UI, END_MARK
+    GEOMETRY_H, BUTTONS_UI, LAYOUT_UI, SAES_HEADER, END_MARK
 };
 
 static std::map<FileToGenerate, std::string> FileTemplatePath = {
@@ -54,7 +54,8 @@ static std::map<TemplateMark, std::string> MarkStrings = {
     {GEOMETRY_W,                "GEOMETRY_W"},
     {GEOMETRY_H,                "GEOMETRY_H"},
     {BUTTONS_UI,                "BUTTONS_UI"},
-    {LAYOUT_UI,                 "LAYOUT_UI"}
+    {LAYOUT_UI,                 "LAYOUT_UI"},
+    {SAES_HEADER,               "SAES_HEADER"}
 };
 
 void generatePanelFiles(GPanel p);
