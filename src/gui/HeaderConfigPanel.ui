@@ -16,33 +16,6 @@
   <layout class="QVBoxLayout" name="mainLayout">
    <item>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="5">
-      <widget class="QGroupBox" name="csciName">
-       <property name="title">
-        <string>CSCI Name</string>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_8">
-        <property name="leftMargin">
-         <number>0</number>
-        </property>
-        <property name="topMargin">
-         <number>0</number>
-        </property>
-        <property name="rightMargin">
-         <number>0</number>
-        </property>
-        <property name="bottomMargin">
-         <number>0</number>
-        </property>
-        <item>
-         <widget class="QLineEdit" name="lne_csciName"/>
-        </item>
-       </layout>
-      </widget>
-     </item>
      <item row="0" column="3">
       <widget class="QGroupBox" name="companyName">
        <property name="title">
@@ -70,15 +43,15 @@
        </layout>
       </widget>
      </item>
-     <item row="1" column="4">
-      <widget class="QGroupBox" name="cscsuname">
+     <item row="0" column="4">
+      <widget class="QGroupBox" name="project">
        <property name="title">
-        <string>CSC (SU) Name</string>
+        <string>Project</string>
        </property>
        <property name="checkable">
         <bool>true</bool>
        </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_9">
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
         <property name="leftMargin">
          <number>0</number>
         </property>
@@ -92,7 +65,34 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="QLineEdit" name="lne_cscsuname"/>
+         <widget class="QLineEdit" name="lne_project"/>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item row="0" column="5">
+      <widget class="QGroupBox" name="csciName">
+       <property name="title">
+        <string>CSCI Name</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_8">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QLineEdit" name="lne_csciName"/>
         </item>
        </layout>
       </widget>
@@ -124,6 +124,33 @@
        </layout>
       </widget>
      </item>
+     <item row="1" column="4">
+      <widget class="QGroupBox" name="cscsuname">
+       <property name="title">
+        <string>CSC (SU) Name</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_9">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QLineEdit" name="lne_cscsuname"/>
+        </item>
+       </layout>
+      </widget>
+     </item>
      <item row="1" column="5">
       <widget class="QGroupBox" name="cscsunumber">
        <property name="title">
@@ -151,15 +178,15 @@
        </layout>
       </widget>
      </item>
-     <item row="5" column="3">
-      <widget class="QGroupBox" name="csciqualtestsinfo">
+     <item row="2" column="3">
+      <widget class="QGroupBox" name="unitname">
        <property name="title">
-        <string>CSCI Qualification Tests Info</string>
+        <string>Unit Name</string>
        </property>
        <property name="checkable">
         <bool>true</bool>
        </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_13">
+       <layout class="QHBoxLayout" name="horizontalLayout_25">
         <property name="leftMargin">
          <number>0</number>
         </property>
@@ -173,20 +200,20 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="QLineEdit" name="lne_csciqualtestsinfo"/>
+         <widget class="QLineEdit" name="lne_unitname"/>
         </item>
        </layout>
       </widget>
      </item>
-     <item row="0" column="4">
-      <widget class="QGroupBox" name="project">
+     <item row="2" column="4">
+      <widget class="QGroupBox" name="unitnumber">
        <property name="title">
-        <string>Project</string>
+        <string>Unit Number</string>
        </property>
        <property name="checkable">
         <bool>true</bool>
        </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <layout class="QHBoxLayout" name="horizontalLayout_10">
         <property name="leftMargin">
          <number>0</number>
         </property>
@@ -200,7 +227,7 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="QLineEdit" name="lne_project"/>
+         <widget class="QLineEdit" name="lne_unitnumber"/>
         </item>
        </layout>
       </widget>
@@ -316,6 +343,33 @@
        </layout>
       </widget>
      </item>
+     <item row="4" column="3">
+      <widget class="QGroupBox" name="fullfillerequirements">
+       <property name="title">
+        <string>Fullfilled Requirements</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_26">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QLineEdit" name="lne_fullfilledrequirements"/>
+        </item>
+       </layout>
+      </widget>
+     </item>
      <item row="4" column="4">
       <widget class="QGroupBox" name="unittestsinfo">
        <property name="title">
@@ -366,6 +420,60 @@
         </property>
         <item>
          <widget class="QLineEdit" name="lne_csctestsinfo"/>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item row="5" column="3">
+      <widget class="QGroupBox" name="csciqualtestsinfo">
+       <property name="title">
+        <string>CSCI Qualification Tests Info</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_13">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QLineEdit" name="lne_csciqualtestsinfo"/>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item row="5" column="4">
+      <widget class="QGroupBox" name="datacreated">
+       <property name="title">
+        <string>Data Created</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_21">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QLineEdit" name="lne_datacreated"/>
         </item>
        </layout>
       </widget>
@@ -424,33 +532,6 @@
        </layout>
       </widget>
      </item>
-     <item row="5" column="4">
-      <widget class="QGroupBox" name="datacreated">
-       <property name="title">
-        <string>Data Created</string>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_21">
-        <property name="leftMargin">
-         <number>0</number>
-        </property>
-        <property name="topMargin">
-         <number>0</number>
-        </property>
-        <property name="rightMargin">
-         <number>0</number>
-        </property>
-        <property name="bottomMargin">
-         <number>0</number>
-        </property>
-        <item>
-         <widget class="QLineEdit" name="lne_datacreated"/>
-        </item>
-       </layout>
-      </widget>
-     </item>
      <item row="6" column="4">
       <widget class="QGroupBox" name="filename">
        <property name="title">
@@ -477,88 +558,7 @@
         </item>
        </layout>
       </widget>
-     </item>
-     <item row="4" column="3">
-      <widget class="QGroupBox" name="fullfillerequirements">
-       <property name="title">
-        <string>Fullfilled Requirements</string>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_26">
-        <property name="leftMargin">
-         <number>0</number>
-        </property>
-        <property name="topMargin">
-         <number>0</number>
-        </property>
-        <property name="rightMargin">
-         <number>0</number>
-        </property>
-        <property name="bottomMargin">
-         <number>0</number>
-        </property>
-        <item>
-         <widget class="QLineEdit" name="lne_fullfilledrequirements"/>
-        </item>
-       </layout>
-      </widget>
-     </item>
-     <item row="2" column="4">
-      <widget class="QGroupBox" name="unitnumber">
-       <property name="title">
-        <string>Unit Number</string>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_10">
-        <property name="leftMargin">
-         <number>0</number>
-        </property>
-        <property name="topMargin">
-         <number>0</number>
-        </property>
-        <property name="rightMargin">
-         <number>0</number>
-        </property>
-        <property name="bottomMargin">
-         <number>0</number>
-        </property>
-        <item>
-         <widget class="QLineEdit" name="lne_unitnumber"/>
-        </item>
-       </layout>
-      </widget>
-     </item>
-     <item row="2" column="3">
-      <widget class="QGroupBox" name="unitname">
-       <property name="title">
-        <string>Unit Name</string>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_25">
-        <property name="leftMargin">
-         <number>0</number>
-        </property>
-        <property name="topMargin">
-         <number>0</number>
-        </property>
-        <property name="rightMargin">
-         <number>0</number>
-        </property>
-        <property name="bottomMargin">
-         <number>0</number>
-        </property>
-        <item>
-         <widget class="QLineEdit" name="lne_unitname"/>
-        </item>
-       </layout>
-      </widget>
-     </item>
+     </item>   
      <item row="6" column="5">
       <widget class="QGroupBox" name="revisionhistory">
        <property name="title">
