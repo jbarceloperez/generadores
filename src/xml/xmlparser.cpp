@@ -89,7 +89,7 @@ void XMLParser::writeXMLFile(PanelCollection panels, string xmlPath)
         for (int i=0; i < HeaderElement::NOELEMENTS; i++)
         {
             HeaderElement he = static_cast<HeaderElement>(i);
-            if (p.getHeaderElement(he).compare("")) // si no está vacio, escribe el header
+            if (p.getHeaderElement(he) != "") // si no está vacio, escribe el header
             {
                 xmlWriter.writeStartElement(QString::fromStdString(HeaderElementXMLMap[he]));  // <headerElement>
                 xmlWriter.writeCharacters(QString::fromStdString(p.getHeaderElement(he)));
@@ -98,8 +98,6 @@ void XMLParser::writeXMLFile(PanelCollection panels, string xmlPath)
         }
         xmlWriter.writeEndElement(); // </header>
         
-
-
         // añadir su layout si no es el default
         if (p.getLayout()!=DEFAULT_LAYOUT)
         {
@@ -158,4 +156,81 @@ void XMLParser::writeXMLFile(PanelCollection panels, string xmlPath)
     {
         Controller::getInstance().printTrace(ERROR, "Error saving file:" + std::string(xmlPath));        
     }
+}
+
+/**
+ * Función que construye un panel a partir de los atributos y subelementos
+ * de este elemento. Debe ser un elemento <panel>, si no devuelve un panel
+ * vacío. Chequea todos los atributos y subelementos y devuelve un objeto
+ * GPanel con el panel correspondiente.
+*/
+GPanel XMLParser::buildPanel(XMLElement e)
+{
+    if (e.getName() != "panel")
+        return GPanel("");
+    // elementos obligatorios
+    string type = e.getAttributeValue("type");
+    string name = e.getAttributeValue("name");
+
+    GPanel panelObject = GPanel(name);
+    panelObject.setType(type);
+
+    // otros elementos
+    for (XMLElement e : e.getElements()) {
+        string name = e.getName();
+        // elemento <geometry>
+        if (name == "geometry") 
+        {
+            try
+            {
+                panelObject.setWidth(atoi(e.getSubelement("w").getContent().c_str()));
+                panelObject.setHeight(atoi(e.getSubelement("h").getContent().c_str()));
+            }
+            catch(const XMLElementNotFoundException e)
+            {
+                std::cerr << e.what() << '\n';
+            }
+        }
+        // elemento <buttons>
+        else if (name == "buttons")
+        {
+            for (XMLElement se : e.getElements())
+            {
+                if (se.numSubelements()==1) // si solo tiene el nombre, no la accion
+                {
+                    panelObject.addButton(se.getSubelement("name").getContent(), se.getAttributeValue("type"), "null");
+                } 
+                else
+                {
+                    panelObject.addButton(se.getSubelement("name").getContent(), se.getAttributeValue("type"), se.getSubelement("action").getContent());
+                }
+            }
+        }
+        // elmento <uipath>
+        else if (name == "uipath")
+        {
+            panelObject.setUiPath(e.getContent());
+        }
+        // elemento <layout>
+        else if (name == "layout")
+        {
+            panelObject.setLayout(e.getContent());
+        }
+        // elemento <header>
+        else if (name == "header")
+        {
+            for (XMLElement se : e.getElements())
+            {
+                for (auto &i : HeaderElementXMLMap) 
+                {
+                    if (i.second == se.getName()) 
+                    {
+                        panelObject.setHeaderElement(i.first, se.getContent());
+                        break; 
+                    }
+                }
+            }
+        }
+    }
+    return panelObject;
 }

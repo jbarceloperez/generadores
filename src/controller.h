@@ -5,7 +5,7 @@
 #include <string>
 
 #include "model/panelcollection.h"
-#include "model/panel.h"
+#include "model/gpanel.h"
 #include "model/saesheader.h"
 #include "xml/xmlelement.h"
 #include "xml/xmlfile.h"

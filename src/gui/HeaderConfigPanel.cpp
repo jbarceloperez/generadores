@@ -1,6 +1,6 @@
 #include "HeaderConfigPanel.h"
 #include "../model/saesheader.h"
-#include "../model/panel.h"
+#include "../model/gpanel.h"
 #include "../controller.h"
 #include "ui_HeaderConfigPanel.h"
 
@@ -26,6 +26,8 @@ HeaderConfigPanelImpl::HeaderConfigPanelImpl()
     connect(p_impl->ui.pbCheckAll, &QPushButton::clicked, this, &HeaderConfigPanelImpl::handleButtonClicked);
     connect(p_impl->ui.pbUncheckAll, &QPushButton::clicked, this, &HeaderConfigPanelImpl::handleButtonClicked);
     connect(p_impl->ui.pbClearAll, &QPushButton::clicked, this, &HeaderConfigPanelImpl::handleButtonClicked);
+
+    p_impl->ui.dateEdit->setDate(QDate::currentDate());
 
     updateValues();
 }
@@ -182,13 +184,14 @@ void HeaderConfigPanelImpl::save()
     updateValues();
 }
 
-void HeaderConfigPanelImpl::iterateElements() {
-    for (const auto& element : p_impl->ui.mainLayout->children()) 
-    {
-        if (element->metaObject()->className() == "QGroupBox") 
-        {
-            // static_cast<QGroupBox*>(element)->setChecked(checked);
-        }
-    }
-}
+// void HeaderConfigPanelImpl::iterateElements() 
+// {
+//     for (const auto& element : p_impl->ui.mainLayout->children()) 
+//     {
+//         if (element->metaObject()->className() == "QGroupBox") 
+//         {
+//             // static_cast<QGroupBox*>(element)->setChecked(checked);
+//         }
+//     }
+// }
 

@@ -207,7 +207,7 @@ void Controller::onPbAddButtonPressed(std::string name, std::string type, std::s
         return;
     for (Button b : currentPanel->getButtons())
     {
-        if (!b.getName().compare(name))
+        if (b.getName() == name)
         {
             printTrace(INFO, "Button " + name + " alredy exists.");
             return;
@@ -355,7 +355,7 @@ void Controller::iterateXML(XMLElement e)
     for (XMLElement i : subelementos)
     {
         string aux = i.getAttributeValue("class");
-        if (!aux.compare("QPushButton"))
+        if (aux == "QPushButton")
         {
             currentPanel->addButton(QPUSHBUTTON, i.getAttributeValue("name"));
             Controller::getInstance().printTrace(WARNING, "QPushButton: " + i.getAttributeValue("name"));
@@ -371,6 +371,7 @@ void Controller::iterateXML(XMLElement e)
 */
 void Controller::readInputXml(string inputFileName)
 {
+    XMLParser parser;
     XMLFile doc(inputFileName.data());
 
     try
@@ -384,7 +385,7 @@ void Controller::readInputXml(string inputFileName)
         exit(EXIT_FAILURE);
     }
     for(XMLElement panel : doc.getRootElement().getElements()) {
-        panelCol.addPanel(panel.buildPanel());
+        panelCol.addPanel(parser.buildPanel(panel));
     }
 }
 
@@ -396,6 +397,7 @@ void Controller::readInputXml(string inputFileName)
 */
 void Controller::generateAllFiles(string inputFile)
 {
+    XMLParser parser;
     XMLFile doc(inputFile.data());
 
     try
@@ -410,7 +412,7 @@ void Controller::generateAllFiles(string inputFile)
     }
     // cerr << doc.toString();  // DEBUG
     for(XMLElement panel : doc.getRootElement().getElements()) {
-        panelGen.addPanel(panel.buildPanel());
+        panelGen.addPanel(parser.buildPanel(panel));
     }
     for (GPanel panel : panelGen.getVector())
     {

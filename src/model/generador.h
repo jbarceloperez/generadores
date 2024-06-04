@@ -1,7 +1,7 @@
 #ifndef GENERADOR_H
 #define GENERADOR_H
 
-#include "panel.h"
+#include "gpanel.h"
 #include <map>
 
 enum FileToGenerate 

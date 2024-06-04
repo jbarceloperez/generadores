@@ -42,7 +42,7 @@ std::string XMLElement::getAttributeValue(std::string name)
 {
     for (XMLAttribute atributo : attributes)
     {
-        if (!atributo.getName().compare(name))
+        if (atributo.getName() == name)
             return atributo.getValue();
     }
     Controller::getInstance().printTrace(DEBUG, "Attribute '" + name + "' does not exist.");
@@ -62,7 +62,7 @@ XMLElement XMLElement::getSubelement(string name)
 {
     for (XMLElement e : elements)
     {
-        if (!e.getName().compare(name))
+        if (e.getName() == name)
             return e;
     }
     string what = "No existe el elemento " + name;
@@ -115,78 +115,4 @@ string XMLElement::toString(int depth) const
     }
     
     return str;
-}
-
-/**
- * Función que construye un panel a partir de los atributos y subelementos
- * de este elemento. Debe ser un elemento <panel>, si no devuelve un panel
- * vacío. Chequea todos los atributos y subelementos y devuelve un objeto
- * GPanel con el panel correspondiente.
-*/
-GPanel XMLElement::buildPanel()
-{
-    if (name.compare("panel"))
-        return GPanel("");
-    // elementos obligatorios
-    string type = getAttributeValue("type");
-    string name = getAttributeValue("name");
-
-    GPanel panelObject = GPanel(name);
-    panelObject.setType(type);
-
-    // otros elementos
-    for (XMLElement e : elements) {
-        string name = e.getName();
-        // elemento <geometry>
-        if (!name.compare("geometry")) {
-            try
-            {
-                panelObject.setWidth(atoi(e.getSubelement("w").getContent().c_str()));
-                panelObject.setHeight(atoi(e.getSubelement("h").getContent().c_str()));
-            }
-            catch(const XMLElementNotFoundException e)
-            {
-                std::cerr << e.what() << '\n';
-            }
-        }
-        // elemento <buttons>
-        else if (!name.compare("buttons"))
-        {
-            for (XMLElement se : e.getElements())
-            {
-                if (se.numSubelements()==1) // si solo tiene el nombre, no la accion
-                    panelObject.addButton(se.getSubelement("name").getContent(), se.getAttributeValue("type"), "null");
-                else
-                    panelObject.addButton(se.getSubelement("name").getContent(), se.getAttributeValue("type"), se.getSubelement("action").getContent());
-            }
-        }
-        // elmento <uipath>
-        else if (!name.compare("uipath"))
-        {
-            panelObject.setUiPath(e.getContent());
-        }
-        // elemento <layout>
-        else if (!name.compare("layout"))
-        {
-            panelObject.setLayout(e.getContent());
-        }
-        // elemento <header>
-        else if (!name.compare("header"))
-        {
-            for (XMLElement se : e.getElements())
-            {
-                for (auto &i : HeaderElementXMLMap) 
-                {
-                    if (i.second == se.getName()) 
-                    {
-                        panelObject.setHeaderElement(i.first, se.getContent());
-                        break; 
-                    }
-                }
-            }
-        }
-        
-    }
-
-    return panelObject;
 }

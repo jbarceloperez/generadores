@@ -4,7 +4,6 @@
 #include <string>
 #include <vector>
 #include "xmlattribute.h"
-#include "../model/panel.h"
 
 using namespace std;
 
@@ -41,8 +40,6 @@ public:
     void addAttribute(string name, string data);
     int numSubelements() const;
     string toString(int depth) const;
-
-    GPanel buildPanel();
 };
 
 #endif

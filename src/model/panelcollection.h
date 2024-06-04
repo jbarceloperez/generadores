@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "panel.h"
+#include "gpanel.h"
 #include <vector>
 #include <string>
 

@@ -3,7 +3,7 @@
 
 #include <string>
 #include <vector>
-#include "../model/panel.h"
+#include "../model/gpanel.h"
 #include "../model/panelcollection.h"
 #include "xmlattribute.h"
 #include "xmlelement.h"
@@ -29,6 +29,7 @@ public:
     XMLElement readXml(char *path);
     XMLElement parseElement(QXmlStreamReader& xml);
     void writeXMLFile(PanelCollection panels, string xmlPath);
+    GPanel buildPanel(XMLElement e);
 };
 
 #endif

@@ -1,4 +1,4 @@
-#include "panel.h"
+#include "gpanel.h"
 #include "../controller.h"
 
 
@@ -158,6 +158,7 @@ void GPanel::deleteActionToButton(int button)
     buttons[button].deleteAction();
 }
 
+// Funcionalidad con la cabecera
 void GPanel::setHeaderElement(HeaderElement element, std::string value)
 {
     header.setHeaderElement(element, value);
