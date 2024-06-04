@@ -7,8 +7,7 @@
 #include <algorithm>    // for using transform 
 #include <cctype>       // for using toUpper
 #include <cstdio>       // sprintf
-
-#include "templatefunctions.cpp"
+#include "templatefunctions.h"
 
 namespace fs = std::filesystem;
 using namespace std;

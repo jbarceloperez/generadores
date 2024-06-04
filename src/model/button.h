@@ -47,14 +47,14 @@ public:
     Button(std::string _name, std::string _type, std::string _action);
     ~Button() {};
 
-    std::string getName() {return name;}
-    ButtonType getType() {return type;}
-    ButtonAction getAction() {return action;}
+    std::string getName();
+    ButtonType getType();
+    ButtonAction getAction();
 
-    void setName(std::string _name) {name = _name;}
-    void setType(ButtonType _type) {type = _type;}
-    void setAction(ButtonAction _action) {action = _action;}
-    void deleteAction() {action = NULLBUTTONACTION;} 
+    void setName(std::string _name);
+    void setType(ButtonType _type);
+    void setAction(ButtonAction _action);
+    void deleteAction();
 
     std::string toString();
 };

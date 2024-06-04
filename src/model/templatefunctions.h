@@ -1,5 +1,4 @@
 #include <map>
-#include "generador.h"
 
 static std::map<TemplateMark, std::string> Functions = {
     {PANEL_APPLY_H,             "/** @brief Método con la funcionalidad del botón \"Apply\". */\n\tvirtual void panelApply()override final;"},

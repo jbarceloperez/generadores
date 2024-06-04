@@ -20,6 +20,41 @@ Button::Button(std::string _name, std::string _type, std::string _action)
     }
 }
 
+std::string Button::getName()
+{
+    return name;
+}
+
+ButtonType Button::getType()
+{
+    return type;
+}
+
+ButtonAction Button::getAction()
+{
+    return action;
+}
+
+void Button::setName(std::string _name)
+{
+    name = _name;
+}
+
+void Button::setType(ButtonType _type)
+{
+    type = _type;
+}
+
+void Button::setAction(ButtonAction _action)
+{
+    action = _action;
+}
+
+void Button::deleteAction() 
+{
+    action = NULLBUTTONACTION;
+} 
+
 std::string Button::toString()
 {
     std::string str;
