@@ -15,14 +15,7 @@
 //------------------------------------------------------------------------------------
 /*virtual*/ const ParameterLimitData* %NAME%Gw::exportGetParameterLimit()
 {
-    /*const ParameterLimitData* toReturn = 0;
-    boost::optional<const ParameterLimitData*> data = ConfigSignals::ParameterLimit_get();
-    if(data)
-    {
-        toReturn = *data;
-    }
-
-    return toReturn;*/
+    return ConfigSignals::ParameterLimit_get().value_or(nullptr);
 }
 //-----------------------------------------------------------------------------------------
 void %NAME%Gw::exportAction(const Common::Action& p_action, const boost::any& p_any)

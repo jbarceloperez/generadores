@@ -13,7 +13,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # set(CMAKE_PREFIX_PATH "C:\\Qt\\6.6.1\\mingw_64\\")
 # Para poder incluir los logs
 # set ( ENV{SAES_PATH} "C:\\Users\\javib\\Documents\\saes\\Generadores\\lib\\log-saes")
-set ( ENV{SAES_PATH} "lib/log-saes")
+set ( ENV{SAES_PATH} "/home/javi/Documentos/Generadores/lib/log-saes")
 set(CMAKE_PREFIX_PATH "/home/javi/Qt/6.7.0/gcc_64/lib/cmake")
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
@@ -21,14 +21,17 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 qt_standard_project_setup()
 set(PROJECT_SOURCES
         src/main.cpp
-        src/controller.cpp
-        src/controller.h
+        src/controller/controller.cpp
+        src/controller/controller.h
+        src/controller/guicontroller.cpp
+        src/controller/guicontroller.h
         src/gui/GeneratorPanelImpl.cpp
         src/gui/GeneratorPanelImpl.h
         src/gui/GeneratorPanel.ui
         src/gui/HeaderConfigPanel.ui
         src/gui/HeaderConfigPanel.cpp
         src/gui/HeaderConfigPanel.h
+        src/log/logger.h src/log/logger.cpp
 
         src/model/generador.cpp src/model/gpanel.cpp src/model/panelcollection.cpp src/model/button.cpp src/model/saesheader.cpp
         src/model/generador.h src/model/gpanel.h src/model/panelcollection.h src/model/button.h src/model/saesheader.h src/model/templatefunctions.h

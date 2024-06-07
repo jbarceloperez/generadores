@@ -1,5 +1,5 @@
 #include "xmlelement.h"
-#include "../controller.h"
+#include "../controller/controller.h"
 
 
 // ----------------------------------------------------------------------
@@ -45,7 +45,6 @@ std::string XMLElement::getAttributeValue(std::string name)
         if (atributo.getName() == name)
             return atributo.getValue();
     }
-    Controller::getInstance().printTrace(DEBUG, "Attribute '" + name + "' does not exist.");
     return "";
 }
 

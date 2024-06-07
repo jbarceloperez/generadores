@@ -26,6 +26,8 @@ private slots:
 private:
     class PrivateData;
     std::unique_ptr<PrivateData> p_impl;
+    dbg::log loghmi;
+
     void onPbWithUIPressed();
     void onPbWithoutUIPressed();
     void onPbGeberatePressed();

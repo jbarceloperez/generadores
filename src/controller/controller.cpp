@@ -1,8 +1,8 @@
 #include "controller.h"
 #include <iostream>
 
-#include "model/generador.h"
-#include "xml/xmlparser.h"
+#include "../model/generador.h"
+
 #include <bits/getopt_core.h>
 
 
@@ -20,17 +20,30 @@ void Controller::init(int _argc, char *_argv[])
     {
         argv[i] = _argv[i];
     }
-    dbg::log::initialize("/home/javi/Documentos/Generadores/src/traces.cfg");
+    dbg::log::initialize("/home/javi/Documentos/Generadores/traces.cfg");
+    // log.log_hmi(INFO, "Starting logger...");
+    // log.log_mainlog(INFO, "Starting logger...");
+    hmi = dbg::log("hmi");
+    mainlog = dbg::log("main");
+    mainlog.info("Starting logger...");
+    hmi.info("Starting logger...");
+
     appLogLevel = TRACE;
     currentPanel = nullptr;
+    nogui(_argc, _argv);
+}
+
+void Controller::nogui(int _argc, char *_argv[])
+{
     int c;
-    char* path;
-    int nogui = 0;  // flag
-    while ((c = getopt(_argc, _argv, "hn:")) != -1) {
-    switch (c) 
+    char *path;
+    int nogui = 0; // flag
+    while ((c = getopt(_argc, _argv, "hn:")) != -1)
+    {
+        switch (c)
         {
         case 'n':
-            nogui=1;
+            nogui = 1;
             path = optarg;
             break;
         case 'h':
@@ -38,10 +51,10 @@ void Controller::init(int _argc, char *_argv[])
             exit(EXIT_FAILURE);
             break;
         default:
-            break;   
+            break;
         }
     }
-    if (nogui)   // ejecución nogui
+    if (nogui) // ejecución nogui
     {
         cout << "   - codeGenerator - no gui mode -\n\n";
         generateAllFiles(path);
@@ -50,20 +63,20 @@ void Controller::init(int _argc, char *_argv[])
 }
 
 // todo: fix logger
-void Controller::printTrace(DebugLevel level, string msg)
+void Controller::printTrace(TraceLevel level, string msg)
 {   
     if (level >= appLogLevel)
     {
         switch (level)
         {
         case TRACE:
-            mainlog.warning(msg.c_str());
+            mainlog.trace(msg.c_str());
             break;
         case DEBUG:
-            mainlog.warning(msg.c_str());
+            mainlog.debug(msg.c_str());
             break;
         case INFO:
-            mainlog.warning(msg.c_str());
+            mainlog.info(msg.c_str());
             break;
         case WARNING:
             mainlog.warning(msg.c_str());
@@ -78,9 +91,7 @@ void Controller::printTrace(DebugLevel level, string msg)
         default:
             break;
         }
-    }
-    // mainlog.warning(msg.c_str());
-    
+    }  
 }
 
 GPanel* Controller::getCurrentPanel() const

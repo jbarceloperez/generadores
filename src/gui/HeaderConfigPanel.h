@@ -4,6 +4,7 @@
 #pragma once
 
 #include <QFrame>
+#include "../controller/controller.h"
 
 class HeaderConfigPanelImpl : public QFrame
 {
@@ -20,6 +21,7 @@ private slots:
 private:
     class PrivateData;
     std::unique_ptr<PrivateData> p_impl;
+    dbg::log loghmi;
 
     void checkAll(bool checked);
     void clearAll();

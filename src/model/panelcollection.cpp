@@ -1,5 +1,5 @@
 #include "panelcollection.h"
-#include "../controller.h"
+#include "../controller/controller.h"
 
 void PanelCollection::addPanel(std::string name)
 {

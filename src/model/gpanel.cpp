@@ -1,5 +1,5 @@
 #include "gpanel.h"
-#include "../controller.h"
+#include "../controller/controller.h"
 
 
 // Constructor

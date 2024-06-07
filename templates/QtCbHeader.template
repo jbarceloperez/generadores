@@ -1,3 +1,6 @@
+%SAES_HEADER%
+
+
 /**
  * @file %NAME%QtCb.h
  * @brief Header para la clase %NAME%QtCb.
@@ -9,7 +12,6 @@
 #pragma once
 
 #include <BaseClass.h>
-#include <boost/scoped_ptr.hpp>
 
 
 class ParameterLimitData;
@@ -32,7 +34,7 @@ public:
      */
     virtual ~%NAME%QtCb();
     
-    virtual void init();
+    virtual void init() override final;
     %PANEL_APPLY_H%
     %PANEL_CANCEL_H%
     %PANEL_CHECK_H%
@@ -66,7 +68,7 @@ private:
     /**
      * @brief Puntero al objeto PrivateData privado.
     */
-    boost::scoped_ptr<PrivateData> p_impl;
+    std::unique_ptr<PrivateData> p_impl;
 
 };
 

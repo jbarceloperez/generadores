@@ -1,7 +1,6 @@
 #include "HeaderConfigPanel.h"
 #include "../model/saesheader.h"
 #include "../model/gpanel.h"
-#include "../controller.h"
 #include "ui_HeaderConfigPanel.h"
 
 class HeaderConfigPanelImpl::PrivateData
@@ -20,6 +19,7 @@ class HeaderConfigPanelImpl::PrivateData
 HeaderConfigPanelImpl::HeaderConfigPanelImpl()
     : p_impl(new PrivateData())
 {
+    loghmi = dbg::log("hmi");
     p_impl->ui.setupUi(this);
 
     connect(p_impl->ui.pbSave, &QPushButton::clicked, this, &HeaderConfigPanelImpl::handleButtonClicked);
@@ -125,7 +125,7 @@ void HeaderConfigPanelImpl::checkAll(bool checked)
 
 void HeaderConfigPanelImpl::clearAll()
 {
-    Controller::getInstance().printTrace(TRACE, "pbClearAll");
+    loghmi.trace("pbClearAll");
     p_impl->ui.lne_companyName->setText("");
     p_impl->ui.lne_project->setText("");
     p_impl->ui.lne_csciName->setText("");
@@ -153,7 +153,7 @@ void HeaderConfigPanelImpl::clearAll()
 
 void HeaderConfigPanelImpl::save()
 {
-    Controller::getInstance().printTrace(TRACE, "pbHeaderSave");
+    loghmi.trace("pbSave Header");
     SaesHeader header = SaesHeader(p_impl->ui.lne_filename->text().toStdString());
 
     if (p_impl->ui.companyName->isChecked()) header.setHeaderElement(COMPANY_NAME, p_impl->ui.lne_companyName->text().toStdString());

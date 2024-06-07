@@ -2,7 +2,7 @@
 
 #include "ui_GeneratorPanel.h"
 
-#include "../controller.h"
+#include "../controller/controller.h"
 #include "../model/gpanel.h"
 #include <QFileDialog>
 #include <QMessageBox>
@@ -29,7 +29,9 @@ GeneratorPanelImpl::GeneratorPanelImpl()
 {
     p_impl->ui.setupUi(this);
     headerPanel.reset(new HeaderConfigPanelImpl());
-    
+    // loghmi = Controller::getInstance().getAppLogger()->getHmi();
+    loghmi = dbg::log("hmi");
+
     // Conectar la señal clicked() de los botones a la ranura handleButtonClicked()
     connect(p_impl->ui.pbWithoutUI, &QPushButton::clicked, this, &GeneratorPanelImpl::handleButtonClicked);
     connect(p_impl->ui.pbWithUI, &QPushButton::clicked, this, &GeneratorPanelImpl::handleButtonClicked);
@@ -70,7 +72,7 @@ GeneratorPanelImpl::~GeneratorPanelImpl()
 
 void GeneratorPanelImpl::handleSpinBoxWidth()
 {
-    Controller::getInstance().printTrace(TRACE, "currentPanel width changed");
+    loghmi.trace("currentPanel width changed");
     int h = Controller::getInstance().getCurrentPanel()->getHeight();
     int w = p_impl->ui.sbWidth->value();
     onSizeChanged(h,w);
@@ -78,7 +80,7 @@ void GeneratorPanelImpl::handleSpinBoxWidth()
 
 void GeneratorPanelImpl::handleSpinBoxHeight()
 {
-    Controller::getInstance().printTrace(TRACE, "currentPanel height changed");
+    loghmi.trace("currentPanel height changed");
     int h = p_impl->ui.sbHeigth->value();
     int w = Controller::getInstance().getCurrentPanel()->getWidth();
     onSizeChanged(h,w);
@@ -99,7 +101,7 @@ void GeneratorPanelImpl::onSizeChanged(int h, int w)
 
 void GeneratorPanelImpl::handleSelectedPanel()
 {
-    Controller::getInstance().printTrace(TRACE, "currentPanel list changed");
+    loghmi.trace("currentPanel list changed");
 
     int index = p_impl->ui.listWidget_panels->currentRow();
     Controller::getInstance().changeCurrentPanel(index);
@@ -108,7 +110,7 @@ void GeneratorPanelImpl::handleSelectedPanel()
 
 void GeneratorPanelImpl::handleLayoutCombobox()
 {
-    Controller::getInstance().printTrace(TRACE, "layout combobox changed");
+    loghmi.trace("layout combobox changed");
 
     int index = p_impl->ui.comboLayout->currentIndex();
     if (Controller::getInstance().onComboPanelsChanged(index))
@@ -170,7 +172,7 @@ void GeneratorPanelImpl::handleButtonClicked()
 
 void GeneratorPanelImpl::onPbDeletePanelPressed()
 {
-    Controller::getInstance().printTrace(TRACE, "pbDeletePanel");
+    loghmi.trace("pbDeletePanel");
     int index = p_impl->ui.listWidget_panels->currentRow();
     if (index != -1)
     {
@@ -190,13 +192,13 @@ void GeneratorPanelImpl::onPbDeletePanelPressed()
     }
     else
     {
-        Controller::getInstance().printTrace(INFO, "No panel selected");
+        loghmi.info("No panel selected");
     }
 }
 
 void GeneratorPanelImpl::onPbDelButtonPressed()
 {
-    Controller::getInstance().printTrace(TRACE, "pbDelButton");
+    loghmi.trace("pbDelButton");
 
     if (p_impl->ui.listWidget_but->selectedItems().size() == 0)
     {
@@ -210,7 +212,7 @@ void GeneratorPanelImpl::onPbDelButtonPressed()
 
 void GeneratorPanelImpl::onPbAddButtonPressed()
 {
-    Controller::getInstance().printTrace(TRACE, "pbAddButton");
+    loghmi.trace("pbAddButton");
     if (p_impl->ui.cb_apply->isChecked())
         Controller::getInstance().onPbAddButtonPressed("pbApply", "QPushButton", "Apply");
     if (p_impl->ui.cb_cancel->isChecked())
@@ -229,18 +231,18 @@ void GeneratorPanelImpl::onPbFilePressed()
     QString file = QFileDialog::getOpenFileName(this, "Select a ui file", "../");
     if (file.isEmpty())
     {
-        Controller::getInstance().printTrace(TRACE, "onPbFilePressed> No file selected.");
+        loghmi.trace("onPbFilePressed> No file selected.");
         return;
     }
     // update ui
     p_impl->ui.lnePath->setText(file);
-    Controller::getInstance().printTrace(INFO, "Selected file: " + file.toStdString());
+    loghmi.info("Selected file: %s", file.toStdString().data());
     updateHmi();
 }
 
 void GeneratorPanelImpl::onPbDeassociatePressed()
 {
-    Controller::getInstance().printTrace(TRACE, "pbDeassociate");
+    loghmi.trace("pbDeassociate");
     if (p_impl->ui.listWidget_but->selectedItems().size() == 0)
     {
         QMessageBox::warning(this, "Warning", "No selected button.",QMessageBox::Ok);
@@ -255,7 +257,7 @@ void GeneratorPanelImpl::onPbDeassociatePressed()
 
 void GeneratorPanelImpl::onPbAssociatePressed()
 {
-    Controller::getInstance().printTrace(TRACE, "pbAssociate");
+    loghmi.trace("pbAssociate");
     if (p_impl->ui.listWidget_act->selectedItems().size() == 0 || p_impl->ui.listWidget_but->selectedItems().size() == 0)
     {
         QMessageBox::warning(this, "Warning", "No selected button.",QMessageBox::Ok);
@@ -271,7 +273,7 @@ void GeneratorPanelImpl::onPbAssociatePressed()
 
 void GeneratorPanelImpl::onPbSaveXmlPressed()
 {
-    Controller::getInstance().printTrace(TRACE, "pbSaveXml");
+    loghmi.trace("pbSaveXml");
     QFileInfo check_file("input.xml");
     if (check_file.exists() && check_file.isFile())
     {
@@ -284,11 +286,11 @@ void GeneratorPanelImpl::onPbSaveXmlPressed()
 
 void GeneratorPanelImpl::onPbLoadXmlPressed()
 {
-    Controller::getInstance().printTrace(TRACE, "pbLoadXml");
+    loghmi.trace("pbLoadXml");
     QString file = QFileDialog::getOpenFileName(this, "Choose a file", "../");
     if (file.isEmpty())
     {
-        Controller::getInstance().printTrace(TRACE, "onPbLoadXmlPressed> No file selected.");
+        loghmi.trace("onPbLoadXmlPressed> No file selected.");
         return;
     }
     int addedPanels = Controller::getInstance().onPbLoadXmlPressed(file.toStdString());
@@ -304,7 +306,7 @@ void GeneratorPanelImpl::onPbLoadXmlPressed()
 
 void GeneratorPanelImpl::onPbGeberatePressed()
 {
-    Controller::getInstance().printTrace(TRACE, "pbGenerate");
+    loghmi.trace("pbGenerate");
     QFileInfo check_file("input.xml");
     onPbSaveXmlPressed();
     Controller::getInstance().onPbGeneratePressed();
@@ -314,7 +316,7 @@ void GeneratorPanelImpl::onPbGeberatePressed()
 
 void GeneratorPanelImpl::onPbWithoutUIPressed()
 {
-    Controller::getInstance().printTrace(TRACE, "pbWithoutUi");
+    loghmi.trace("pbWithoutUi");
     QString name = p_impl->ui.lneName->text();
     if (name.isEmpty())
     {
@@ -332,7 +334,7 @@ void GeneratorPanelImpl::onPbWithoutUIPressed()
 
 void GeneratorPanelImpl::onPbWithUIPressed()
 {
-    Controller::getInstance().printTrace(TRACE, "pbWithUi");
+    loghmi.trace("pbWithUi");
     QString file = p_impl->ui.lnePath->text();
     if (file.isEmpty())
     {

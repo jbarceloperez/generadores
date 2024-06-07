@@ -1,6 +1,6 @@
 #include <QApplication>
 #include "gui/GeneratorPanelImpl.h"
-#include "controller.h"
+#include "controller/controller.h"
 
 
 int main(int argc, char* argv[]) 

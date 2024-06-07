@@ -1,6 +1,6 @@
 #include "xmlparser.h"
 
-#include "../controller.h"
+#include "../controller/controller.h"
 
 
 XMLElement XMLParser::readXml(char *xmlPath)

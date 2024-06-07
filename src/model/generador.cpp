@@ -1,5 +1,5 @@
 #include "generador.h"
-#include "../controller.h"
+#include "../controller/controller.h"
 #include <filesystem>
 #include <iostream>
 #include <fstream>
