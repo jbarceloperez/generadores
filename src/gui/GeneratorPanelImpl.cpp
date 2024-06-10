@@ -29,8 +29,9 @@ GeneratorPanelImpl::GeneratorPanelImpl()
 {
     p_impl->ui.setupUi(this);
     headerPanel.reset(new HeaderConfigPanelImpl());
-    // loghmi = Controller::getInstance().getAppLogger()->getHmi();
+    // loghmi = controller->getAppLogger()->getHmi();
     loghmi = dbg::log("hmi");
+    controller = static_cast<GuiController*>(&Controller::getInstance());
 
     // Conectar la señal clicked() de los botones a la ranura handleButtonClicked()
     connect(p_impl->ui.pbWithoutUI, &QPushButton::clicked, this, &GeneratorPanelImpl::handleButtonClicked);
@@ -73,7 +74,7 @@ GeneratorPanelImpl::~GeneratorPanelImpl()
 void GeneratorPanelImpl::handleSpinBoxWidth()
 {
     loghmi.trace("currentPanel width changed");
-    int h = Controller::getInstance().getCurrentPanel()->getHeight();
+    int h = controller->getCurrentPanel()->getHeight();
     int w = p_impl->ui.sbWidth->value();
     onSizeChanged(h,w);
 }
@@ -82,14 +83,14 @@ void GeneratorPanelImpl::handleSpinBoxHeight()
 {
     loghmi.trace("currentPanel height changed");
     int h = p_impl->ui.sbHeigth->value();
-    int w = Controller::getInstance().getCurrentPanel()->getWidth();
+    int w = controller->getCurrentPanel()->getWidth();
     onSizeChanged(h,w);
 }
 
 
 void GeneratorPanelImpl::onSizeChanged(int h, int w)
 {
-    if (Controller::getInstance().changeCurrentPanelSize(h,w))
+    if (controller->changeCurrentPanelSize(h,w))
     {
         updateTxtAssociate();
     }
@@ -104,7 +105,7 @@ void GeneratorPanelImpl::handleSelectedPanel()
     loghmi.trace("currentPanel list changed");
 
     int index = p_impl->ui.listWidget_panels->currentRow();
-    Controller::getInstance().changeCurrentPanel(index);
+    controller->changeCurrentPanel(index);
     updateHmi();
 }
 
@@ -113,7 +114,7 @@ void GeneratorPanelImpl::handleLayoutCombobox()
     loghmi.trace("layout combobox changed");
 
     int index = p_impl->ui.comboLayout->currentIndex();
-    if (Controller::getInstance().onComboPanelsChanged(index))
+    if (controller->onComboPanelsChanged(index))
         updateTxtAssociate();
 }
 
@@ -177,7 +178,7 @@ void GeneratorPanelImpl::onPbDeletePanelPressed()
     if (index != -1)
     {
         string panel = p_impl->ui.listWidget_panels->currentItem()->text().toStdString();
-        int panelesRestantes = Controller::getInstance().onPbDeletePanelPressed(panel);
+        int panelesRestantes = controller->onPbDeletePanelPressed(panel);
         // update panels
         QListWidgetItem *it = p_impl->ui.listWidget_panels->takeItem(p_impl->ui.listWidget_panels->currentRow());
         delete it;
@@ -206,7 +207,7 @@ void GeneratorPanelImpl::onPbDelButtonPressed()
         return;
     }
     int button = p_impl->ui.listWidget_but->currentItem()->listWidget()->row(p_impl->ui.listWidget_but->currentItem());
-    Controller::getInstance().onPbDelButtonPressed(button);
+    controller->onPbDelButtonPressed(button);
     updateHmi();
 }
 
@@ -214,15 +215,15 @@ void GeneratorPanelImpl::onPbAddButtonPressed()
 {
     loghmi.trace("pbAddButton");
     if (p_impl->ui.cb_apply->isChecked())
-        Controller::getInstance().onPbAddButtonPressed("pbApply", "QPushButton", "Apply");
+        controller->onPbAddButtonPressed("pbApply", "QPushButton", "Apply");
     if (p_impl->ui.cb_cancel->isChecked())
-        Controller::getInstance().onPbAddButtonPressed("pbCancel", "QPushButton", "Cancel");
+        controller->onPbAddButtonPressed("pbCancel", "QPushButton", "Cancel");
     if (p_impl->ui.cb_check->isChecked())
-        Controller::getInstance().onPbAddButtonPressed("pbCheck", "QPushButton", "Check");
+        controller->onPbAddButtonPressed("pbCheck", "QPushButton", "Check");
     if (p_impl->ui.cb_reset->isChecked())
-        Controller::getInstance().onPbAddButtonPressed("pbReset", "QPushButton", "Reset");
+        controller->onPbAddButtonPressed("pbReset", "QPushButton", "Reset");
     if (p_impl->ui.cb_custom->isChecked())
-        Controller::getInstance().onPbAddButtonPressed(p_impl->ui.lneCustom->text().toStdString(), "QPushButton", "Custom1");
+        controller->onPbAddButtonPressed(p_impl->ui.lneCustom->text().toStdString(), "QPushButton", "Custom1");
     updateHmi();
 }
 
@@ -249,7 +250,7 @@ void GeneratorPanelImpl::onPbDeassociatePressed()
         return;
     }
     int button = p_impl->ui.listWidget_but->currentRow();
-    if (Controller::getInstance().onPbDeassociatePressed(button))
+    if (controller->onPbDeassociatePressed(button))
     {// update ui
         updateTxtAssociate();
     }
@@ -265,7 +266,7 @@ void GeneratorPanelImpl::onPbAssociatePressed()
     }
     int button = p_impl->ui.listWidget_but->currentRow();
     int action = p_impl->ui.listWidget_act->currentRow();
-    if (Controller::getInstance().onPbAssociatePressed(button, action))
+    if (controller->onPbAssociatePressed(button, action))
     {// update ui
         updateTxtAssociate();
     }
@@ -280,7 +281,7 @@ void GeneratorPanelImpl::onPbSaveXmlPressed()
         QMessageBox::StandardButton reply = QMessageBox::question(this, "Overwrite?", "'input.xml' alredy exists. Overwrite?",QMessageBox::Yes|QMessageBox::No);
         if (reply == QMessageBox::No) return;
     }
-    Controller::getInstance().onPbSaveXmlPressed();
+    controller->onPbSaveXmlPressed();
     QMessageBox::information(this, "Success", "XML config saved in 'input.xml'.");
 }
 
@@ -293,8 +294,8 @@ void GeneratorPanelImpl::onPbLoadXmlPressed()
         loghmi.trace("onPbLoadXmlPressed> No file selected.");
         return;
     }
-    int addedPanels = Controller::getInstance().onPbLoadXmlPressed(file.toStdString());
-    for (string n : Controller::getInstance().getPanelNames())
+    int addedPanels = controller->onPbLoadXmlPressed(file.toStdString());
+    for (string n : controller->getPanelNames())
     {
         p_impl->ui.listWidget_panels->addItem(n.data());
     }
@@ -309,7 +310,7 @@ void GeneratorPanelImpl::onPbGeberatePressed()
     loghmi.trace("pbGenerate");
     QFileInfo check_file("input.xml");
     onPbSaveXmlPressed();
-    Controller::getInstance().onPbGeneratePressed();
+    controller->onPbGeneratePressed();
     string msg = "Files succesfully generated in " + check_file.absolutePath().toStdString() + ".";
     QMessageBox::information(this, "Files generated", msg.data(), QMessageBox::Ok);
 }
@@ -322,7 +323,7 @@ void GeneratorPanelImpl::onPbWithoutUIPressed()
     {
         QMessageBox::critical(this, "Error", "You must set a name for the panel.");
     }
-    else if (Controller::getInstance().onPbWithoutUIPressed(name.toStdString()))
+    else if (controller->onPbWithoutUIPressed(name.toStdString()))
     {   // actualizar lista paneles
         p_impl->ui.listWidget_panels->addItem(name);
         int index = p_impl->ui.listWidget_panels->count() - 1;
@@ -340,9 +341,9 @@ void GeneratorPanelImpl::onPbWithUIPressed()
     {
         QMessageBox::critical(this, "Error", "A .ui file must be selected.");
     }
-    else if (Controller::getInstance().onPbWithUIPressed(file.toStdString()))
+    else if (controller->onPbWithUIPressed(file.toStdString()))
     {   // actualizar combobox paneles
-        const char* name = Controller::getInstance().getCurrentPanel()->getName().data();
+        const char* name = controller->getCurrentPanel()->getName().data();
         p_impl->ui.listWidget_panels->addItem(name);
         int index = p_impl->ui.listWidget_panels->count() - 1;
         p_impl->ui.listWidget_panels->setCurrentRow(index);
@@ -360,9 +361,9 @@ void GeneratorPanelImpl::updateHmi()
 
 void GeneratorPanelImpl::updateTxtAssociate()
 {
-    if (Controller::getInstance().getCurrentPanel() != nullptr)
+    if (controller->getCurrentPanel() != nullptr)
     {
-        std::string str = Controller::getInstance().panelInfo();
+        std::string str = controller->panelInfo();
         p_impl->ui.txtAsociate->clear();
         p_impl->ui.txtAsociate->appendPlainText(str.data());
     }
@@ -370,10 +371,10 @@ void GeneratorPanelImpl::updateTxtAssociate()
 
 void GeneratorPanelImpl::updateButtons()
 {
-    if (Controller::getInstance().getCurrentPanel() != nullptr)
+    if (controller->getCurrentPanel() != nullptr)
     {
         p_impl->ui.listWidget_but->clear();
-        for (Button b : Controller::getInstance().getCurrentPanel()->getButtons())
+        for (Button b : controller->getCurrentPanel()->getButtons())
         {
             p_impl->ui.listWidget_but->addItem(b.getName().data());
         }
@@ -382,16 +383,16 @@ void GeneratorPanelImpl::updateButtons()
 
 void GeneratorPanelImpl::updatePanelSettings()
 {
-    if (Controller::getInstance().getCurrentPanel() != nullptr)
+    if (controller->getCurrentPanel() != nullptr)
     {
-        if (Controller::getInstance().getCurrentPanel()->getLayout()!=EXTERNAL_UI)
+        if (controller->getCurrentPanel()->getLayout()!=EXTERNAL_UI)
         {
-            int h = Controller::getInstance().getCurrentPanel()->getHeight();
-            int w = Controller::getInstance().getCurrentPanel()->getWidth();
+            int h = controller->getCurrentPanel()->getHeight();
+            int w = controller->getCurrentPanel()->getWidth();
             p_impl->ui.sbHeigth->setValue(h);
             p_impl->ui.sbWidth->setValue(w);
         }
-        LayoutType layout = Controller::getInstance().getCurrentPanel()->getLayout();
+        LayoutType layout = controller->getCurrentPanel()->getLayout();
         p_impl->ui.comboLayout->setCurrentIndex(layout);
     }
 }

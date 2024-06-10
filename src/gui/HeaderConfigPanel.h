@@ -4,7 +4,7 @@
 #pragma once
 
 #include <QFrame>
-#include "../controller/controller.h"
+#include "../controller/guicontroller.h"
 
 class HeaderConfigPanelImpl : public QFrame
 {
@@ -22,6 +22,7 @@ private:
     class PrivateData;
     std::unique_ptr<PrivateData> p_impl;
     dbg::log loghmi;
+    GuiController* controller;
 
     void checkAll(bool checked);
     void clearAll();

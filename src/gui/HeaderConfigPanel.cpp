@@ -21,6 +21,7 @@ HeaderConfigPanelImpl::HeaderConfigPanelImpl()
 {
     loghmi = dbg::log("hmi");
     p_impl->ui.setupUi(this);
+    controller = static_cast<GuiController*>(&Controller::getInstance());
 
     connect(p_impl->ui.pbSave, &QPushButton::clicked, this, &HeaderConfigPanelImpl::handleButtonClicked);
     connect(p_impl->ui.pbCheckAll, &QPushButton::clicked, this, &HeaderConfigPanelImpl::handleButtonClicked);
@@ -59,11 +60,11 @@ void HeaderConfigPanelImpl::handleButtonClicked()
 
 void HeaderConfigPanelImpl::updateValues()
 {
-    if (Controller::getInstance().getCurrentPanel() == nullptr)
+    if (controller->getCurrentPanel() == nullptr)
     {
         return;
     }
-    SaesHeader header = Controller::getInstance().getCurrentPanel()->getHeader();
+    SaesHeader header = controller->getCurrentPanel()->getHeader();
     
     p_impl->ui.lne_companyName->setText(QString(header.getHeaderElement(COMPANY_NAME).data()));
     p_impl->ui.lne_project->setText(QString(header.getHeaderElement(PROJECT).data()));
@@ -115,12 +116,6 @@ void HeaderConfigPanelImpl::checkAll(bool checked)
     p_impl->ui.revisionhistory->setChecked(checked);
     p_impl->ui.date->setChecked(checked);
     p_impl->ui.cp->setChecked(checked);
-    
-    // for (const auto& element : p_impl->ui.gridLayout->findChildren<QGroupBox *>(Qt::FindDirectChildrenOnly)) 
-    // {
-    //     Controller::getInstance().printTrace(DEBUG, "HOLA");
-    //     element->setChecked(checked);
-    // }
 }
 
 void HeaderConfigPanelImpl::clearAll()
@@ -180,18 +175,6 @@ void HeaderConfigPanelImpl::save()
     if (p_impl->ui.date->isChecked()) header.setHeaderElement(DATE, p_impl->ui.dateEdit->date().toString("dd/MM/yyyy").toStdString());
     if (p_impl->ui.cp->isChecked()) header.setHeaderElement(CP, p_impl->ui.lne_cp->text().toStdString());
 
-    Controller::getInstance().onHeaderSavePressed(&header);
+    controller->onHeaderSavePressed(&header);
     updateValues();
 }
-
-// void HeaderConfigPanelImpl::iterateElements() 
-// {
-//     for (const auto& element : p_impl->ui.mainLayout->children()) 
-//     {
-//         if (element->metaObject()->className() == "QGroupBox") 
-//         {
-//             // static_cast<QGroupBox*>(element)->setChecked(checked);
-//         }
-//     }
-// }
-

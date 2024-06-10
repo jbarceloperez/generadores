@@ -14,7 +14,7 @@
 #include "../log/logger.h"
 
 class Controller {
-private:
+protected:
     // atributos
     PanelCollection panelCol;   // conjunto de paneles creados
     PanelCollection panelGen;   // conjunto de paneles leidos del XML, para generarlos
@@ -26,7 +26,8 @@ private:
     int appLogLevel;            // nivel de log, el programa no mostrará logs por debajo de este
     char* argv[];
     
-    Controller() {};
+    Controller() = default;
+    virtual ~Controller();
 
     void iterateXML(XMLElement e);
     bool readUiXml(XMLFile ui);
@@ -44,21 +45,21 @@ public:
     GPanel* getCurrentPanel() const;
     vector<string> getPanelNames();
 
-    void onPbGeneratePressed();
-    bool onPbWithUIPressed(string uiPath);
-    bool onPbWithoutUIPressed(string name);
-    bool onPbAssociatePressed(int button, int action);
-    bool onPbDeassociatePressed(int button);
-    void onPbSaveXmlPressed();
-    int onPbLoadXmlPressed(string xmlPath);
-    void onPbAddButtonPressed(string name, string type, string action);
-    int onPbDeletePanelPressed(string panel);
-    void onPbDelButtonPressed(int button);
-    void changeCurrentPanel(int index);
-    bool onComboPanelsChanged(int index);
-    void onHeaderSavePressed(SaesHeader* header);
-    bool changeCurrentPanelSize(int h, int w);
-    string panelInfo();
+    virtual void onPbGeneratePressed();
+    virtual bool onPbWithUIPressed(std::string uiPath);
+    virtual bool onPbWithoutUIPressed(std::string name);
+    virtual bool onPbAssociatePressed(int button, int action);
+    virtual bool onPbDeassociatePressed(int button);
+    virtual void onPbSaveXmlPressed();
+    virtual int onPbLoadXmlPressed(std::string xmlPath);
+    virtual void onPbAddButtonPressed(std::string name, std::string type, std::string action);
+    virtual int onPbDeletePanelPressed(std::string panel);
+    virtual void onPbDelButtonPressed(int button);
+    virtual void changeCurrentPanel(int index);
+    virtual bool onComboPanelsChanged(int index);
+    virtual void onHeaderSavePressed(SaesHeader* header);
+    virtual bool changeCurrentPanelSize(int h, int w);
+    virtual std::string panelInfo();
 };
 
 #endif /* CONTROLLER_H */
