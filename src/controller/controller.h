@@ -17,7 +17,6 @@ class Controller {
 protected:
     // atributos
     PanelCollection panelCol;   // conjunto de paneles creados
-    PanelCollection panelGen;   // conjunto de paneles leidos del XML, para generarlos
     GPanel* currentPanel;       // puntero a un panel de panelCol
     // Logger log;
     dbg::log mainlog;
@@ -43,14 +42,14 @@ public:
     void printTrace(TraceLevel trace, string msg);
     Logger *getAppLogger();
     GPanel* getCurrentPanel() const;
-    vector<string> getPanelNames();
+    vector<std::string> getPanelNames();
 
-    virtual void onPbGeneratePressed();
+    virtual void onPbGeneratePressed(std::string outDirectory);
     virtual bool onPbWithUIPressed(std::string uiPath);
     virtual bool onPbWithoutUIPressed(std::string name);
     virtual bool onPbAssociatePressed(int button, int action);
     virtual bool onPbDeassociatePressed(int button);
-    virtual void onPbSaveXmlPressed();
+    virtual void onPbSaveXmlPressed(std::string xmlPath);
     virtual int onPbLoadXmlPressed(std::string xmlPath);
     virtual void onPbAddButtonPressed(std::string name, std::string type, std::string action);
     virtual int onPbDeletePanelPressed(std::string panel);

@@ -61,9 +61,9 @@ static std::map<TemplateMark, std::string> MarkStrings = {
     {UIXMLBUTTON_WITHPOS,       "UIXMLBUTTON_WITHPOS"}
 };
 
-void generatePanelFiles(GPanel p);
+void generatePanelFiles(GPanel p, std::string outDirectory);
 
-void writeFile(const std::string& path, const std::string& srcDirPath, GPanel &p, std::map<TemplateMark, std::string> &properties, FileToGenerate file);
+void writeFile(const std::string& path, GPanel &p, std::map<TemplateMark, std::string> &properties, FileToGenerate file);
 std::string readTemplate(const std::string &filename);
 void replaceMarks(std::string &code, const std::map<TemplateMark, std::string> &properties);
 

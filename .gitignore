@@ -3,3 +3,4 @@ lib/
 build/
 CMakeLists.txt.user
 ScenarioWavRecordPanel.ui
+*.autosave

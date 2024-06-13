@@ -9,6 +9,7 @@
 #include <QFileInfo>
 #include <QListWidgetItem>
 #include <QListWidget>
+#include <QDir>
 #include <map>
 
 class GeneratorPanelImpl::PrivateData
@@ -275,14 +276,15 @@ void GeneratorPanelImpl::onPbAssociatePressed()
 void GeneratorPanelImpl::onPbSaveXmlPressed()
 {
     loghmi.trace("pbSaveXml");
-    QFileInfo check_file("input.xml");
-    if (check_file.exists() && check_file.isFile())
+    QString saveFile = QFileDialog::getSaveFileName(this, "Save the file to...", "../");
+    if (saveFile.isEmpty())
     {
-        QMessageBox::StandardButton reply = QMessageBox::question(this, "Overwrite?", "'input.xml' alredy exists. Overwrite?",QMessageBox::Yes|QMessageBox::No);
-        if (reply == QMessageBox::No) return;
+        loghmi.trace("onPbSaveXmlPressed> No file selected.");
+        return;
     }
-    controller->onPbSaveXmlPressed();
-    QMessageBox::information(this, "Success", "XML config saved in 'input.xml'.");
+    controller->onPbSaveXmlPressed(saveFile.toStdString());
+    string msg = "XML config saved in '" + saveFile.toStdString() + "'.";
+    QMessageBox::information(this, "Success", msg.data(), QMessageBox::Ok);
 }
 
 void GeneratorPanelImpl::onPbLoadXmlPressed()
@@ -308,10 +310,15 @@ void GeneratorPanelImpl::onPbLoadXmlPressed()
 void GeneratorPanelImpl::onPbGeberatePressed()
 {
     loghmi.trace("pbGenerate");
-    QFileInfo check_file("input.xml");
-    onPbSaveXmlPressed();
-    controller->onPbGeneratePressed();
-    string msg = "Files succesfully generated in " + check_file.absolutePath().toStdString() + ".";
+    QString dir_path = QFileDialog::getExistingDirectory(this, "Choose a directory to generate the code:", "../");
+    if (dir_path.isEmpty())
+    {
+        loghmi.warning("onPbGeneratePressed> No directory selected.");
+        return;
+    }
+    QDir dir(dir_path);
+    controller->onPbGeneratePressed(dir_path.toStdString());
+    string msg = "Files succesfully generated in " + dir_path.toStdString() + ".";
     QMessageBox::information(this, "Files generated", msg.data(), QMessageBox::Ok);
 }
 

@@ -9,12 +9,12 @@ public:
     GuiController();
     ~GuiController();
 
-    virtual void onPbGeneratePressed() override final;
+    virtual void onPbGeneratePressed(std::string outDirectory) override final;
     virtual bool onPbWithUIPressed(std::string uiPath) override final;
     virtual bool onPbWithoutUIPressed(std::string name) override final;
     virtual bool onPbAssociatePressed(int button, int action) override final;
     virtual bool onPbDeassociatePressed(int button) override final;
-    virtual void onPbSaveXmlPressed() override final;
+    virtual void onPbSaveXmlPressed(std::string xmlPath) override final;
     virtual int onPbLoadXmlPressed(std::string xmlPath) override final;
     virtual void onPbAddButtonPressed(std::string name, std::string type, std::string action) override final;
     virtual int onPbDeletePanelPressed(std::string panel) override final;

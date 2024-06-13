@@ -7,7 +7,6 @@
 #include <algorithm>    // for using transform 
 #include <cctype>       // for using toUpper
 #include <cstdio>       // sprintf
-#include "templatefunctions.h"
 
 namespace fs = std::filesystem;
 using namespace std;
@@ -17,20 +16,20 @@ using namespace std;
  * Función que genera la estructura de ficheros para
  * la estructura de clases del panel. Es como el main del generador
 */
-void generatePanelFiles(GPanel p)
+void generatePanelFiles(GPanel p, string outDirectory)
 {
     map<TemplateMark, string> properties;
     fillPropertiesMap(p, properties);
 
-    string name = p.getName();
-    string aux_root = name + "/src_inc/" + name;
-    string srcDirPath = name + "/src_inc";
-    fs::path folderPath = name;
+    string dirPath = outDirectory + "/" + p.getName();  // ruta absoluta al directorio
+    string aux_root = dirPath + "/src_inc/" + p.getName(); // prefijo de cada fichero en la carpeta de sources
+    string srcDirPath = dirPath + "/src_inc";   // ruta absoluta al directorio de sources
 
-    if (fs::exists(folderPath)) {
+    // Verifica si el directorio ya existe
+    if (fs::exists(dirPath)) {
         try {
-            fs::remove_all(folderPath);
-            Controller::getInstance().printTrace(INFO, "Directorio ./" + name + " ya existente. Eliminando...");
+            fs::remove_all(dirPath);
+            Controller::getInstance().printTrace(INFO, "Directorio '" + dirPath + "' ya existente. Eliminando...");
         } catch (const fs::filesystem_error& e) {
             Controller::getInstance().printTrace(CRITICAL, "Error eliminando el directorio existente.");
             Controller::getInstance().printTrace(CRITICAL, e.what());
@@ -39,36 +38,49 @@ void generatePanelFiles(GPanel p)
     }
 
     // Crea la carpeta donde se guardará el cmakelists y la carpeta src_inc
-    fs::create_directory(folderPath);
-    Controller::getInstance().printTrace(INFO, "Creado nuevo directorio -> " + folderPath.string());
+    fs::create_directory(dirPath);
+    Controller::getInstance().printTrace(INFO, "Creado nuevo directorio -> " + dirPath);
 
     // Carpeta con los ficheros del panel
     fs::create_directory(srcDirPath);
     Controller::getInstance().printTrace(INFO, "Creado nuevo directorio -> " + srcDirPath);
     
     // Genera todos los ficheros
-    writeFile(name + "/CMakeLists.txt", srcDirPath, p, properties, CMAKELISTS);
-    writeFile(aux_root + ".h", srcDirPath, p, properties, HEADER);
-    writeFile(aux_root + "Gw.h", srcDirPath, p, properties, GWHEADER);
-    writeFile(aux_root + "Gw.cpp", srcDirPath, p, properties, GW);
-    writeFile(aux_root + "QtCb.h", srcDirPath, p, properties, QTCBHEADER);
-    writeFile(aux_root + "QtCb.cpp", srcDirPath, p, properties, QTCB);
+    writeFile(dirPath + "/CMakeLists.txt", p, properties, CMAKELISTS);
+    writeFile(aux_root + ".h", p, properties, HEADER);
+    writeFile(aux_root + "Gw.h", p, properties, GWHEADER);
+    writeFile(aux_root + "Gw.cpp", p, properties, GW);
+    writeFile(aux_root + "QtCb.h", p, properties, QTCBHEADER);
+    writeFile(aux_root + "QtCb.cpp", p, properties, QTCB);
     if (p.getType() == PanelType::CONFIG || p.getType() == PanelType::READ_ONLY)
     {
-        writeFile(aux_root + ".ui", srcDirPath, p, properties, UI);
+        writeFile(aux_root + ".ui", p, properties, UI);
     }
 }
 
 //-----------------------------------------------------------------------------
 
-void writeFile(const string& path, const string& srcDirPath, GPanel &p, map<TemplateMark, std::string> &properties, FileToGenerate file)
+/**
+ * @brief Función que escribe en un fichero el código generado
+ * @param path Ruta absoluta del fichero a escribir
+ * @param p Objeto GPanel con los datos del panel
+ * @param properties Map con las propiedades del panel
+ * @param file Tipo de fichero a escribir
+ * @note
+ * La función abre un ofstream al path correspondiente. 
+ * Escribe el código de la plantilla correspondiente en una string mediante la
+ * función readTemplate, y luego procesa ese string con la función replaceMarks.
+ * Finalmente, escribe el contenido en el ofstream y lo cierra. 
+*/
+void writeFile(const string& path, GPanel &p, map<TemplateMark, std::string> &properties, FileToGenerate file)
 {
     ofstream out(path); // abre el ofstream al path correspondiente
     string code;
     code = readTemplate(FileTemplatePath[file]); // lee el contenido de la plantilla a code
     replaceMarks(code, properties); // procesa la plantilla y rellena las marcas
     out << code;    // escribe el contenido en el ofstream
-    Controller::getInstance().printTrace(INFO, "Creado nuevo fichero -> " + srcDirPath);
+    Controller::getInstance().printTrace(INFO, "Creado nuevo fichero -> " + path);
+    out.close(); // cierra el ofstream
 }
 
 void fillPropertiesMap(GPanel p, map<TemplateMark, string>& props) {

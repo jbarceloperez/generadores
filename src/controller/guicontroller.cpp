@@ -12,9 +12,9 @@ GuiController::~GuiController() {}
  * Función llamada desde la vista, lee el archivo XML de entrada
  * y después genera los ficheros correspondientes.
 */
-void GuiController::onPbGeneratePressed()
+void GuiController::onPbGeneratePressed(string outDirectory)
 {
-    generateAllFiles("input.xml");
+    generateAllFiles(outDirectory);
 }
 
 /**
@@ -92,10 +92,10 @@ bool GuiController::onPbDeassociatePressed(int button)
  * Función llamada desde la vista, escribe el objeto XMLFile en
  * un fichero.
 */
-void GuiController::onPbSaveXmlPressed()
+void GuiController::onPbSaveXmlPressed(std::string xmlPath)
 {
     XMLParser parser;
-    parser.writeXMLFile(panelCol, "input.xml");
+    parser.writeXMLFile(panelCol, xmlPath);
 }
 
 /**

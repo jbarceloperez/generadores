@@ -104,12 +104,12 @@ vector<string> Controller::getPanelNames() {
     return panelCol.getNames();
 }
 
-void Controller::onPbGeneratePressed() {} // a implementar en subclase
+void Controller::onPbGeneratePressed(std::string outDirectory) {} // a implementar en subclase
 bool Controller::onPbWithUIPressed(std::string uiPath) {return 0;} // a implementar en subclase
 bool Controller::onPbWithoutUIPressed(std::string name) {return 0;} // a implementar en subclase
 bool Controller::onPbAssociatePressed(int button, int action) {return 0;} // a implementar en subclase
 bool Controller::onPbDeassociatePressed(int button) {return 0;} // a implementar en subclase
-void Controller::onPbSaveXmlPressed() {} // a implementar en subclase
+void Controller::onPbSaveXmlPressed(std::string xmlPath) {} // a implementar en subclase
 int Controller::onPbLoadXmlPressed(std::string xmlPath) {return 0;} // a implementar en subclase
 void Controller::onPbAddButtonPressed(std::string name, std::string type, std::string action) {} // a implementar en subclase
 int Controller::onPbDeletePanelPressed(std::string panel) {return 0;} // a implementar en subclase
@@ -190,8 +190,8 @@ void Controller::readInputXml(string inputFileName)
     }
     catch(const XMLFileException& e)
     {
-        std::cerr << e.what() << '\n';
-        std::cerr << "Error loading path '" << inputFileName << "'\n";
+        mainlog.critical("Error loading file '%s'", inputFileName);
+        mainlog.critical(e.what());
         exit(EXIT_FAILURE);
     }
     for(XMLElement panel : doc.getRootElement().getElements()) {
@@ -200,33 +200,15 @@ void Controller::readInputXml(string inputFileName)
 }
 
 /**
- * Función que genera ficheros. Primero, lee el archivo xml de entrada
- * con la configuración de los ficheros a generar. Después, para
- * cada panel en la colección, llama a la lógica del generador para
- * generar su estructura de clases.
+ * Función que genera ficheros. Para cada panel en la colección 
+ * de paneles, llama a la lógica del generador para generar su 
+ * estructura de clases en el directorio pasado como parámetro.
 */
-void Controller::generateAllFiles(string inputFile)
+void Controller::generateAllFiles(string outDirectory)
 {
-    XMLParser parser;
-    XMLFile doc(inputFile.data());
-
-    try
+    for (GPanel panel : panelCol.getVector())
     {
-        doc.read();
-    }
-    catch(const XMLFileException& e)
-    {
-        std::cerr << e.what() << '\n';
-        std::cerr << "Error loading path '" << inputFile << "'\n";
-        exit(EXIT_FAILURE);
-    }
-    // cerr << doc.toString();  // DEBUG
-    for(XMLElement panel : doc.getRootElement().getElements()) {
-        panelGen.addPanel(parser.buildPanel(panel));
-    }
-    for (GPanel panel : panelGen.getVector())
-    {
-        generatePanelFiles(panel);
+        generatePanelFiles(panel, outDirectory);
         printTrace(INFO, "Ended generating files for " + panel.getName() + "\n");
     }
 }

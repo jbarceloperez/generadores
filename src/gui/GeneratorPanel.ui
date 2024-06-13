@@ -157,7 +157,7 @@
          <item>
           <widget class="QPushButton" name="pbWithoutUI">
            <property name="text">
-            <string>Vacío</string>
+            <string>Panel vacío</string>
            </property>
            <property name="checkable">
             <bool>true</bool>
@@ -198,7 +198,7 @@
          <item>
           <widget class="QPushButton" name="pbWithUI">
            <property name="text">
-            <string>Diseño</string>
+            <string>Panel con ui</string>
            </property>
            <property name="checkable">
             <bool>true</bool>
