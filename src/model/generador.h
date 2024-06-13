@@ -17,7 +17,8 @@ enum TemplateMark
     PANEL_CUSTOM2_CPP, ADD_FOOTER_BUTTON_APPLY, ADD_FOOTER_BUTTON_CANCEL, 
     ADD_FOOTER_BUTTON_CHECK, ADD_FOOTER_BUTTON_RESET, 
     ADD_FOOTER_BUTTON_CUSTOM1, ADD_FOOTER_BUTTON_CUSTOM2, GEOMETRY_W, 
-    GEOMETRY_H, BUTTONS_UI, LAYOUT_UI, SAES_HEADER, END_MARK
+    GEOMETRY_H, BUTTONS_UI, LAYOUT_UI, SAES_HEADER, UIXMLBUTTON,
+    UIXMLBUTTON_WITHPOS, END_MARK
 };
 
 static std::map<FileToGenerate, std::string> FileTemplatePath = {
@@ -55,7 +56,9 @@ static std::map<TemplateMark, std::string> MarkStrings = {
     {GEOMETRY_H,                "GEOMETRY_H"},
     {BUTTONS_UI,                "BUTTONS_UI"},
     {LAYOUT_UI,                 "LAYOUT_UI"},
-    {SAES_HEADER,               "SAES_HEADER"}
+    {SAES_HEADER,               "SAES_HEADER"},
+    {UIXMLBUTTON,               "UIXMLBUTTON"},
+    {UIXMLBUTTON_WITHPOS,       "UIXMLBUTTON_WITHPOS"}
 };
 
 void generatePanelFiles(GPanel p);
@@ -63,8 +66,12 @@ void generatePanelFiles(GPanel p);
 void writeFile(const std::string& path, const std::string& srcDirPath, GPanel &p, std::map<TemplateMark, std::string> &properties, FileToGenerate file);
 std::string readTemplate(const std::string &filename);
 void replaceMarks(std::string &code, const std::map<TemplateMark, std::string> &properties);
-void fillPropertiesMap(GPanel p, std::map<TemplateMark, std::string> &properties);
 
-void setButtonData(std::map<TemplateMark, std::string> &props, GPanel &p, Button &b, std::string &str_buttons, TemplateMark mark1, TemplateMark mark2, TemplateMark mark3);
+void fillPropertiesMap(GPanel p, std::map<TemplateMark, std::string> &properties);
+void fillButtonMarks(GPanel &p, std::map<TemplateMark, std::string> &props, std::map<TemplateMark, std::string> &code_chunks);
+void setButtonData(std::map<TemplateMark, std::string> &props, std::map<TemplateMark, std::string> &code_chunks, GPanel &p, Button &b, std::string &str_buttons, TemplateMark mark1, TemplateMark mark2, TemplateMark mark3);
+
+std::map<TemplateMark, std::string> readCodeChunks(const std::string &filename);
+void processLine(std::string &line, bool &inChunk, std::string &currentChunk, std::map<TemplateMark, std::string> &codeChunks, std::ostringstream &currentCode);
 
 #endif // GENERATOR_H

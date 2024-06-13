@@ -1,0 +1,209 @@
+// %s = button name ambas veces
+%%UIXMLBUTTON%   
+	<item>
+	    <widget class=QPushButton name=\"%s\">
+		    <property name=\"text\">
+			    <string>%s</string>
+			</property>
+		</widget>
+	</item>
+%/UIXMLBUTTON%
+
+
+// %d = row, %d = column, %s = button name ambas veces
+%%UIXMLBUTTON_WITHPOS%
+	<item row=\"%d\" column=\"%d\">
+	    <widget class=QPushButton name=\"%s\">
+		    <property name=\"text\">
+			    <string>%s</string>
+			</property>
+		</widget>
+	</item>
+%/UIXMLBUTTON_WITHPOS%
+
+
+%%ADD_FOOTER_BUTTON_APPLY% // %s = button name
+addFooterButton(Footer::Button_Apply, p_impl->ui.%s);
+%/ADD_FOOTER_BUTTON_APPLY%
+
+
+%%ADD_FOOTER_BUTTON_CANCEL%	// %s = button name
+addFooterButton(Footer::Button_Cancel, p_impl->ui.%s);
+%/ADD_FOOTER_BUTTON_CANCEL%
+
+
+%%ADD_FOOTER_BUTTON_RESET%	// %s = button name
+addFooterButton(Footer::Button_Reset, p_impl->ui.%s);
+%/ADD_FOOTER_BUTTON_RESET%
+
+// %s = button name
+%%ADD_FOOTER_BUTTON_CHECK%
+addFooterButton(Footer::Button_Check, p_impl->ui.%s);
+%/ADD_FOOTER_BUTTON_CHECK%
+
+// %s = button name
+%%ADD_FOOTER_BUTTON_CUSTOM1%
+addFooterButton(Footer::Button_Custom1, p_impl->ui.%s);
+%/ADD_FOOTER_BUTTON_CUSTOM1%
+
+// %s = button name
+%%ADD_FOOTER_BUTTON_CUSTOM2%
+addFooterButton(Footer::Button_Custom2, p_impl->ui.%s);
+%/ADD_FOOTER_BUTTON_CUSTOM2%
+
+
+%%PANEL_APPLY_H%
+	/**
+	 * @brief Método con la funcionalidad del botón \"Apply\".
+	 */
+	virtual void panelApply() override final;
+%/PANEL_APPLY_H%
+
+
+%%PANEL_APPLY_CPP%
+//----------------------------------------------------------------
+void %NAME%QtCb::panelApply()
+{
+	// Implementation here
+}
+%/PANEL_APPLY_CPP%
+
+
+%%PANEL_CANCEL_H%
+	/**
+	 * @brief Método con la funcionalidad del botón \"Cancel\".
+	 */
+	virtual void panelCancel() override final;
+%/PANEL_CANCEL_H%
+
+
+%%PANEL_CANCEL_CPP%
+//----------------------------------------------------------------
+void %NAME%QtCb::panelCancel()
+{
+	// Implementation here
+}
+%/PANEL_CANCEL_CPP%
+
+
+%%PANEL_CHECK_H%
+	/**
+	 * @brief Método con la funcionalidad del botón \"Check\".
+	 */
+	virtual void panelCheck() override final;
+%/PANEL_CHECK_H%
+
+
+%%PANEL_CHECK_CPP%
+//----------------------------------------------------------------
+void %NAME%QtCb::panelCheck()
+{
+	// Implementation here
+}
+%/PANEL_CHECK_CPP%
+
+
+%%PANEL_RESET_H%
+	/**
+	 * @brief Método con la funcionalidad del botón \"Reset\".
+	 */
+	virtual void panelReset() override final;
+%/PANEL_RESET_H%
+
+
+%%PANEL_RESET_CPP%
+//----------------------------------------------------------------
+void %NAME%QtCb::panelReset()
+{
+	// Implementation here
+}
+%/PANEL_RESET_CPP%
+
+
+%%PANEL_CUSTOM1_H%
+	/**
+	 * @brief Método con la funcionalidad del botón \"Custom1\".
+	 */
+	virtual void panelCustom1() override final;
+%/PANEL_CUSTOM1_H%
+
+
+%%PANEL_CUSTOM1_CPP%
+//----------------------------------------------------------------
+void %NAME%QtCb::panelCustom1()
+{
+	// Implementation here
+}
+%/PANEL_CUSTOM1_CPP%
+
+
+%%PANEL_CUSTOM2_H%
+	/**
+	 * @brief Método con la funcionalidad del botón \"Custom2\".
+	 */
+	virtual void panelCustom2() override final;
+%/PANEL_CUSTOM2_H%
+
+
+%%PANEL_CUSTOM2_CPP%
+//----------------------------------------------------------------
+void %NAME%QtCb::panelCustom2()
+{
+	// Implementation here
+}
+%/PANEL_ACUSTOM2_CPP%
+
+
+%%ADD_FOOTER_BUTTON_APPLY%	// %s = button name
+addFooterButton(Footer::Button_Apply, p_impl->ui.%s);
+%/ADD_FOOTER_BUTTON_APPLY%
+
+
+%%ADD_FOOTER_BUTTON_CANCEL%	// %s = button name
+addFooterButton(Footer::Button_Cancel, p_impl->ui.%s);
+%/ADD_FOOTER_BUTTON_CANCEL%
+
+
+%%ADD_FOOTER_BUTTON_RESET%	// %s = button name
+addFooterButton(Footer::Button_Reset, p_impl->ui.%s);
+%/ADD_FOOTER_BUTTON_RESET%
+
+
+%%ADD_FOOTER_BUTTON_CHECK%	// %s = button name
+addFooterButton(Footer::Button_Check, p_impl->ui.%s);
+%/ADD_FOOTER_BUTTON_CHECK%
+
+
+%%ADD_FOOTER_BUTTON_CUSTOM1%	// %s = button name
+addFooterButton(Footer::Button_Custom1, p_impl->ui.%s);
+%/ADD_FOOTER_BUTTON_CUSTOM1%
+
+
+%%ADD_FOOTER_BUTTON_CUSTOM2%	// %s = button name
+addFooterButton(Footer::Button_Custom2, p_impl->ui.%s);
+%/ADD_FOOTER_BUTTON_CUSTOM2%
+
+
+// %s = button name ambas veces
+%%UIXMLBUTTON%	
+	<item>
+	    <widget class=QPushButton name=\"%s\">
+		    <property name=\"text\">
+			    <string>%s</string>
+			</property>
+		</widget>
+	</item>
+%/UIXMLBUTTON%
+
+
+// %d = row, %d = column, %s = button name ambas veces
+%%UIXMLBUTTON_WITHPOS%	
+	<item row=\"%d\" column=\"%d\">
+	    <widget class=QPushButton name=\"%s\">
+		    <property name=\"text\">
+			    <string>%s</string>
+			</property>
+		</widget>
+	</item>
+%/UIXMLBUTTON_WITHPOS%
+

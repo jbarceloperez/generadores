@@ -194,7 +194,7 @@ void GuiController::onHeaderSavePressed(SaesHeader* header)
 }
 
 /**
- * Función que trata de cambiar el tamaño del currentPanel. Devuelbe
+ * Función que trata de cambiar el tamaño del currentPanel. Devuelve
  * true en caso de cambiarlo y false en otro caso.
 */
 bool GuiController::changeCurrentPanelSize(int h, int w)

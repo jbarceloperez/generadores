@@ -15,7 +15,7 @@ using namespace std;
 
 /**
  * Función que genera la estructura de ficheros para
- * la estructura de clases del panel.
+ * la estructura de clases del panel. Es como el main del generador
 */
 void generatePanelFiles(GPanel p)
 {
@@ -61,7 +61,7 @@ void generatePanelFiles(GPanel p)
 
 //-----------------------------------------------------------------------------
 
-void writeFile(const string& path, const string& srcDirPath, GPanel &p, std::map<TemplateMark, std::string> &properties, FileToGenerate file)
+void writeFile(const string& path, const string& srcDirPath, GPanel &p, map<TemplateMark, std::string> &properties, FileToGenerate file)
 {
     ofstream out(path); // abre el ofstream al path correspondiente
     string code;
@@ -74,6 +74,7 @@ void writeFile(const string& path, const string& srcDirPath, GPanel &p, std::map
 void fillPropertiesMap(GPanel p, map<TemplateMark, string>& props) {
     for (int m = NAME; m < END_MARK; m++)   // inicializar propiedades a 0
         props[static_cast<TemplateMark>(m)] = "";
+    map<TemplateMark, string> code_chunks = readCodeChunks("../templates/Functions.txt");
     props[NAME] = p.getName();
     string str_name = p.getName();
     transform(str_name.begin(), str_name.end(), str_name.begin(), ::toupper);
@@ -82,32 +83,42 @@ void fillPropertiesMap(GPanel p, map<TemplateMark, string>& props) {
     props[GEOMETRY_W] = to_string(p.getWidth());
     props[LAYOUT_UI] = LayoutTypeToString[p.getLayout()];
     props[SAES_HEADER] = p.getHeaderString();
+    for (auto &i : code_chunks) 
+    {
+        replaceMarks(i.second, props);
+    }
+    fillButtonMarks(p, props, code_chunks);
+}
+
+void fillButtonMarks(GPanel &p, map<TemplateMark, string> &props, map<TemplateMark, string> &code_chunks)
+{
     // generacion de los botones
     string str_buttons = "";
     int n_buttons = 0;
     for (Button b : p.getButtons())
     {
         ButtonAction accion = b.getAction();
-        string aux; char buff[200];
+        string aux;
+        char buff[200];
         switch (accion)
         {
         case APPLY:
-            setButtonData(props, p, b, str_buttons, PANEL_APPLY_H, PANEL_APPLY_CPP, ADD_FOOTER_BUTTON_APPLY);
+            setButtonData(props, code_chunks, p, b, str_buttons, PANEL_APPLY_H, PANEL_APPLY_CPP, ADD_FOOTER_BUTTON_APPLY);
             break;
         case CANCEL:
-            setButtonData(props, p, b, str_buttons, PANEL_CANCEL_H, PANEL_CANCEL_CPP, ADD_FOOTER_BUTTON_CANCEL);
+            setButtonData(props, code_chunks, p, b, str_buttons, PANEL_CANCEL_H, PANEL_CANCEL_CPP, ADD_FOOTER_BUTTON_CANCEL);
             break;
         case CHECK:
-            setButtonData(props, p, b, str_buttons, PANEL_CHECK_H, PANEL_CHECK_CPP, ADD_FOOTER_BUTTON_CHECK);
+            setButtonData(props, code_chunks, p, b, str_buttons, PANEL_CHECK_H, PANEL_CHECK_CPP, ADD_FOOTER_BUTTON_CHECK);
             break;
         case RESET:
-            setButtonData(props, p, b, str_buttons, PANEL_RESET_H, PANEL_RESET_CPP, ADD_FOOTER_BUTTON_RESET);
+            setButtonData(props, code_chunks, p, b, str_buttons, PANEL_RESET_H, PANEL_RESET_CPP, ADD_FOOTER_BUTTON_RESET);
             break;
         case CUSTOM1:
-            setButtonData(props, p, b, str_buttons, PANEL_CUSTOM1_H, PANEL_CUSTOM1_CPP, ADD_FOOTER_BUTTON_CUSTOM1);
+            setButtonData(props, code_chunks, p, b, str_buttons, PANEL_CUSTOM1_H, PANEL_CUSTOM1_CPP, ADD_FOOTER_BUTTON_CUSTOM1);
             break;
         case CUSTOM2:
-            setButtonData(props, p, b, str_buttons, PANEL_CUSTOM2_H, PANEL_CUSTOM2_CPP, ADD_FOOTER_BUTTON_CUSTOM2);
+            setButtonData(props, code_chunks, p, b, str_buttons, PANEL_CUSTOM2_H, PANEL_CUSTOM2_CPP, ADD_FOOTER_BUTTON_CUSTOM2);
             break;
         default:
             break;
@@ -115,13 +126,14 @@ void fillPropertiesMap(GPanel p, map<TemplateMark, string>& props) {
         // generar el texto a insertar en el .ui por botón
         if (p.getLayout() == QGRIDLAYOUT || p.getLayout() == QFORMLAYOUT)
         {
-            aux = CodeSnippets[UIXMLBUTTON_WITHPOS];
+            aux = code_chunks[UIXMLBUTTON_WITHPOS];
             int row = 0, col = n_buttons;
-            sprintf(buff, aux.data(), row, col, ButtonTypeToString[b.getType()].data(), b.getName().data(), b.getName().data());
+            sprintf(buff, aux.data(), row, col, b.getName().data(), b.getName().data());
         }
-        else {
-            aux = CodeSnippets[UIXMLBUTTON];
-            sprintf(buff, aux.data(), ButtonTypeToString[b.getType()].data(), b.getName().data(), b.getName().data());
+        else
+        {
+            aux = code_chunks[UIXMLBUTTON];
+            sprintf(buff, aux.data(), b.getName().data(), b.getName().data());
         }
         str_buttons += buff;
         n_buttons++;
@@ -133,19 +145,80 @@ void fillPropertiesMap(GPanel p, map<TemplateMark, string>& props) {
  * Función que genera el texto correspondiente a las acciones de los botones en los
  * archivos QtCb.cpp y QtCb.h 
 */
-void setButtonData(std::map<TemplateMark, std::string> &props, GPanel &p, Button &b, std::string &str_buttons, TemplateMark mark1, TemplateMark mark2, TemplateMark mark3)
+void setButtonData(map<TemplateMark, string> &props, map<TemplateMark, string> &code_chunks, GPanel &p, Button &b, string &str_buttons, TemplateMark h_mark, TemplateMark cpp_mark, TemplateMark addButton_mark)
 {
-    props[mark1] = Functions[mark1];
+    string aux;
+    props[h_mark] = code_chunks[h_mark];
     char buff[200];
-    string aux = Functions[mark2];
+    aux = code_chunks[cpp_mark];
     sprintf(buff, aux.data(), p.getName().data());
-    props[mark2] = buff;
-    aux = Functions[mark3];
+    props[cpp_mark] = buff;
+    aux = code_chunks[addButton_mark];
     sprintf(buff, aux.data(), b.getName().data());
-    props[mark3] = buff;
+    props[addButton_mark] = buff;
 }
 
-string readTemplate(const std::string &filename)
+map<TemplateMark, string> readCodeChunks(const string &filename)
+{
+    map<TemplateMark, string> codeChunks;
+    ifstream file(filename);
+    string line;
+    string currentChunk;
+    ostringstream currentCode;
+    bool inChunk = false;
+
+    if (file.is_open()) 
+    {
+        while (getline(file, line)) 
+        {
+            processLine(line, inChunk, currentChunk, codeChunks, currentCode);
+        }
+        file.close();
+    } else {
+        cerr << "Unable to open file";
+    }
+    return codeChunks;
+}
+
+void processLine(std::string &line, bool &inChunk, std::string &currentChunk, std::map<TemplateMark, std::string> &codeChunks, std::ostringstream &currentCode)
+{
+    if (line.find('%') != std::string::npos)    // se encuentra un caracter %
+    {
+        if (line.find("%%") != std::string::npos)   // ¿es una marca de incio de code chunk?
+        {
+            // Comienza el code chunk
+            size_t name_end = line.find('%', 2);
+            currentChunk = line.substr(2, name_end - 2); // obtiene el nombre del chunk
+            inChunk = true;
+        }
+        else if (line.find("%/") != std::string::npos)  // ¿es una marca de fin de code chunk?
+        {
+            if (inChunk)    // si ya estaba leyendo un chunk, lo agrega al mapa
+            {
+                for (auto &i : MarkStrings)
+                {
+                    if (i.second == currentChunk)
+                    {
+                        codeChunks[i.first] = currentCode.str();
+                        break;
+                    }
+                }
+                currentCode.str("");
+                currentCode.clear();
+                inChunk = false;
+            }
+        }
+        else if (inChunk) {
+            currentCode << line << "\n"; // si no es ninguna de las dos marcas de code chunk, agrega la linea al stream
+        }
+    }
+    else if (inChunk)    // si no hay '%' y esta leyendo un chunk, lo agrega al stream
+    {
+        currentCode << line << "\n";
+    }
+}
+
+string readTemplate(const string &filename)
 {
     ifstream file(filename);
     string content((istreambuf_iterator<char>(file)), istreambuf_iterator<char>());
@@ -160,9 +233,9 @@ string readTemplate(const std::string &filename)
 void replaceMarks(string &code, const map<TemplateMark, string> &props)
 {
     for (const auto& pair : props) {
-        std::string placeholder = "%" + MarkStrings.find(pair.first)->second + "%";
+        string placeholder = "%" + MarkStrings.find(pair.first)->second + "%";
         size_t pos = code.find(placeholder);
-        while (pos != std::string::npos) {
+        while (pos != string::npos) {
             code.replace(pos, placeholder.size(), pair.second);
             pos = code.find(placeholder);
         }

@@ -34,7 +34,7 @@ set(PROJECT_SOURCES
         src/log/logger.h src/log/logger.cpp
 
         src/model/generador.cpp src/model/gpanel.cpp src/model/panelcollection.cpp src/model/button.cpp src/model/saesheader.cpp
-        src/model/generador.h src/model/gpanel.h src/model/panelcollection.h src/model/button.h src/model/saesheader.h src/model/templatefunctions.h
+        src/model/generador.h src/model/gpanel.h src/model/panelcollection.h src/model/button.h src/model/saesheader.h
         src/xml/xmlparser.cpp src/xml/xmlparser.h
         src/xml/xmlfile.cpp src/xml/xmlfile.h
         src/xml/xmlattribute.cpp src/xml/xmlattribute.h
