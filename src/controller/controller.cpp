@@ -111,7 +111,7 @@ bool Controller::onPbAssociatePressed(int button, int action) {return 0;} // a i
 bool Controller::onPbDeassociatePressed(int button) {return 0;} // a implementar en subclase
 void Controller::onPbSaveXmlPressed(std::string xmlPath) {} // a implementar en subclase
 int Controller::onPbLoadXmlPressed(std::string xmlPath) {return 0;} // a implementar en subclase
-void Controller::onPbAddButtonPressed(std::string name, std::string type, std::string action) {} // a implementar en subclase
+void Controller::onPbAddButtonPressed(std::string name, std::string action) {} // a implementar en subclase
 int Controller::onPbDeletePanelPressed(std::string panel) {return 0;} // a implementar en subclase
 void Controller::onPbDelButtonPressed(int button) {} // a implementar en subclase
 void Controller::changeCurrentPanel(int index) {} // a implementar en subclase
@@ -167,7 +167,7 @@ void Controller::iterateXML(XMLElement e)
         string aux = i.getAttributeValue("class");
         if (aux == "QPushButton")
         {
-            currentPanel->addButton(QPUSHBUTTON, i.getAttributeValue("name"));
+            currentPanel->addButton(i.getAttributeValue("name"));
             Controller::getInstance().printTrace(WARNING, "QPushButton: " + i.getAttributeValue("name"));
         }
         iterateXML(i);

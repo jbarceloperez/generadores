@@ -131,7 +131,7 @@ void XMLParser::writeXMLFile(PanelCollection panels, string xmlPath)
             for (Button b : p.getButtons())
             {
                 xmlWriter.writeStartElement("button");  // <button>
-                xmlWriter.writeAttribute("type", QString::fromStdString(ButtonTypeToString[b.getType()]));
+                // xmlWriter.writeAttribute("type", QString::fromStdString(ButtonTypeToString[b.getType()]));
                 xmlWriter.writeTextElement("name", QString::fromStdString(b.getName()));
                 if (b.getAction() != NULLBUTTONACTION)
                 {
@@ -198,11 +198,11 @@ GPanel XMLParser::buildPanel(XMLElement e)
             {
                 if (se.numSubelements()==1) // si solo tiene el nombre, no la accion
                 {
-                    panelObject.addButton(se.getSubelement("name").getContent(), se.getAttributeValue("type"), "null");
+                    panelObject.addButton(se.getSubelement("name").getContent());
                 } 
                 else
                 {
-                    panelObject.addButton(se.getSubelement("name").getContent(), se.getAttributeValue("type"), se.getSubelement("action").getContent());
+                    panelObject.addButton(se.getSubelement("name").getContent(), se.getSubelement("action").getContent());
                 }
             }
         }

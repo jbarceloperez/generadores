@@ -1,56 +1,3 @@
-// %s = button name ambas veces
-%%UIXMLBUTTON%   
-	<item>
-	    <widget class=QPushButton name=\"%s\">
-		    <property name=\"text\">
-			    <string>%s</string>
-			</property>
-		</widget>
-	</item>
-%/UIXMLBUTTON%
-
-
-// %d = row, %d = column, %s = button name ambas veces
-%%UIXMLBUTTON_WITHPOS%
-	<item row=\"%d\" column=\"%d\">
-	    <widget class=QPushButton name=\"%s\">
-		    <property name=\"text\">
-			    <string>%s</string>
-			</property>
-		</widget>
-	</item>
-%/UIXMLBUTTON_WITHPOS%
-
-
-%%ADD_FOOTER_BUTTON_APPLY% // %s = button name
-addFooterButton(Footer::Button_Apply, p_impl->ui.%s);
-%/ADD_FOOTER_BUTTON_APPLY%
-
-
-%%ADD_FOOTER_BUTTON_CANCEL%	// %s = button name
-addFooterButton(Footer::Button_Cancel, p_impl->ui.%s);
-%/ADD_FOOTER_BUTTON_CANCEL%
-
-
-%%ADD_FOOTER_BUTTON_RESET%	// %s = button name
-addFooterButton(Footer::Button_Reset, p_impl->ui.%s);
-%/ADD_FOOTER_BUTTON_RESET%
-
-// %s = button name
-%%ADD_FOOTER_BUTTON_CHECK%
-addFooterButton(Footer::Button_Check, p_impl->ui.%s);
-%/ADD_FOOTER_BUTTON_CHECK%
-
-// %s = button name
-%%ADD_FOOTER_BUTTON_CUSTOM1%
-addFooterButton(Footer::Button_Custom1, p_impl->ui.%s);
-%/ADD_FOOTER_BUTTON_CUSTOM1%
-
-// %s = button name
-%%ADD_FOOTER_BUTTON_CUSTOM2%
-addFooterButton(Footer::Button_Custom2, p_impl->ui.%s);
-%/ADD_FOOTER_BUTTON_CUSTOM2%
-
 
 %%PANEL_APPLY_H%
 	/**
@@ -187,8 +134,8 @@ addFooterButton(Footer::Button_Custom2, p_impl->ui.%s);
 // %s = button name ambas veces
 %%UIXMLBUTTON%	
 	<item>
-	    <widget class=QPushButton name=\"%s\">
-		    <property name=\"text\">
+	    <widget class="QPushButton" name="%s">
+		    <property name="text">
 			    <string>%s</string>
 			</property>
 		</widget>
@@ -198,9 +145,9 @@ addFooterButton(Footer::Button_Custom2, p_impl->ui.%s);
 
 // %d = row, %d = column, %s = button name ambas veces
 %%UIXMLBUTTON_WITHPOS%	
-	<item row=\"%d\" column=\"%d\">
-	    <widget class=QPushButton name=\"%s\">
-		    <property name=\"text\">
+	<item row="%d" column="%d">
+	    <widget class="QPushButton" name="%s">
+		    <property name="text">
 			    <string>%s</string>
 			</property>
 		</widget>

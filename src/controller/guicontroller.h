@@ -16,7 +16,7 @@ public:
     virtual bool onPbDeassociatePressed(int button) override final;
     virtual void onPbSaveXmlPressed(std::string xmlPath) override final;
     virtual int onPbLoadXmlPressed(std::string xmlPath) override final;
-    virtual void onPbAddButtonPressed(std::string name, std::string type, std::string action) override final;
+    virtual void onPbAddButtonPressed(std::string name, std::string action) override final;
     virtual int onPbDeletePanelPressed(std::string panel) override final;
     virtual void onPbDelButtonPressed(int button) override final;
     virtual void changeCurrentPanel(int index) override final;

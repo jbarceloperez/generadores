@@ -216,15 +216,15 @@ void GeneratorPanelImpl::onPbAddButtonPressed()
 {
     loghmi.trace("pbAddButton");
     if (p_impl->ui.cb_apply->isChecked())
-        controller->onPbAddButtonPressed("pbApply", "QPushButton", "Apply");
+        controller->onPbAddButtonPressed("pbApply", "Apply");
     if (p_impl->ui.cb_cancel->isChecked())
-        controller->onPbAddButtonPressed("pbCancel", "QPushButton", "Cancel");
+        controller->onPbAddButtonPressed("pbCancel", "Cancel");
     if (p_impl->ui.cb_check->isChecked())
-        controller->onPbAddButtonPressed("pbCheck", "QPushButton", "Check");
+        controller->onPbAddButtonPressed("pbCheck", "Check");
     if (p_impl->ui.cb_reset->isChecked())
-        controller->onPbAddButtonPressed("pbReset", "QPushButton", "Reset");
+        controller->onPbAddButtonPressed("pbReset", "Reset");
     if (p_impl->ui.cb_custom->isChecked())
-        controller->onPbAddButtonPressed(p_impl->ui.lneCustom->text().toStdString(), "QPushButton", "Custom1");
+        controller->onPbAddButtonPressed(p_impl->ui.lneCustom->text().toStdString(), "Custom1");
     updateHmi();
 }
 

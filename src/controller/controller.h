@@ -51,7 +51,7 @@ public:
     virtual bool onPbDeassociatePressed(int button);
     virtual void onPbSaveXmlPressed(std::string xmlPath);
     virtual int onPbLoadXmlPressed(std::string xmlPath);
-    virtual void onPbAddButtonPressed(std::string name, std::string type, std::string action);
+    virtual void onPbAddButtonPressed(std::string name, std::string action);
     virtual int onPbDeletePanelPressed(std::string panel);
     virtual void onPbDelButtonPressed(int button);
     virtual void changeCurrentPanel(int index);

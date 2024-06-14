@@ -114,7 +114,7 @@ int GuiController::onPbLoadXmlPressed(string xmlPath)
  * Funcion que añade un botón al currentPanel con la información recibida
  * como parametros desde la vista.
 */
-void GuiController::onPbAddButtonPressed(std::string name, std::string type, std::string action)
+void GuiController::onPbAddButtonPressed(std::string name, std::string action)
 {
     if (currentPanel == nullptr)
         return;
@@ -126,7 +126,7 @@ void GuiController::onPbAddButtonPressed(std::string name, std::string type, std
             return;
         }
     }
-    currentPanel->addButton(name, type, action);
+    currentPanel->addButton(name, action);
 }
 
 /**

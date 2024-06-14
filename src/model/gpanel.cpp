@@ -122,18 +122,18 @@ void GPanel::setLayout(LayoutType newLayout)
 }
 
 // Funcionalidad con los botones
-void GPanel::addButton(ButtonType _type, std::string _name)
+void GPanel::addButton(std::string _name)
 {
+    buttons.push_back(Button(_name));
     Controller::getInstance().printTrace(TRACE, "Added button [" + _name + "]");
-    buttons.push_back(Button(_name, _type));
     if (type == READ_ONLY) type = CONFIG;
     else if (type == EXTERNAL_UI_READ) type = EXTERNAL_UI_CONFIG;
 }
 
-void GPanel::addButton(std::string _name, std::string _type, std::string _action)
+void GPanel::addButton(std::string _name, std::string _action)
 {
     Controller::getInstance().printTrace(TRACE, "Added button [" + _name + "]");
-    buttons.push_back(Button(_name, _type, _action));
+    buttons.push_back(Button(_name, _action));
     if (type == READ_ONLY) type = CONFIG;
     else if (type == EXTERNAL_UI_READ) type = EXTERNAL_UI_CONFIG;
 }

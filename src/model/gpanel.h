@@ -77,8 +77,8 @@ public:
     void setLayout(LayoutType newLayout);
 
     // Funcionalidad con los botones
-    void addButton(ButtonType type, std::string name);
-    void addButton(std::string name, std::string type, std::string action);
+    void addButton(std::string name);
+    void addButton(std::string name, std::string action);
     void deleteButton(int button);
     void addActionToButton(int button, ButtonAction action);
     void deleteActionToButton(int button);
