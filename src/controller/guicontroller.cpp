@@ -197,13 +197,29 @@ void GuiController::onHeaderSavePressed(SaesHeader* header)
  * Función que trata de cambiar el tamaño del currentPanel. Devuelve
  * true en caso de cambiarlo y false en otro caso.
 */
-bool GuiController::changeCurrentPanelSize(int h, int w)
+bool GuiController::changeCurrentPanelHeigth(int h)
 {
     if (currentPanel != nullptr)
     {
         if(currentPanel->getLayout()!=EXTERNAL_UI) // si el ui ya viene dado, no cambiar nada
         {
             currentPanel->setHeight(h);
+            return true;
+        }
+    }
+    return false;
+}
+
+/**
+ * Función que trata de cambiar el tamaño del currentPanel. Devuelve
+ * true en caso de cambiarlo y false en otro caso.
+*/
+bool GuiController::changeCurrentPanelWidth(int w)
+{
+    if (currentPanel != nullptr)
+    {
+        if(currentPanel->getLayout()!=EXTERNAL_UI) // si el ui ya viene dado, no cambiar nada
+        {
             currentPanel->setWidth(w);
             return true;
         }

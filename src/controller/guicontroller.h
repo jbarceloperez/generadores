@@ -22,7 +22,8 @@ public:
     virtual void changeCurrentPanel(int index) override final;
     virtual bool onComboPanelsChanged(int index) override final;
     virtual void onHeaderSavePressed(SaesHeader* header) override final;
-    virtual bool changeCurrentPanelSize(int h, int w) override final;
+    virtual bool changeCurrentPanelHeigth(int h) override final;
+    virtual bool changeCurrentPanelWidth(int w) override final;
     virtual std::string panelInfo() override final;
 };
 

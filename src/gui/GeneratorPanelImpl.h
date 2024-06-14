@@ -40,7 +40,6 @@ private:
     void onPbDelButtonPressed();
     void onPbLoadXmlPressed();
     void onPbDeletePanelPressed();
-    void onSizeChanged(int h, int w);
 
     void updateHmi();
     void updateButtons();

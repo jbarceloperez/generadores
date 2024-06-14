@@ -57,7 +57,8 @@ public:
     virtual void changeCurrentPanel(int index);
     virtual bool onComboPanelsChanged(int index);
     virtual void onHeaderSavePressed(SaesHeader* header);
-    virtual bool changeCurrentPanelSize(int h, int w);
+    virtual bool changeCurrentPanelHeigth(int h);
+    virtual bool changeCurrentPanelWidth(int w);
     virtual std::string panelInfo();
 };
 

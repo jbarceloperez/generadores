@@ -75,23 +75,22 @@ GeneratorPanelImpl::~GeneratorPanelImpl()
 void GeneratorPanelImpl::handleSpinBoxWidth()
 {
     loghmi.trace("currentPanel width changed");
-    int h = controller->getCurrentPanel()->getHeight();
     int w = p_impl->ui.sbWidth->value();
-    onSizeChanged(h,w);
+    if (controller->changeCurrentPanelWidth(w))
+    {
+        updateTxtAssociate();
+    }
+    else
+    {
+        QMessageBox::warning(this, "Warning", "Panel with external UI, cannot modify.",QMessageBox::Ok);
+    }
 }
 
 void GeneratorPanelImpl::handleSpinBoxHeight()
 {
     loghmi.trace("currentPanel height changed");
     int h = p_impl->ui.sbHeigth->value();
-    int w = controller->getCurrentPanel()->getWidth();
-    onSizeChanged(h,w);
-}
-
-
-void GeneratorPanelImpl::onSizeChanged(int h, int w)
-{
-    if (controller->changeCurrentPanelSize(h,w))
+    if (controller->changeCurrentPanelHeigth(h))
     {
         updateTxtAssociate();
     }
