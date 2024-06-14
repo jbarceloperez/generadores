@@ -1,31 +1,32 @@
-%SAES_HEADER%
-
-#include "%NAME%Gw.h"
+// File Name..................................testingPanel
 
 
+#include "testingPanelGw.h"
 
-%NAME%Gw::%NAME%Gw(BaseClass * parent)
-: %NAME%QtCb(parent)
+
+
+testingPanelGw::testingPanelGw(BaseClass * parent)
+: testingPanelQtCb(parent)
 {
 
 }
 
-%NAME%Gw::~%NAME%Gw()
+testingPanelGw::~testingPanelGw()
 {
 
 }
 //------------------------------------------------------------------------------------
-/*virtual*/ const ParameterLimitData* %NAME%Gw::exportGetParameterLimit()
+/*virtual*/ const ParameterLimitData* testingPanelGw::exportGetParameterLimit()
 {
     return ConfigSignals::ParameterLimit_get().value_or(nullptr);
 }
 //-----------------------------------------------------------------------------------------
-void %NAME%Gw::exportAction(const Common::Action& p_action, const boost::any& p_any)
+void testingPanelGw::exportAction(const Common::Action& p_action, const boost::any& p_any)
 {
     //ControllerSignals::Action_cmd_id(p_action, p_any);
 }
 //-----------------------------------------------------------------------------------------
-void %NAME%Gw::exportMessage(const Format::MessageKind& p_kind, const Format::MessageBody& p_body)
+void testingPanelGw::exportMessage(const Format::MessageKind& p_kind, const Format::MessageBody& p_body)
 {
     //ControllerSignals::Message_cmd_id(p_kind, p_body);
 }

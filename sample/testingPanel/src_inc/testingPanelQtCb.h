@@ -1,13 +1,14 @@
-%SAES_HEADER%
+// File Name..................................testingPanel
+
 
 
 /**
- * @file %NAME%QtCb.h
- * @brief Header para la clase %NAME%QtCb.
+ * @file testingPanelQtCb.h
+ * @brief Header para la clase testingPanelQtCb.
  * @details Fichero generado por generador de código de paneles.
  */
-#ifndef __%NAME_CAPS%QTCB_H__
-#define __%NAME_CAPS%QTCB_H__
+#ifndef __TESTINGPANELQTCB_H__
+#define __TESTINGPANELQTCB_H__
 
 #pragma once
 
@@ -17,30 +18,38 @@
 class ParameterLimitData;
 
 /**
- * @class %NAME%QtCb
+ * @class testingPanelQtCb
  * @brief Clase que hereda de BaseClass, representa un panel con funcionalidad específica.
  */
-class %NAME%QtCb : public BaseClass
+class testingPanelQtCb : public BaseClass
 {
     Q_OBJECT
 public:
     /**
-     * @brief Constructor de la clase %NAME%QtCb.
+     * @brief Constructor de la clase testingPanelQtCb.
      * @param parent Puntero al objeto BaseClass padre (nullptr por defecto).
      */
-    %NAME%QtCb(BaseClass* parent = 0);
+    testingPanelQtCb(BaseClass* parent = 0);
     /**
-     * @brief Destructor de la clase %NAME%QtCb.
+     * @brief Destructor de la clase testingPanelQtCb.
      */
-    virtual ~%NAME%QtCb();
+    virtual ~testingPanelQtCb();
     
     virtual void init() override final;
-%PANEL_APPLY_H%
-%PANEL_CANCEL_H%
-%PANEL_CHECK_H%
-%PANEL_RESET_H%
-%PANEL_CUSTOM1_H%
-%PANEL_CUSTOM2_H%
+	/**
+	 * @brief Método con la funcionalidad del botón \"Apply\".
+	 */
+	virtual void panelApply() override final;
+
+	/**
+	 * @brief Método con la funcionalidad del botón \"Cancel\".
+	 */
+	virtual void panelCancel() override final;
+
+
+
+
+
 
 private Q_SLOTS:    
 
@@ -72,4 +81,4 @@ private:
 
 };
 
-#endif  // __%NAME_CAPS%QTCB_H__
+#endif  // __TESTINGPANELQTCB_H__

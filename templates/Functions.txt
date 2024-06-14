@@ -1,3 +1,8 @@
+/*
+
+Este fichero contiene 
+
+*/
 
 %%PANEL_APPLY_H%
 	/**
@@ -127,7 +132,7 @@ addFooterButton(Footer::Button_Custom1, p_impl->ui.%s);
 
 
 %%ADD_FOOTER_BUTTON_CUSTOM2%	// %s = button name
-addFooterButton(Footer::Button_Custom2, p_impl->ui.%s);
+addFooterButton(Footer::Button_Custom_2, p_impl->ui.%s);
 %/ADD_FOOTER_BUTTON_CUSTOM2%
 
 

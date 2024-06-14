@@ -1,7 +1,8 @@
-%SAES_HEADER%
+// File Name..................................testingPanel
 
-#include "%NAME%QtCb.h"
-#include "ui_%NAME%.h"
+
+#include "testingPanelQtCb.h"
+#include "ui_testingPanel.h"
 
 
 #include <QRegularExpression>
@@ -9,7 +10,7 @@
 
 
 
-class %NAME%QtCb::PrivateData
+class testingPanelQtCb::PrivateData
 {
     public:
         PrivateData(BaseClass* parent)
@@ -20,11 +21,11 @@ class %NAME%QtCb::PrivateData
         ~PrivateData()
         {}      
 
-        Ui::%NAME% ui;
+        Ui::testingPanel ui;
 };
 
 
-%NAME%QtCb::%NAME%QtCb(BaseClass * parent)
+testingPanelQtCb::testingPanelQtCb(BaseClass * parent)
     : BaseClass(parent)
     , p_impl(new PrivateData(parent))
 {
@@ -36,12 +37,12 @@ class %NAME%QtCb::PrivateData
 
 }
 
-%NAME%QtCb::~%NAME%QtCb()
+testingPanelQtCb::~testingPanelQtCb()
 {
 
 }
 //----------------------------------------------------------------
-void %NAME%QtCb::init()
+void testingPanelQtCb::init()
 {
     const ParameterLimitData* limit = exportGetParameterLimit();
     if(limit)
@@ -50,29 +51,41 @@ void %NAME%QtCb::init()
     }
 }
 //----------------------------------------------------------------
-void %NAME%QtCb::initialize()
+void testingPanelQtCb::initialize()
 {   
-    %ADD_FOOTER_BUTTON_APPLY%
-    %ADD_FOOTER_BUTTON_CANCEL%
-    %ADD_FOOTER_BUTTON_CHECK%
-    %ADD_FOOTER_BUTTON_RESET%
-    %ADD_FOOTER_BUTTON_CUSTOM1%
-    %ADD_FOOTER_BUTTON_CUSTOM2%
+    addFooterButton(Footer::Button_Apply, p_impl->ui.pbApply);
+
+    addFooterButton(Footer::Button_Cancel, p_impl->ui.pbCancel);
+
+    
+    
+    
+    
 
     addComponents(p_impl->ui.generatedLayout);
 }
 
 //----------------------------------------------------------------
-void %NAME%QtCb::signalsAndSlots()
+void testingPanelQtCb::signalsAndSlots()
 {
 
 }
 
-%PANEL_CHECK_CPP%
-%PANEL_APPLY_CPP%
-%PANEL_CANCEL_CPP%
-%PANEL_RESET_CPP%
-%PANEL_CUSTOM1_CPP%
-%PANEL_CUSTOM2_CPP%
+
+//----------------------------------------------------------------
+void testingPanelQtCb::panelApply()
+{
+	// Implementation here
+}
+
+//----------------------------------------------------------------
+void testingPanelQtCb::panelCancel()
+{
+	// Implementation here
+}
+
+
+
+
 //--------------------------------------------------------------------------------------------
 
