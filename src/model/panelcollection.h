@@ -29,6 +29,7 @@ public:
     std::vector<GPanel> getVector() const;
     std::vector<std::string> getNames() const;
     int getPanelCollectionSize();
+    void updateHeaders(SaesHeader *header);
 };
 
 

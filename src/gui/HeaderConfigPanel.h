@@ -26,8 +26,7 @@ private:
 
     void checkAll(bool checked);
     void clearAll();
-    void save();
-    // void iterateElements();
+    void save(bool allPanels);
 };
 
 #endif // MAINWINDOW_H

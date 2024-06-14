@@ -193,6 +193,11 @@ void GuiController::onHeaderSavePressed(SaesHeader* header)
     }
 }
 
+void GuiController::onHeaderSaveToAllPanelsPressed(SaesHeader* header)
+{
+    panelCol.updateHeaders(header);
+}
+
 /**
  * Función que trata de cambiar el tamaño del currentPanel. Devuelve
  * true en caso de cambiarlo y false en otro caso.

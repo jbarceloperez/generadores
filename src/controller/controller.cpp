@@ -117,7 +117,8 @@ void Controller::onPbDelButtonPressed(int button) {} // a implementar en subclas
 void Controller::changeCurrentPanel(int index) {} // a implementar en subclase
 bool Controller::onComboPanelsChanged(int index) {return 0;} // a implementar en subclase
 void Controller::onHeaderSavePressed(SaesHeader* header) {} // a implementar en subclase
-bool Controller::changeCurrentPanelHeigth(int h) {return 0;} // a implementar en subclase
+void Controller::onHeaderSaveToAllPanelsPressed(SaesHeader *header) {} // a implementar en subclase
+bool Controller::changeCurrentPanelHeigth(int h) { return 0; } // a implementar en subclase
 bool Controller::changeCurrentPanelWidth(int w) {return 0;} // a implementar en subclase
 string Controller::panelInfo() {return "";} // a implementar en subclase
 

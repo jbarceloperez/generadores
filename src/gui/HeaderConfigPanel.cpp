@@ -27,7 +27,7 @@ HeaderConfigPanelImpl::HeaderConfigPanelImpl()
     connect(p_impl->ui.pbCheckAll, &QPushButton::clicked, this, &HeaderConfigPanelImpl::handleButtonClicked);
     connect(p_impl->ui.pbUncheckAll, &QPushButton::clicked, this, &HeaderConfigPanelImpl::handleButtonClicked);
     connect(p_impl->ui.pbClearAll, &QPushButton::clicked, this, &HeaderConfigPanelImpl::handleButtonClicked);
-
+    connect(p_impl->ui.pbSaveToAllPanels, &QPushButton::clicked, this, &HeaderConfigPanelImpl::handleButtonClicked);
     p_impl->ui.dateEdit->setDate(QDate::currentDate());
 
     updateValues();
@@ -54,7 +54,11 @@ void HeaderConfigPanelImpl::handleButtonClicked()
     }
     else if(sender() == p_impl->ui.pbSave)
     {
-        save();
+        save(false);
+    }
+    else if(sender() == p_impl->ui.pbSaveToAllPanels)
+    {
+        save(true);
     }
 }
 
@@ -146,10 +150,10 @@ void HeaderConfigPanelImpl::clearAll()
     p_impl->ui.lne_cp->setText("");
 }
 
-void HeaderConfigPanelImpl::save()
+void HeaderConfigPanelImpl::save(bool saveToAllPanels)
 {
     loghmi.trace("pbSave Header");
-    SaesHeader header = SaesHeader(p_impl->ui.lne_filename->text().toStdString());
+    SaesHeader header = SaesHeader("");
 
     if (p_impl->ui.companyName->isChecked()) header.setHeaderElement(COMPANY_NAME, p_impl->ui.lne_companyName->text().toStdString());
     if (p_impl->ui.project->isChecked()) header.setHeaderElement(PROJECT, p_impl->ui.lne_project->text().toStdString());
@@ -175,6 +179,13 @@ void HeaderConfigPanelImpl::save()
     if (p_impl->ui.date->isChecked()) header.setHeaderElement(DATE, p_impl->ui.dateEdit->date().toString("dd/MM/yyyy").toStdString());
     if (p_impl->ui.cp->isChecked()) header.setHeaderElement(CP, p_impl->ui.lne_cp->text().toStdString());
 
-    controller->onHeaderSavePressed(&header);
+    if (saveToAllPanels)
+    {
+        controller->onHeaderSaveToAllPanelsPressed(&header);
+    }
+    else
+    {
+        controller->onHeaderSavePressed(&header);
+    }
     updateValues();
 }

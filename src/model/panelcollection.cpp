@@ -91,3 +91,18 @@ int PanelCollection::getPanelCollectionSize()
 {
     return panelCollection.size();
 }
+
+void PanelCollection::updateHeaders(SaesHeader *header)
+{
+    for (int j=0; j<panelCollection.size(); j++)
+    {
+        for(int i = 0; i < HeaderElement::NOELEMENTS; i++)
+        {   
+            HeaderElement elem = static_cast<HeaderElement>(i);
+            if (header->getHeaderElement(elem) != "")
+            {
+                panelCollection[j].setHeaderElement(elem, header->getHeaderElement(elem));
+            }
+        }
+    }
+}

@@ -558,7 +558,7 @@
         </item>
        </layout>
       </widget>
-     </item>   
+     </item>
      <item row="6" column="5">
       <widget class="QGroupBox" name="revisionhistory">
        <property name="title">
@@ -721,6 +721,19 @@
         </property>
         <property name="text">
          <string>Save</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pbSaveToAllPanels">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Save to all Panels</string>
         </property>
        </widget>
       </item>
