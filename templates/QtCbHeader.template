@@ -1,11 +1,6 @@
 %SAES_HEADER%
 
-
-/**
- * @file %NAME%QtCb.h
- * @brief Header para la clase %NAME%QtCb.
- * @details Fichero generado por generador de código de paneles.
- */
+%DOC_QTCB_FILE%
 #ifndef __%NAME_CAPS%QTCB_H__
 #define __%NAME_CAPS%QTCB_H__
 
@@ -13,27 +8,18 @@
 
 #include <BaseClass.h>
 
-
 class ParameterLimitData;
 
-/**
- * @class %NAME%QtCb
- * @brief Clase que hereda de BaseClass, representa un panel con funcionalidad específica.
- */
+%DOC_QTCB_CLASS%
 class %NAME%QtCb : public BaseClass
 {
     Q_OBJECT
 public:
-    /**
-     * @brief Constructor de la clase %NAME%QtCb.
-     * @param parent Puntero al objeto BaseClass padre (nullptr por defecto).
-     */
+    %DOC_QTCB_CONSTRUCTOR%
     %NAME%QtCb(BaseClass* parent = 0);
-    /**
-     * @brief Destructor de la clase %NAME%QtCb.
-     */
+    %DOC_QTCB_DESTRUCTOR%
     virtual ~%NAME%QtCb();
-    
+    %DOC_QTCB_INIT%
     virtual void init() override final;
 %PANEL_APPLY_H%
 %PANEL_CANCEL_H%
@@ -44,30 +30,19 @@ public:
 
 private Q_SLOTS:    
 
-
 protected:
     virtual const ParameterLimitData* exportGetParameterLimit()=0;
 
 private:
-    /**
-     * @brief Método para inicializar el panel. Añade la funcionalidad de
-     * los botones y el layout. 
-    */
+    %DOC_QTCB_INITIALIZE%
     void initialize();
-    /**
-     * @brief Método para conectar los señales y slots.
-    */
+    %DOC_QTCB_SIGNALSANDSLOTS%
     void signalsAndSlots();    
 
-
 private:
-    /**
-     * @brief Clase privada que contiene los datos privados del panel.
-    */
+    %DOC_QTCB_PRIVATEDATACLASS%
     class PrivateData;
-    /**
-     * @brief Puntero al objeto PrivateData privado.
-    */
+    %DOC_QTCB_PIMPL%
     std::unique_ptr<PrivateData> p_impl;
 
 };

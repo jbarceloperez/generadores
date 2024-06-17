@@ -18,8 +18,8 @@ using namespace std;
 */
 void generatePanelFiles(GPanel p, string outDirectory)
 {
-    map<TemplateMark, string> properties;
-    fillPropertiesMap(p, properties);
+    map<TemplateMark, string> properties = fillPropertiesMap(p);
+    map<string, string> documentation = readDocumentation("../templates/Documentation.txt");
 
     string dirPath = outDirectory + "/" + p.getName();  // ruta absoluta al directorio
     string aux_root = dirPath + "/src_inc/" + p.getName(); // prefijo de cada fichero en la carpeta de sources
@@ -46,15 +46,15 @@ void generatePanelFiles(GPanel p, string outDirectory)
     Controller::getInstance().printTrace(INFO, "Creado nuevo directorio -> " + srcDirPath);
     
     // Genera todos los ficheros
-    writeFile(dirPath + "/CMakeLists.txt", p, properties, CMAKELISTS);
-    writeFile(aux_root + ".h", p, properties, HEADER);
-    writeFile(aux_root + "Gw.h", p, properties, GWHEADER);
-    writeFile(aux_root + "Gw.cpp", p, properties, GW);
-    writeFile(aux_root + "QtCb.h", p, properties, QTCBHEADER);
-    writeFile(aux_root + "QtCb.cpp", p, properties, QTCB);
+    writeFile(dirPath + "/CMakeLists.txt", documentation, properties, CMAKELISTS);
+    writeFile(aux_root + ".h", documentation, properties, HEADER);
+    writeFile(aux_root + "Gw.h", documentation, properties, GWHEADER);
+    writeFile(aux_root + "Gw.cpp", documentation, properties, GW);
+    writeFile(aux_root + "QtCb.h", documentation, properties, QTCBHEADER);
+    writeFile(aux_root + "QtCb.cpp", documentation, properties, QTCB);
     if (p.getType() == PanelType::CONFIG || p.getType() == PanelType::READ_ONLY)
     {
-        writeFile(aux_root + ".ui", p, properties, UI);
+        writeFile(aux_root + ".ui", documentation, properties, UI);
     }
 }
 
@@ -63,27 +63,37 @@ void generatePanelFiles(GPanel p, string outDirectory)
 /**
  * @brief Función que escribe en un fichero el código generado
  * @param path Ruta absoluta del fichero a escribir
- * @param p Objeto GPanel con los datos del panel
+ * @param documentation
  * @param properties Map con las propiedades del panel
  * @param file Tipo de fichero a escribir
  * @note
  * La función abre un ofstream al path correspondiente. 
  * Escribe el código de la plantilla correspondiente en una string mediante la
  * función readTemplate, y luego procesa ese string con la función replaceMarks.
+ * Tras eso, añade la documentación al código generado.
  * Finalmente, escribe el contenido en el ofstream y lo cierra. 
 */
-void writeFile(const string& path, GPanel &p, map<TemplateMark, std::string> &properties, FileToGenerate file)
+void writeFile(const string& path, map<string, string> &documentation, map<TemplateMark, string> &properties, FileToGenerate file)
 {
     ofstream out(path); // abre el ofstream al path correspondiente
     string code;
     code = readTemplate(FileTemplatePath[file]); // lee el contenido de la plantilla a code
     replaceMarks(code, properties); // procesa la plantilla y rellena las marcas
+    addDocumentation(code, documentation);  // agrega la documentación al código generado
     out << code;    // escribe el contenido en el ofstream
     Controller::getInstance().printTrace(INFO, "Creado nuevo fichero -> " + path);
     out.close(); // cierra el ofstream
 }
 
-void fillPropertiesMap(GPanel p, map<TemplateMark, string>& props) {
+/**
+ * @brief Función que rellena el valor de las marcas de la plantilla con las
+ * propiedades del panel pasado como parámetro. 
+ * @param p Objeto GPanel con las propiedades del panel
+ * @return map<TemplateMark, string> con las propiedades del panel
+*/
+map<TemplateMark, string> fillPropertiesMap(GPanel p) 
+{
+    map<TemplateMark, string> props;
     for (int m = NAME; m < END_MARK; m++)   // inicializar propiedades a 0
         props[static_cast<TemplateMark>(m)] = "";
     map<TemplateMark, string> code_chunks = readCodeChunks("../templates/Functions.txt");
@@ -100,7 +110,10 @@ void fillPropertiesMap(GPanel p, map<TemplateMark, string>& props) {
         replaceMarks(i.second, props);
     }
     fillButtonMarks(p, props, code_chunks);
+
+    return props;
 }
+
 
 void fillButtonMarks(GPanel &p, map<TemplateMark, string> &props, map<TemplateMark, string> &code_chunks)
 {
@@ -170,6 +183,12 @@ void setButtonData(map<TemplateMark, string> &props, map<TemplateMark, string> &
     props[addButton_mark] = buff;
 }
 
+/**
+ * @brief Función que lee un fichero con fragmentos del código a generar, 
+ * y para cada línea llama a la función processChunkLine, que procesa la línea.
+ * @param filename Nombre del fichero con los fragmentos de código
+ * @return Mapa con la el código asociado a cada marca
+*/
 map<TemplateMark, string> readCodeChunks(const string &filename)
 {
     map<TemplateMark, string> codeChunks;
@@ -183,50 +202,117 @@ map<TemplateMark, string> readCodeChunks(const string &filename)
     {
         while (getline(file, line)) 
         {
-            processLine(line, inChunk, currentChunk, codeChunks, currentCode);
+            processChunkLine(line, inChunk, currentChunk, codeChunks, currentCode);
         }
         file.close();
     } else {
-        cerr << "Unable to open file";
+        Controller::getInstance().printTrace(CRITICAL, "Unable to open file");
     }
     return codeChunks;
 }
 
-void processLine(std::string &line, bool &inChunk, std::string &currentChunk, std::map<TemplateMark, std::string> &codeChunks, std::ostringstream &currentCode)
+/**
+ * @brief Función que procesa una línea del fichero con fragmentos de código
+ * y asocia cada marca con su fragmento de código.
+ * @param line string con la línea a procesar
+ * @param inChunk booleano que indica si actualmente se está leyendo o no un chunk
+ * @param currentChunk string con el nombre de la marca del chunk actual
+ * @param codeChunks mapa con las asociaciones marca-códigof
+ * @param currentCode stringstream con el código actual
+*/
+void processChunkLine(string &line, bool &inChunk, string &currentChunk, map<TemplateMark, string> &codeChunks, ostringstream &currentCode)
 {
-    if (line.find('%') != std::string::npos)    // se encuentra un caracter %
+    // se encuentra un caracter %
+    if (line.find("%%") != string::npos)   // ¿es una marca de incio de code chunk?
     {
-        if (line.find("%%") != std::string::npos)   // ¿es una marca de incio de code chunk?
+        // Comienza el code chunk
+        size_t name_end = line.find('%', 2);    // busca el fin de la marca
+        currentChunk = line.substr(2, name_end - 2); // obtiene el nombre del chunk
+        inChunk = true;
+    }
+    else if (line.find("%/") != string::npos)  // ¿es una marca de fin de code chunk?
+    {
+        if (inChunk)    // si ya estaba leyendo un chunk, lo agrega al mapa
         {
-            // Comienza el code chunk
-            size_t name_end = line.find('%', 2);
-            currentChunk = line.substr(2, name_end - 2); // obtiene el nombre del chunk
-            inChunk = true;
-        }
-        else if (line.find("%/") != std::string::npos)  // ¿es una marca de fin de code chunk?
-        {
-            if (inChunk)    // si ya estaba leyendo un chunk, lo agrega al mapa
+            for (auto &i : MarkStrings)
             {
-                for (auto &i : MarkStrings)
+                if (i.second == currentChunk)
                 {
-                    if (i.second == currentChunk)
-                    {
-                        codeChunks[i.first] = currentCode.str();
-                        break;
-                    }
+                    codeChunks[i.first] = currentCode.str();
+                    break;
                 }
-                currentCode.str("");
-                currentCode.clear();
-                inChunk = false;
             }
-        }
-        else if (inChunk) {
-            currentCode << line << "\n"; // si no es ninguna de las dos marcas de code chunk, agrega la linea al stream
+            currentCode.str("");
+            currentCode.clear();
+            inChunk = false;
         }
     }
-    else if (inChunk)    // si no hay '%' y esta leyendo un chunk, lo agrega al stream
+    else if (inChunk) { // si no es ninguna y se está leyendo un chunk, agrega la linea al stream
+        currentCode << line << "\n"; 
+    }
+}
+
+/**
+ * @brief Función que lee un fichero con la documentación del código a generar, 
+ * y para cada línea llama a la función processDocLine, que procesa la línea.
+ * @param filename Nombre del fichero con la documentación
+ * @return Mapa con la documentación asociada a cada marca
+*/
+map<string, string> readDocumentation(const string &filename)
+{
+    map<string, string> documentation;
+    ifstream file(filename);
+    string line;
+    string currentChunk;
+    ostringstream currentDoc;
+    bool inChunk = false;
+
+    if (file.is_open()) 
     {
-        currentCode << line << "\n";
+        while (getline(file, line)) 
+        {
+            processDocLine(line, inChunk, currentChunk, documentation, currentDoc);
+        }
+        file.close();
+    } else {
+        Controller::getInstance().printTrace(CRITICAL, "Unable to open file");
+    }
+    return documentation;
+}
+
+/**
+ * @brief Función que procesa una línea del fichero con documentación del código
+ * y asocia cada marca con su fragmento de documentación.
+ * @param line string con la línea a procesar
+ * @param inChunk booleano que indica si actualmente se está leyendo o no un chunk
+ * @param currentChunk string con el nombre de la marca del chunk actual
+ * @param documentation mapa con las asociaciones marca-documentación
+ * @param currentDoc stringstream con la documentación leída actual
+*/
+void processDocLine(string &line, bool &inChunk, string &currentChunk, map<string, string> &documentation, ostringstream &currentDoc)
+{
+    // se encuentra un caracter %
+    if (line.find("%%") != string::npos)   // ¿es una marca de incio?
+    {
+        // Comienza el chunk
+        size_t name_end = line.find('%', 2);    // busca el fin de la marca
+        currentChunk = line.substr(2, name_end - 2); // obtiene el nombre del chunk
+        inChunk = true;
+    }
+    else if (line.find("%/") != string::npos)  // ¿es una marca de fin de chunk?
+    {
+        if (inChunk)    // si ya estaba leyendo un chunk, lo agrega al mapa
+        {
+            string s = currentDoc.str();   
+            s.pop_back();  // elimina el último retorno de carro
+            documentation[currentChunk] = s;
+            currentDoc.str("");
+            currentDoc.clear();
+            inChunk = false;
+        }
+    }
+    else if (inChunk) { // si no es ninguna y se está leyendo un chunk, agrega la linea al stream
+        currentDoc << line << "\n";
     }
 }
 
@@ -253,4 +339,21 @@ void replaceMarks(string &code, const map<TemplateMark, string> &props)
         }
     }
 }
+
+/**
+ * Para cada marca que coincida con una entrada del mapa de documentación,
+ * sustituye la marca por su valor correspondiente.
+*/
+void addDocumentation(string &code, const map<string, string> &documentation)
+{
+    for (const auto& pair : documentation) {
+        string placeholder = "%" + pair.first + "%";
+        size_t pos = code.find(placeholder);
+        while (pos != string::npos) {
+            code.replace(pos, placeholder.size(), pair.second);
+            pos = code.find(placeholder);
+        }
+    }
+}
+
 

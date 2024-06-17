@@ -1,13 +1,17 @@
-/*
-
-Este fichero contiene 
-
-*/
+/**
+ * Este fichero contiene fragmentos de código a insertar en
+ * el código generado a raíz de las plantillas. Cada fragmento
+ * viene precedido y seguido por su marca en las plantillas.
+ *
+ * Inicio de marca: 	%%NOMBRE%
+ * Fin de marca: 		%/NOMBRE%
+ * 
+ * Todas las líneas entre las marcas conforman el fragmento
+ * de código a insertar. 
+ */
 
 %%PANEL_APPLY_H%
-	/**
-	 * @brief Método con la funcionalidad del botón \"Apply\".
-	 */
+	%DOC_QTCB_PANELAPPLY%
 	virtual void panelApply() override final;
 %/PANEL_APPLY_H%
 
@@ -22,9 +26,7 @@ void %NAME%QtCb::panelApply()
 
 
 %%PANEL_CANCEL_H%
-	/**
-	 * @brief Método con la funcionalidad del botón \"Cancel\".
-	 */
+	%DOC_QTCB_PANELCANCEL%
 	virtual void panelCancel() override final;
 %/PANEL_CANCEL_H%
 
@@ -39,9 +41,7 @@ void %NAME%QtCb::panelCancel()
 
 
 %%PANEL_CHECK_H%
-	/**
-	 * @brief Método con la funcionalidad del botón \"Check\".
-	 */
+	%DOC_QTCB_PANELCHECK%
 	virtual void panelCheck() override final;
 %/PANEL_CHECK_H%
 
@@ -56,9 +56,7 @@ void %NAME%QtCb::panelCheck()
 
 
 %%PANEL_RESET_H%
-	/**
-	 * @brief Método con la funcionalidad del botón \"Reset\".
-	 */
+	%DOC_QTCB_PANELRESET%
 	virtual void panelReset() override final;
 %/PANEL_RESET_H%
 
@@ -73,9 +71,7 @@ void %NAME%QtCb::panelReset()
 
 
 %%PANEL_CUSTOM1_H%
-	/**
-	 * @brief Método con la funcionalidad del botón \"Custom1\".
-	 */
+	%DOC_QTCB_PANELCUSTOM1%
 	virtual void panelCustom1() override final;
 %/PANEL_CUSTOM1_H%
 
@@ -90,9 +86,7 @@ void %NAME%QtCb::panelCustom1()
 
 
 %%PANEL_CUSTOM2_H%
-	/**
-	 * @brief Método con la funcionalidad del botón \"Custom2\".
-	 */
+	%DOC_QTCB_PANELCUSTOM2%
 	virtual void panelCustom2() override final;
 %/PANEL_CUSTOM2_H%
 

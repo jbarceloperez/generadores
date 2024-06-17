@@ -63,15 +63,18 @@ static std::map<TemplateMark, std::string> MarkStrings = {
 
 void generatePanelFiles(GPanel p, std::string outDirectory);
 
-void writeFile(const std::string& path, GPanel &p, std::map<TemplateMark, std::string> &properties, FileToGenerate file);
+void writeFile(const std::string& path, std::map<std::string, std::string> &documentation, std::map<TemplateMark, std::string> &properties, FileToGenerate file);
 std::string readTemplate(const std::string &filename);
 void replaceMarks(std::string &code, const std::map<TemplateMark, std::string> &properties);
 
-void fillPropertiesMap(GPanel p, std::map<TemplateMark, std::string> &properties);
+std::map<TemplateMark, std::string> fillPropertiesMap(GPanel p);
 void fillButtonMarks(GPanel &p, std::map<TemplateMark, std::string> &props, std::map<TemplateMark, std::string> &code_chunks);
 void setButtonData(std::map<TemplateMark, std::string> &props, std::map<TemplateMark, std::string> &code_chunks, GPanel &p, Button &b, std::string &str_buttons, TemplateMark mark1, TemplateMark mark2, TemplateMark mark3);
 
 std::map<TemplateMark, std::string> readCodeChunks(const std::string &filename);
-void processLine(std::string &line, bool &inChunk, std::string &currentChunk, std::map<TemplateMark, std::string> &codeChunks, std::ostringstream &currentCode);
+std::map<std::string, std::string> readDocumentation(const std::string &filename);
+void processChunkLine(std::string &line, bool &inChunk, std::string &currentChunk, std::map<TemplateMark, std::string> &codeChunks, std::ostringstream &currentCode);
+void processDocLine(std::string &line, bool &inChunk, std::string &currentChunk, std::map<std::string, std::string> &documentation, std::ostringstream &currentDoc);
+void addDocumentation(std::string &code, const std::map<std::string, std::string> &documentation);
 
 #endif // GENERATOR_H

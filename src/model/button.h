@@ -6,19 +6,9 @@
 #include <vector>
 
 
-// enum ButtonType {
-//     QPUSHBUTTON, QRADIOBUTTON, QCHECKBOX
-// };
-
 enum ButtonAction {
     APPLY, CANCEL, CHECK, RESET, CUSTOM1, CUSTOM2, NULLBUTTONACTION
 };
-
-// static std::map<ButtonType, std::string> ButtonTypeToString = {
-//     {QPUSHBUTTON, "QPushButton"},
-//     {QRADIOBUTTON, "QRadioButton"},
-//     {QCHECKBOX, "QCheckBox"}
-// };
 
 static std::map<ButtonAction, std::string> ButtonActionToString = {
     {APPLY, "Apply"},
