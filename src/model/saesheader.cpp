@@ -7,6 +7,7 @@ SaesHeader::SaesHeader(string _fileName)
         elements[i] = "";
     }
     elements[FILE_NAME] = _fileName;
+    elements[COMPANY_NAME] = "SAES";
 }
 
 string SaesHeader::getHeaderElement(HeaderElement element)
