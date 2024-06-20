@@ -295,11 +295,14 @@ void GeneratorPanelImpl::onPbLoadXmlPressed()
         return;
     }
     int addedPanels = controller->onPbLoadXmlPressed(file.toStdString());
+    int aux = 0, length = controller->getPanelNames().size();
     for (string n : controller->getPanelNames())
-    {
-        p_impl->ui.listWidget_panels->addItem(n.data());
+    {   
+        if (aux >= length-addedPanels)
+            p_impl->ui.listWidget_panels->addItem(n.data());
+        aux++;
     }
-    p_impl->ui.listWidget_panels->setCurrentRow(0);   
+    p_impl->ui.listWidget_panels->setCurrentRow(length-addedPanels);   
     string msg = "Added " + to_string(addedPanels) + " panels succesfully.";
     QMessageBox::information(this, "Panels added", msg.data(), QMessageBox::Ok);    
     updateHmi();

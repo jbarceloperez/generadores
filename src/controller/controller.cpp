@@ -22,6 +22,7 @@ void Controller::init(int _argc, char *_argv[])
     {
         argv[i] = _argv[i];
     }
+    panelCol.init();
     log = Logger();
     log.init(TRACES_CONFIG_PATH);
     log.hmilog(INFO, "Initializing logger...");

@@ -191,7 +191,7 @@ GPanel XMLParser::buildPanel(XMLElement panelElement)
             }
             catch(const XMLElementNotFoundException e)
             {
-                std::cerr << e.what() << '\n';
+                log->mainlog(CRITICAL, e.what());
             }
         }
         // elemento <buttons>
