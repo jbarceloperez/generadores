@@ -1,23 +1,33 @@
+#ifndef LOGGER_H
+#define LOGGER_H
+
 #include "logs.hpp"
+#include <string>
 
 enum TraceLevel {
     TRACE, DEBUG, INFO, WARNING, ERROR, CRITICAL
 };
 
+/**
+ * @class Logger
+ * @brief Clase Logger que adapta la librería de logs de
+ * SAES, e implementa dos objetos logger para separar las
+ * trazas de la vista con las del resto de la aplicación.
+ */ 
 class Logger {
 
 private:
     dbg::log hmi;
-    dbg::log mainlog;
-    void printTrace(dbg::log* log, TraceLevel level, char* msg);
+    dbg::log main;
 
 public:
     Logger();
-    ~Logger();
 
-    void log_hmi(TraceLevel level, char* msg);
-    void log_mainlog(TraceLevel level, char* msg);
-    dbg::log* getHmi();
-    dbg::log* getMainlog();
-
+    void init(const char* config_file = "traces.cfg");
+    void hmilog(TraceLevel level, const char* msg, ...);
+    void mainlog(TraceLevel level, const char* msg, ...);
+    void hmilog(TraceLevel level, std::string msg);
+    void mainlog(TraceLevel level, std::string msg);
 };
+
+#endif  // LOGGER_H

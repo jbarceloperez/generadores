@@ -6,6 +6,7 @@
 #include <vector>
 #include "button.h"
 #include "saesheader.h"
+#include "../log/logger.h"
 
 #define DEFAULT_W 400
 #define DEFAULT_H 300
@@ -48,6 +49,7 @@ private:
     std::string uipath;             // Ruta al archivo ui, si lo tuvise
     std::vector<Button> buttons;    // Collección de botones
     SaesHeader header;              // Cabecera SAES del panel
+    Logger* log;                    // Logger
 
 public:
     // Constructor

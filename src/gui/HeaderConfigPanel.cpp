@@ -19,9 +19,9 @@ class HeaderConfigPanelImpl::PrivateData
 HeaderConfigPanelImpl::HeaderConfigPanelImpl()
     : p_impl(new PrivateData())
 {
-    loghmi = dbg::log("hmi");
     p_impl->ui.setupUi(this);
     controller = static_cast<GuiController*>(&Controller::getInstance());
+    log = Controller::getInstance().getLogger();
 
     connect(p_impl->ui.pbSave, &QPushButton::clicked, this, &HeaderConfigPanelImpl::handleButtonClicked);
     connect(p_impl->ui.pbCheckAll, &QPushButton::clicked, this, &HeaderConfigPanelImpl::handleButtonClicked);
@@ -124,7 +124,7 @@ void HeaderConfigPanelImpl::checkAll(bool checked)
 
 void HeaderConfigPanelImpl::clearAll()
 {
-    loghmi.trace("pbClearAll");
+    log->hmilog(TRACE, "pbClearAll");
     p_impl->ui.lne_companyName->setText("");
     p_impl->ui.lne_project->setText("");
     p_impl->ui.lne_csciName->setText("");
@@ -152,7 +152,7 @@ void HeaderConfigPanelImpl::clearAll()
 
 void HeaderConfigPanelImpl::save(bool saveToAllPanels)
 {
-    loghmi.trace("pbSave Header");
+    log->hmilog(TRACE, "[%s]pbSave Header", __AT__);    // debug
     SaesHeader header = SaesHeader("");
 
     if (p_impl->ui.companyName->isChecked()) header.setHeaderElement(COMPANY_NAME, p_impl->ui.lne_companyName->text().toStdString());

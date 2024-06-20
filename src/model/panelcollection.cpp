@@ -1,6 +1,13 @@
 #include "panelcollection.h"
 #include "../controller/controller.h"
 
+PanelCollection::PanelCollection() {}
+
+void PanelCollection::init()
+{
+    log = Controller::getInstance().getLogger();
+}
+
 void PanelCollection::addPanel(std::string name)
 {
     addPanel(GPanel(name));
@@ -13,7 +20,7 @@ void PanelCollection::addPanel(GPanel p)
 {
     if (getPanelByName(p.getName()) != nullptr)
     {
-        Controller::getInstance().printTrace(TRACE, "PanelCollection::addPanel> Panel '" + p.getName() + "' alredy exists.");
+        log->mainlog(TRACE, "PanelCollection::addPanel> Panel '" + p.getName() + "' alredy exists.");
     }
     else
         panelCollection.push_back(p);
@@ -26,7 +33,7 @@ void PanelCollection::delPanel(std::string panel)
         if (!iter->getName().compare(panel))
         {
             iter = panelCollection.erase(iter);
-            Controller::getInstance().printTrace(TRACE, "PanelCollection::delPanel> Deleted panel " + panel + ".");
+            log->mainlog(TRACE, "PanelCollection::delPanel> Deleted panel " + panel + ".");
         }
         else
             ++iter;

@@ -32,8 +32,8 @@ bool GuiController::onPbWithUIPressed(string uiPath)
     }   
     catch(const XMLFileException& e)
     {   // TODO: Manejar el error en vez de excepción
-        printTrace(CRITICAL, e.what());
-        printTrace(CRITICAL, "Error loading path '" + uiPath + "'\n");
+        log.mainlog(CRITICAL, e.what());
+        log.mainlog(CRITICAL, "Error loading path '" + uiPath + "'\n");
     }
     if (readUiXml(uiXml))   // si el panel ya existe devuelve falso
         return true;
@@ -122,7 +122,7 @@ void GuiController::onPbAddButtonPressed(std::string name, std::string action)
     {
         if (b.getName() == name)
         {
-            printTrace(INFO, "Button " + name + " alredy exists.");
+            log.mainlog(INFO, "Button " + name + " alredy exists.");
             return;
         }
     }
@@ -169,7 +169,7 @@ bool GuiController::onComboPanelsChanged(int index)
         {
             if (index==EXTERNAL_UI) // no se debe poder asignar este layout
             {
-                printTrace(CRITICAL, "GuiController::onComboPanelsChanged> cannot set EXTERNAL_UI layout");
+                log.mainlog(CRITICAL, "GuiController::onComboPanelsChanged> cannot set EXTERNAL_UI layout");
             }
             else 
             {

@@ -1,62 +1,96 @@
 #include "logger.h"
+#include <cstdarg>
 
-Logger::Logger()
+Logger::Logger() {}
+
+/**
+ * @brief Inicializa el logger con la configuración del archivo config_file,
+ * y también inicializa los dos objetos logger hmi y main.
+ * @param config_file ruta al archivo de configuración, por defecto es "traces.cfg"
+*/
+void Logger::init(const char *config_file)
 {
+    dbg::log::initialize(config_file);
     hmi = dbg::log("hmi");
-    mainlog = dbg::log("main");
-    // alltraces = dbg::log("alltraces");
+    main = dbg::log("main");
 }
 
-Logger::~Logger()
+/**
+ * @brief Escribe un mensaje en el logger hmi.
+ * @param level nivel de trace
+ * @param msg mensaje a escribir
+*/
+void Logger::hmilog(TraceLevel level, const char *msg, ...)
 {
-
-}
-
-void Logger::log_hmi(TraceLevel level, char *msg)
-{
-    printTrace(&hmi, level, msg);
-}
-
-void Logger::log_mainlog(TraceLevel level, char *msg)
-{
-    printTrace(&mainlog, level, msg);
-}
-
-dbg::log *Logger::getHmi()
-{
-    return &hmi;
-}
-
-dbg::log *Logger::getMainlog()
-{
-    return &mainlog;
-}
-
-
-void Logger::printTrace(dbg::log *log, TraceLevel level, char *msg)
-{
+    va_list args;
+    va_start(args, msg);
     switch (level)
-        {
+    {
         case TRACE:
-            log->trace(msg);
+            hmi.trace(msg);
             break;
         case DEBUG:
-            log->debug(msg);
+            hmi.debug(msg);
             break;
         case INFO:
-            log->info(msg);
+            hmi.info(msg);
             break;
         case WARNING:
-            log->warning(msg);
+            hmi.warning(msg);
             break;
         case ERROR:
-            log->error("[%s] %s",__AT__,msg);
+            hmi.error(msg);
             break;
         case CRITICAL:
-            log->critical("[%s] %s",__AT__,msg);
+            hmi.critical(msg);
             break;
-        
         default:
             break;
-        }
+    }
+    va_end(args);
+}
+
+/**
+ * @brief Escribe un mensaje en el logger main.
+ * @param level nivel de trace
+ * @param msg mensaje a escribir
+*/
+void Logger::mainlog(TraceLevel level, const char *msg, ...)
+{
+    va_list args;
+    va_start(args, msg);
+    switch (level)
+    {
+        case TRACE:
+            main.trace(msg);
+            break;
+        case DEBUG:
+            main.debug(msg);
+            break;
+        case INFO:
+            main.info(msg);
+            break;
+        case WARNING:
+            main.warning(msg);
+            break;
+        case ERROR:
+            main.error(msg);
+            break;
+        case CRITICAL:
+            main.critical(msg);
+            break;
+        default:
+            break;
+    }
+    va_end(args);
+}
+
+void Logger::hmilog(TraceLevel level, std::string msg)
+{
+    hmilog(level, msg.c_str());
+}
+
+void Logger::mainlog(TraceLevel level, std::string msg)
+{
+    mainlog(level, msg.c_str());
 }

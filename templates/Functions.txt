@@ -42,13 +42,13 @@ void %NAME%QtCb::panelCancel()
 
 %%PANEL_CHECK_H%
 	%DOC_QTCB_PANELCHECK%
-	virtual void panelCheck() override final;
+	virtual bool panelCheck() override final;
 %/PANEL_CHECK_H%
 
 
 %%PANEL_CHECK_CPP%
 //----------------------------------------------------------------
-void %NAME%QtCb::panelCheck()
+bool %NAME%QtCb::panelCheck()
 {
 	// Implementation here
 }

@@ -11,12 +11,16 @@
 namespace fs = std::filesystem;
 using namespace std;
 
+Generador::Generador()
+{
+    log = Controller::getInstance().getLogger();
+}
 
 /**
  * Función que genera la estructura de ficheros para
  * la estructura de clases del panel. Es como el main del generador
 */
-void generatePanelFiles(GPanel p, string outDirectory)
+void Generador::generatePanelFiles(GPanel p, string outDirectory)
 {
     map<TemplateMark, string> properties = fillPropertiesMap(p);
     map<string, string> documentation = readDocumentation("../templates/Documentation.txt");
@@ -29,21 +33,21 @@ void generatePanelFiles(GPanel p, string outDirectory)
     if (fs::exists(dirPath)) {
         try {
             fs::remove_all(dirPath);
-            Controller::getInstance().printTrace(INFO, "Directorio '" + dirPath + "' ya existente. Eliminando...");
+            log->mainlog(INFO, "Directorio '" + dirPath + "' ya existente. Eliminando...");
         } catch (const fs::filesystem_error& e) {
-            Controller::getInstance().printTrace(CRITICAL, "Error eliminando el directorio existente.");
-            Controller::getInstance().printTrace(CRITICAL, e.what());
+            log->mainlog(CRITICAL, "Error eliminando el directorio existente.");
+            log->mainlog(CRITICAL, e.what());
             exit(EXIT_FAILURE);
         }
     }
 
     // Crea la carpeta donde se guardará el cmakelists y la carpeta src_inc
     fs::create_directory(dirPath);
-    Controller::getInstance().printTrace(INFO, "Creado nuevo directorio -> " + dirPath);
+    log->mainlog(INFO, "Creado nuevo directorio -> " + dirPath);
 
     // Carpeta con los ficheros del panel
     fs::create_directory(srcDirPath);
-    Controller::getInstance().printTrace(INFO, "Creado nuevo directorio -> " + srcDirPath);
+    log->mainlog(INFO, "Creado nuevo directorio -> " + srcDirPath);
     
     // Genera todos los ficheros
     writeFile(dirPath + "/CMakeLists.txt", documentation, properties, CMAKELISTS);
@@ -73,7 +77,7 @@ void generatePanelFiles(GPanel p, string outDirectory)
  * Tras eso, añade la documentación al código generado.
  * Finalmente, escribe el contenido en el ofstream y lo cierra. 
 */
-void writeFile(const string& path, map<string, string> &documentation, map<TemplateMark, string> &properties, FileToGenerate file)
+void Generador::writeFile(const string& path, map<string, string> &documentation, map<TemplateMark, string> &properties, FileToGenerate file)
 {
     ofstream out(path); // abre el ofstream al path correspondiente
     string code;
@@ -81,7 +85,7 @@ void writeFile(const string& path, map<string, string> &documentation, map<Templ
     replaceMarks(code, properties); // procesa la plantilla y rellena las marcas
     addDocumentation(code, documentation);  // agrega la documentación al código generado
     out << code;    // escribe el contenido en el ofstream
-    Controller::getInstance().printTrace(INFO, "Creado nuevo fichero -> " + path);
+    log->mainlog(INFO, "Creado nuevo fichero -> " + path);
     out.close(); // cierra el ofstream
 }
 
@@ -91,7 +95,7 @@ void writeFile(const string& path, map<string, string> &documentation, map<Templ
  * @param p Objeto GPanel con las propiedades del panel
  * @return map<TemplateMark, string> con las propiedades del panel
 */
-map<TemplateMark, string> fillPropertiesMap(GPanel p) 
+map<TemplateMark, string> Generador::fillPropertiesMap(GPanel p) 
 {
     map<TemplateMark, string> props;
     for (int m = NAME; m < END_MARK; m++)   // inicializar propiedades a 0
@@ -115,7 +119,7 @@ map<TemplateMark, string> fillPropertiesMap(GPanel p)
 }
 
 
-void fillButtonMarks(GPanel &p, map<TemplateMark, string> &props, map<TemplateMark, string> &code_chunks)
+void Generador::fillButtonMarks(GPanel &p, map<TemplateMark, string> &props, map<TemplateMark, string> &code_chunks)
 {
     // generacion de los botones
     string str_buttons = "";
@@ -133,9 +137,9 @@ void fillButtonMarks(GPanel &p, map<TemplateMark, string> &props, map<TemplateMa
         case CANCEL:
             setButtonData(props, code_chunks, p, b, str_buttons, PANEL_CANCEL_H, PANEL_CANCEL_CPP, ADD_FOOTER_BUTTON_CANCEL);
             break;
-        case CHECK:
-            setButtonData(props, code_chunks, p, b, str_buttons, PANEL_CHECK_H, PANEL_CHECK_CPP, ADD_FOOTER_BUTTON_CHECK);
-            break;
+        // case CHECK:
+        //     setButtonData(props, code_chunks, p, b, str_buttons, PANEL_CHECK_H, PANEL_CHECK_CPP, ADD_FOOTER_BUTTON_CHECK);
+        //     break;
         case RESET:
             setButtonData(props, code_chunks, p, b, str_buttons, PANEL_RESET_H, PANEL_RESET_CPP, ADD_FOOTER_BUTTON_RESET);
             break;
@@ -170,7 +174,7 @@ void fillButtonMarks(GPanel &p, map<TemplateMark, string> &props, map<TemplateMa
  * Función que genera el texto correspondiente a las acciones de los botones en los
  * archivos QtCb.cpp y QtCb.h 
 */
-void setButtonData(map<TemplateMark, string> &props, map<TemplateMark, string> &code_chunks, GPanel &p, Button &b, string &str_buttons, TemplateMark h_mark, TemplateMark cpp_mark, TemplateMark addButton_mark)
+void Generador::setButtonData(map<TemplateMark, string> &props, map<TemplateMark, string> &code_chunks, GPanel &p, Button &b, string &str_buttons, TemplateMark h_mark, TemplateMark cpp_mark, TemplateMark addButton_mark)
 {
     string aux;
     props[h_mark] = code_chunks[h_mark];
@@ -189,7 +193,7 @@ void setButtonData(map<TemplateMark, string> &props, map<TemplateMark, string> &
  * @param filename Nombre del fichero con los fragmentos de código
  * @return Mapa con la el código asociado a cada marca
 */
-map<TemplateMark, string> readCodeChunks(const string &filename)
+map<TemplateMark, string> Generador::readCodeChunks(const string &filename)
 {
     map<TemplateMark, string> codeChunks;
     ifstream file(filename);
@@ -206,7 +210,7 @@ map<TemplateMark, string> readCodeChunks(const string &filename)
         }
         file.close();
     } else {
-        Controller::getInstance().printTrace(CRITICAL, "Unable to open file");
+        log->mainlog(CRITICAL, "Unable to open file");
     }
     return codeChunks;
 }
@@ -220,7 +224,7 @@ map<TemplateMark, string> readCodeChunks(const string &filename)
  * @param codeChunks mapa con las asociaciones marca-códigof
  * @param currentCode stringstream con el código actual
 */
-void processChunkLine(string &line, bool &inChunk, string &currentChunk, map<TemplateMark, string> &codeChunks, ostringstream &currentCode)
+void Generador::processChunkLine(string &line, bool &inChunk, string &currentChunk, map<TemplateMark, string> &codeChunks, ostringstream &currentCode)
 {
     // se encuentra un caracter %
     if (line.find("%%") != string::npos)   // ¿es una marca de incio de code chunk?
@@ -258,7 +262,7 @@ void processChunkLine(string &line, bool &inChunk, string &currentChunk, map<Tem
  * @param filename Nombre del fichero con la documentación
  * @return Mapa con la documentación asociada a cada marca
 */
-map<string, string> readDocumentation(const string &filename)
+map<string, string> Generador::readDocumentation(const string &filename)
 {
     map<string, string> documentation;
     ifstream file(filename);
@@ -275,7 +279,7 @@ map<string, string> readDocumentation(const string &filename)
         }
         file.close();
     } else {
-        Controller::getInstance().printTrace(CRITICAL, "Unable to open file");
+        log->mainlog(CRITICAL, "Unable to open file");
     }
     return documentation;
 }
@@ -289,7 +293,7 @@ map<string, string> readDocumentation(const string &filename)
  * @param documentation mapa con las asociaciones marca-documentación
  * @param currentDoc stringstream con la documentación leída actual
 */
-void processDocLine(string &line, bool &inChunk, string &currentChunk, map<string, string> &documentation, ostringstream &currentDoc)
+void Generador::processDocLine(string &line, bool &inChunk, string &currentChunk, map<string, string> &documentation, ostringstream &currentDoc)
 {
     // se encuentra un caracter %
     if (line.find("%%") != string::npos)   // ¿es una marca de incio?
@@ -316,7 +320,7 @@ void processDocLine(string &line, bool &inChunk, string &currentChunk, map<strin
     }
 }
 
-string readTemplate(const string &filename)
+string Generador::readTemplate(const string &filename)
 {
     ifstream file(filename);
     string content((istreambuf_iterator<char>(file)), istreambuf_iterator<char>());
@@ -328,7 +332,7 @@ string readTemplate(const string &filename)
  * Para cada marca del conjunto props, la busca en el codigo de la plantilla.
  * Cuando la encuentra, reemplaza la marca por su valor correspondiente.  
 */
-void replaceMarks(string &code, const map<TemplateMark, string> &props)
+void Generador::replaceMarks(string &code, const map<TemplateMark, string> &props)
 {
     for (const auto& pair : props) {
         string placeholder = "%" + MarkStrings.find(pair.first)->second + "%";
@@ -344,7 +348,7 @@ void replaceMarks(string &code, const map<TemplateMark, string> &props)
  * Para cada marca que coincida con una entrada del mapa de documentación,
  * sustituye la marca por su valor correspondiente.
 */
-void addDocumentation(string &code, const map<string, string> &documentation)
+void Generador::addDocumentation(string &code, const map<string, string> &documentation)
 {
     for (const auto& pair : documentation) {
         string placeholder = "%" + pair.first + "%";
@@ -355,5 +359,3 @@ void addDocumentation(string &code, const map<string, string> &documentation)
         }
     }
 }
-
-

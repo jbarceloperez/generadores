@@ -5,6 +5,7 @@
 #include <vector>
 #include "../model/gpanel.h"
 #include "../model/panelcollection.h"
+#include "../log/logger.h"
 #include "xmlattribute.h"
 #include "xmlelement.h"
 #include "xmlfile.h"
@@ -24,8 +25,11 @@ using namespace std;
 */
 class XMLParser {
 
+private:
+    Logger* log;
+
 public:
-    XMLParser() {};
+    XMLParser();
     XMLElement readXml(char *path);
     XMLElement parseElement(QXmlStreamReader& xml);
     void writeXMLFile(PanelCollection panels, string xmlPath);

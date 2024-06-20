@@ -11,6 +11,7 @@ GPanel::GPanel(std::string _name, int _w, int _h, PanelType _type)
     type = _type;
     layout = DEFAULT_LAYOUT;
     header = SaesHeader(name);
+    log = Controller::getInstance().getLogger();
 }
 
 GPanel::GPanel(std::string _name)
@@ -21,6 +22,7 @@ GPanel::GPanel(std::string _name)
     type = PanelType::READ_ONLY;
     layout = DEFAULT_LAYOUT;
     header = SaesHeader(name);
+    log = Controller::getInstance().getLogger();
 }
 
 // Getters
@@ -99,7 +101,7 @@ void GPanel::setType(std::string newTypeValue)
             return;
         }
     }
-    Controller::getInstance().printTrace(CRITICAL, "ERROR: PanelType '" + newTypeValue + "' does not exist.");
+    log->mainlog(CRITICAL, "ERROR: PanelType '" + newTypeValue + "' does not exist.");
     // exception?
 }
 
@@ -125,14 +127,14 @@ void GPanel::setLayout(LayoutType newLayout)
 void GPanel::addButton(std::string _name)
 {
     buttons.push_back(Button(_name));
-    Controller::getInstance().printTrace(TRACE, "Added button [" + _name + "]");
+    log->mainlog(TRACE, "Added button [" + _name + "]");
     if (type == READ_ONLY) type = CONFIG;
     else if (type == EXTERNAL_UI_READ) type = EXTERNAL_UI_CONFIG;
 }
 
 void GPanel::addButton(std::string _name, std::string _action)
 {
-    Controller::getInstance().printTrace(TRACE, "Added button [" + _name + "]");
+    log->mainlog(TRACE, "Added button [" + _name + "]");
     buttons.push_back(Button(_name, _action));
     if (type == READ_ONLY) type = CONFIG;
     else if (type == EXTERNAL_UI_READ) type = EXTERNAL_UI_CONFIG;

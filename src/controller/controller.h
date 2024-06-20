@@ -18,11 +18,9 @@ protected:
     // atributos
     PanelCollection panelCol;   // conjunto de paneles creados
     GPanel* currentPanel;       // puntero a un panel de panelCol
-    // Logger log;
-    dbg::log mainlog;
-    dbg::log hmi;
+    Logger log;
+
     int argc;
-    int appLogLevel;            // nivel de log, el programa no mostrará logs por debajo de este
     char* argv[];
     
     Controller() = default;
@@ -32,17 +30,16 @@ protected:
     bool readUiXml(XMLFile ui);
     void readInputXml(string file);
     void generateAllFiles(string inputFile);
+    void nogui(int _argc, char *_argv[]);
 
 public:
     Controller(Controller const &) = delete;
     static Controller &getInstance();
 
     void init(int _argc, char *_argv[]);
-    void nogui(int _argc, char *_argv[]);
-    void printTrace(TraceLevel trace, string msg);
-    Logger *getAppLogger();
     GPanel* getCurrentPanel() const;
     vector<std::string> getPanelNames();
+    Logger* getLogger();
 
     virtual void onPbGeneratePressed(std::string outDirectory);
     virtual bool onPbWithUIPressed(std::string uiPath);

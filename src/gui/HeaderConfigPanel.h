@@ -21,8 +21,8 @@ private slots:
 private:
     class PrivateData;
     std::unique_ptr<PrivateData> p_impl;
-    dbg::log loghmi;
     GuiController* controller;
+    Logger* log;
 
     void checkAll(bool checked);
     void clearAll();

@@ -2,6 +2,7 @@
 #define GENERADOR_H
 
 #include "gpanel.h"
+#include "../log/logger.h"
 #include <map>
 
 enum FileToGenerate 
@@ -61,6 +62,13 @@ static std::map<TemplateMark, std::string> MarkStrings = {
     {UIXMLBUTTON_WITHPOS,       "UIXMLBUTTON_WITHPOS"}
 };
 
+class Generador {
+private:
+    Logger* log;
+
+public:
+Generador();
+
 void generatePanelFiles(GPanel p, std::string outDirectory);
 
 void writeFile(const std::string& path, std::map<std::string, std::string> &documentation, std::map<TemplateMark, std::string> &properties, FileToGenerate file);
@@ -76,5 +84,8 @@ std::map<std::string, std::string> readDocumentation(const std::string &filename
 void processChunkLine(std::string &line, bool &inChunk, std::string &currentChunk, std::map<TemplateMark, std::string> &codeChunks, std::ostringstream &currentCode);
 void processDocLine(std::string &line, bool &inChunk, std::string &currentChunk, std::map<std::string, std::string> &documentation, std::ostringstream &currentDoc);
 void addDocumentation(std::string &code, const std::map<std::string, std::string> &documentation);
+
+};
+
 
 #endif // GENERATOR_H

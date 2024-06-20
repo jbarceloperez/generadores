@@ -58,7 +58,6 @@
     */
 %/DOC_GW_EXPORTMESSAGE%
 
-
 // ================== QtCb.h FILE ==================
 // =================================================
 
@@ -154,7 +153,7 @@
 
 %%DOC_QTCB_PANELCHECK%
 /**
-	 * @brief Método con la funcionalidad del botón "Check".
+	 * @brief Método con la funcionalidad de checkear el panel.
 	 */
 %/DOC_QTCB_PANELCHECK%
 

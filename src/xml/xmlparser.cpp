@@ -1,7 +1,10 @@
 #include "xmlparser.h"
-
 #include "../controller/controller.h"
 
+XMLParser::XMLParser()
+{
+    log = Controller::getInstance().getLogger();
+}
 
 XMLElement XMLParser::readXml(char *xmlPath)
 {
@@ -65,7 +68,7 @@ void XMLParser::writeXMLFile(PanelCollection panels, string xmlPath)
 {
     QFile file(xmlPath.data());
     if (!file.open(QIODevice::WriteOnly)) {
-        Controller::getInstance().printTrace(ERROR, "Error opening file:" + std::string(xmlPath));
+        log->mainlog(ERROR, "Error opening file:" + std::string(xmlPath));
         return;
     }
 
@@ -150,11 +153,11 @@ void XMLParser::writeXMLFile(PanelCollection panels, string xmlPath)
     file.close();
     if (file.error() == QFile::NoError) 
     {
-        Controller::getInstance().printTrace(INFO, "XMLFile successfully saved in " + std::string(xmlPath));
+        log->mainlog(INFO, "XMLFile successfully saved in " + std::string(xmlPath));
     } 
     else 
     {
-        Controller::getInstance().printTrace(ERROR, "Error saving file:" + std::string(xmlPath));        
+        log->mainlog(ERROR, "Error saving file:" + std::string(xmlPath));        
     }
 }
 

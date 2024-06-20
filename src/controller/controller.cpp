@@ -21,15 +21,10 @@ void Controller::init(int _argc, char *_argv[])
     {
         argv[i] = _argv[i];
     }
-    dbg::log::initialize("/home/javi/Documentos/Generadores/traces.cfg");
-    // log.log_hmi(INFO, "Starting logger...");
-    // log.log_mainlog(INFO, "Starting logger...");
-    hmi = dbg::log("hmi");
-    mainlog = dbg::log("main");
-    mainlog.info("Starting logger...");
-    hmi.info("Starting logger...");
-
-    appLogLevel = TRACE;
+    log = Logger();
+    log.init("/home/javi/Documentos/Generadores/traces.cfg");
+    log.hmilog(INFO, "Initializing logger...");
+    log.mainlog(INFO, "Initializing logger...");
     currentPanel = nullptr;
     nogui(_argc, _argv);
 }
@@ -63,38 +58,6 @@ void Controller::nogui(int _argc, char *_argv[])
     }
 }
 
-// todo: fix logger
-void Controller::printTrace(TraceLevel level, string msg)
-{   
-    if (level >= appLogLevel)
-    {
-        switch (level)
-        {
-        case TRACE:
-            mainlog.trace(msg.c_str());
-            break;
-        case DEBUG:
-            mainlog.debug(msg.c_str());
-            break;
-        case INFO:
-            mainlog.info(msg.c_str());
-            break;
-        case WARNING:
-            mainlog.warning(msg.c_str());
-            break;
-        case ERROR:
-            mainlog.error(msg.c_str());
-            break;
-        case CRITICAL:
-            mainlog.critical(msg.c_str());
-            break;
-        
-        default:
-            break;
-        }
-    }  
-}
-
 GPanel* Controller::getCurrentPanel() const
 {
     return currentPanel;
@@ -102,6 +65,11 @@ GPanel* Controller::getCurrentPanel() const
 
 vector<string> Controller::getPanelNames() {
     return panelCol.getNames();
+}
+
+Logger *Controller::getLogger()
+{
+    return &log;
 }
 
 void Controller::onPbGeneratePressed(std::string outDirectory) {} // a implementar en subclase
@@ -136,14 +104,14 @@ bool Controller::readUiXml(XMLFile ui)
     std::string name = root.getSubelement("class").getContent();
     if (panelCol.containsPanel(name))
     {
-        printTrace(INFO, "Same panel '" + name + "' alredy loaded. Ignoring.");
+        log.mainlog(INFO, "Same panel '" + name + "' alredy loaded. Ignoring.");
         return false;
     }
     // nuevo panel
     panelCol.addPanel(name);
     currentPanel = panelCol.getPanelByName(name);
     
-    printTrace(TRACE, "Loaded panel '" + name + "'");
+    log.mainlog(TRACE, "Loaded panel '" + name + "'");
 
     currentPanel->setUiPath(ui.getXmlPath());
     currentPanel->setLayout(EXTERNAL_UI);       // no hay ui, no hay layout
@@ -170,7 +138,7 @@ void Controller::iterateXML(XMLElement e)
         if (aux == "QPushButton")
         {
             currentPanel->addButton(i.getAttributeValue("name"));
-            Controller::getInstance().printTrace(WARNING, "QPushButton: " + i.getAttributeValue("name"));
+            log.mainlog(WARNING, "QPushButton: " + i.getAttributeValue("name"));
         }
         iterateXML(i);
     }
@@ -192,8 +160,8 @@ void Controller::readInputXml(string inputFileName)
     }
     catch(const XMLFileException& e)
     {
-        mainlog.critical("Error loading file '%s'", inputFileName);
-        mainlog.critical(e.what());
+        log.mainlog(CRITICAL, "Error loading file '%s'", inputFileName);
+        log.mainlog(CRITICAL, e.what());
         exit(EXIT_FAILURE);
     }
     for(XMLElement panel : doc.getRootElement().getElements()) {
@@ -208,9 +176,10 @@ void Controller::readInputXml(string inputFileName)
 */
 void Controller::generateAllFiles(string outDirectory)
 {
+    Generador g;
     for (GPanel panel : panelCol.getVector())
     {
-        generatePanelFiles(panel, outDirectory);
-        printTrace(INFO, "Ended generating files for " + panel.getName() + "\n");
+        g.generatePanelFiles(panel, outDirectory);
+        log.mainlog(INFO, "Ended generating files for " + panel.getName() + "\n");
     }
 }

@@ -4,6 +4,7 @@
 #pragma once
 
 #include "gpanel.h"
+#include "../log/logger.h"
 #include <vector>
 #include <string>
 
@@ -14,11 +15,12 @@ class PanelCollection {
 
 private:
     std::vector<GPanel> panelCollection;
+    Logger* log;
 
 public:
-    PanelCollection() {}
-    ~PanelCollection() {}
+    PanelCollection();
 
+    void init();
     void addPanel(std::string name);
     void addPanel(GPanel p);
     void delPanel(std::string panel);
