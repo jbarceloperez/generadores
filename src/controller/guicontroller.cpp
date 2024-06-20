@@ -104,10 +104,10 @@ void GuiController::onPbSaveXmlPressed(std::string xmlPath)
 */
 int GuiController::onPbLoadXmlPressed(string xmlPath)
 {
+    int panelsSize = panelCol.getPanelCollectionSize();
     readInputXml(xmlPath);
-    int addedPanels = panelCol.getPanelCollectionSize();
     currentPanel = panelCol.getPanelByIndex(0); // selecciona el primer panel
-    return panelCol.getPanelCollectionSize();
+    return panelCol.getPanelCollectionSize() - panelsSize;
 }
 
 /**

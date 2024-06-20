@@ -124,7 +124,7 @@ void HeaderConfigPanelImpl::checkAll(bool checked)
 
 void HeaderConfigPanelImpl::clearAll()
 {
-    log->hmilog(TRACE, "pbClearAll");
+    log->hmilog(TRACE, "[" + string(__AT__) + "] pbClearAll");
     p_impl->ui.lne_companyName->setText("");
     p_impl->ui.lne_project->setText("");
     p_impl->ui.lne_csciName->setText("");
@@ -152,7 +152,7 @@ void HeaderConfigPanelImpl::clearAll()
 
 void HeaderConfigPanelImpl::save(bool saveToAllPanels)
 {
-    log->hmilog(TRACE, "[%s]pbSave Header", __AT__);    // debug
+    log->hmilog(TRACE, "[" + string(__AT__) + "] pbSave Header");    // debug
     SaesHeader header = SaesHeader("");
 
     if (p_impl->ui.companyName->isChecked()) header.setHeaderElement(COMPANY_NAME, p_impl->ui.lne_companyName->text().toStdString());

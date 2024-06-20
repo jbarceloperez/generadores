@@ -83,7 +83,7 @@ void Generador::writeFile(const string& path, map<string, string> &documentation
     string code;
     code = readTemplate(FileTemplatePath[file]); // lee el contenido de la plantilla a code
     replaceMarks(code, properties); // procesa la plantilla y rellena las marcas
-    addDocumentation(code, documentation);  // agrega la documentación al código generado
+    addDocumentation(code, documentation, properties[NAME]);  // agrega la documentación al código generado
     out << code;    // escribe el contenido en el ofstream
     log->mainlog(INFO, "Creado nuevo fichero -> " + path);
     out.close(); // cierra el ofstream
@@ -348,7 +348,7 @@ void Generador::replaceMarks(string &code, const map<TemplateMark, string> &prop
  * Para cada marca que coincida con una entrada del mapa de documentación,
  * sustituye la marca por su valor correspondiente.
 */
-void Generador::addDocumentation(string &code, const map<string, string> &documentation)
+void Generador::addDocumentation(string &code, const map<string, string> &documentation, string name)
 {
     for (const auto& pair : documentation) {
         string placeholder = "%" + pair.first + "%";
@@ -357,5 +357,12 @@ void Generador::addDocumentation(string &code, const map<string, string> &docume
             code.replace(pos, placeholder.size(), pair.second);
             pos = code.find(placeholder);
         }
+    }
+    // sustituye el nombre de la marca en la documentación
+    string placeholder = "%NAME%";
+    size_t pos = code.find(placeholder);
+    while (pos != string::npos) {
+        code.replace(pos, placeholder.size(), name);
+        pos = code.find(placeholder);
     }
 }

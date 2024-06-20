@@ -1,9 +1,10 @@
 #include "controller.h"
 #include <iostream>
-
 #include "../model/generador.h"
-
 #include <bits/getopt_core.h>
+
+#define TRACES_CONFIG_PATH "/home/javi/Documentos/Generadores/traces.cfg"
+
 
 Controller::~Controller() {}
 
@@ -22,7 +23,7 @@ void Controller::init(int _argc, char *_argv[])
         argv[i] = _argv[i];
     }
     log = Logger();
-    log.init("/home/javi/Documentos/Generadores/traces.cfg");
+    log.init(TRACES_CONFIG_PATH);
     log.hmilog(INFO, "Initializing logger...");
     log.mainlog(INFO, "Initializing logger...");
     currentPanel = nullptr;

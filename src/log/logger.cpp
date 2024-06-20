@@ -24,25 +24,28 @@ void Logger::hmilog(TraceLevel level, const char *msg, ...)
 {
     va_list args;
     va_start(args, msg);
+    // char *out;
+    // vsprintf(out, msg, args);
+
     switch (level)
     {
         case TRACE:
-            hmi.trace(msg);
+            hmi.trace(msg, args);
             break;
         case DEBUG:
-            hmi.debug(msg);
+            hmi.debug(msg, args);
             break;
         case INFO:
-            hmi.info(msg);
+            hmi.info(msg, args);
             break;
         case WARNING:
-            hmi.warning(msg);
+            hmi.warning(msg, args);
             break;
         case ERROR:
-            hmi.error(msg);
+            hmi.error(msg, args);
             break;
         case CRITICAL:
-            hmi.critical(msg);
+            hmi.critical(msg, args);
             break;
         default:
             break;

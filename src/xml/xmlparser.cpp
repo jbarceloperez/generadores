@@ -167,19 +167,19 @@ void XMLParser::writeXMLFile(PanelCollection panels, string xmlPath)
  * vacío. Chequea todos los atributos y subelementos y devuelve un objeto
  * GPanel con el panel correspondiente.
 */
-GPanel XMLParser::buildPanel(XMLElement e)
+GPanel XMLParser::buildPanel(XMLElement panelElement)
 {
-    if (e.getName() != "panel")
+    if (panelElement.getName() != "panel")
         return GPanel("");
     // elementos obligatorios
-    string type = e.getAttributeValue("type");
-    string name = e.getAttributeValue("name");
+    string type = panelElement.getAttributeValue("type");
+    string name = panelElement.getAttributeValue("name");
 
     GPanel panelObject = GPanel(name);
     panelObject.setType(type);
 
     // otros elementos
-    for (XMLElement e : e.getElements()) {
+    for (XMLElement e : panelElement.getElements()) {
         string name = e.getName();
         // elemento <geometry>
         if (name == "geometry") 

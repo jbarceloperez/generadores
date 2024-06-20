@@ -1,25 +1,25 @@
 %SAES_HEADER%
 
+%DOC_QTCBCPP_FILE%
+
 #include "%NAME%QtCb.h"
 #include "ui_%NAME%.h"
-
 
 #include <QRegularExpression>
 #include <QRegularExpressionValidator>
 
-
-
 class %NAME%QtCb::PrivateData
 {
     public:
+        %DOC_QTCBCPP_PDATA_CONSTRUCTOR%
         PrivateData(BaseClass* parent)
         {
 
         }
-
+        %DOC_QTCBCPP_PDATA_DESTRUCTOR%
         ~PrivateData()
         {}      
-
+        %DOC_QTCBCPP_PDATA_UI%
         Ui::%NAME% ui;
 };
 

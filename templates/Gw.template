@@ -1,7 +1,8 @@
 %SAES_HEADER%
 
-#include "%NAME%Gw.h"
+%DOC_GWCPP_FILE%
 
+#include "%NAME%Gw.h"
 
 
 %NAME%Gw::%NAME%Gw(BaseClass * parent)

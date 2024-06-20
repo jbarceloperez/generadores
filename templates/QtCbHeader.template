@@ -31,6 +31,7 @@ public:
 private Q_SLOTS:    
 
 protected:
+    %DOC_QTCB_EXPORTGETPARAMETERLIMIT%
     virtual const ParameterLimitData* exportGetParameterLimit()=0;
 
 private:

@@ -9,6 +9,7 @@
 
 #include "%NAME%QtCb.h"
 
+%DOC_GW_CLASS%
 class %NAME%Gw : public %NAME%QtCb
 {
 public:

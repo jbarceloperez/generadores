@@ -9,6 +9,7 @@
 
 #include "%NAME%Gw.h"
 
+%DOC_HEADER_TYPEDEF%
 typedef %NAME%Gw %NAME%;
 
 #endif  // __%NAME_CAPS%_H__
