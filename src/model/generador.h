@@ -7,7 +7,7 @@
 
 enum FileToGenerate 
 {
-    HEADER, GWHEADER, GW, QTCBHEADER, QTCB, UI, CMAKELISTS, FILES_END
+    HEADER, GWHEADER, GW, QTCBHEADER, QTCB, UI, CMAKELISTS, DOXYFILE, FILES_END
 };
 
 enum TemplateMark
@@ -29,7 +29,8 @@ static std::map<FileToGenerate, std::string> FileTemplatePath = {
     {QTCBHEADER,    "../templates/QtCbHeader.template"},
     {QTCB,          "../templates/QtCb.template"},
     {UI,            "../templates/Ui.template"},
-    {CMAKELISTS,    "../templates/CMakeLists.template"}
+    {CMAKELISTS,    "../templates/CMakeLists.template"},
+    {DOXYFILE,      "../templates/Doxyfile.template"}
 };
 
 static std::map<TemplateMark, std::string> MarkStrings = {

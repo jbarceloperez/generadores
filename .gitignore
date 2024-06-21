@@ -4,4 +4,4 @@ build/
 CMakeLists.txt.user
 ScenarioWavRecordPanel.ui
 *.autosave
-sample/
+out/

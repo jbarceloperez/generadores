@@ -215,7 +215,7 @@
 %/DOC_QTCBCPP_FILE%
 
 
-%DOC_QTCBCPP_PDATA_CONSTRUCTOR%
+%%DOC_QTCBCPP_PDATA_CONSTRUCTOR%
 /**
          * @brief Constructor de la clase PrivateData.
          * @param parent Puntero al objeto BaseClass padre (nullptr por defecto).
@@ -223,7 +223,7 @@
 %/DOC_QTCBCPP_PDATA_CONSTRUCTOR%
 
 
-%DOC_QTCBCPP_PDATA_DESTRUCTOR%
+%%DOC_QTCBCPP_PDATA_DESTRUCTOR%
 /**
          * @brief Destructor de la clase PrivateData.
          */

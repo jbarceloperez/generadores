@@ -51,6 +51,7 @@ void Generador::generatePanelFiles(GPanel p, string outDirectory)
     
     // Genera todos los ficheros
     writeFile(dirPath + "/CMakeLists.txt", documentation, properties, CMAKELISTS);
+    writeFile(dirPath + "/Doxyfile", documentation, properties, DOXYFILE);
     writeFile(aux_root + ".h", documentation, properties, HEADER);
     writeFile(aux_root + "Gw.h", documentation, properties, GWHEADER);
     writeFile(aux_root + "Gw.cpp", documentation, properties, GW);
