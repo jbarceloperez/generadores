@@ -274,7 +274,7 @@ void GeneratorPanelImpl::onPbAssociatePressed()
 void GeneratorPanelImpl::onPbSaveXmlPressed()
 {
     log->hmilog(TRACE, "pbSaveXml");
-    QString saveFile = QFileDialog::getSaveFileName(this, "Save the file to...", "../");
+    QString saveFile = QFileDialog::getSaveFileName(this, "Save the file to...", "../index.xml", "XML files (*.xml);;Any (*)");
     if (saveFile.isEmpty())
     {
         log->hmilog(TRACE, "onPbSaveXmlPressed> No file selected.");
