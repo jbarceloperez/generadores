@@ -18,16 +18,17 @@
 //------------------------------------------------------------------------------------
 /*virtual*/ const ParameterLimitData* %NAME%Gw::exportGetParameterLimit()
 {
-    return ConfigSignals::ParameterLimit_get().value_or(nullptr);
+    // return ConfigSignals::ParameterLimit_get().value_or(nullptr);    // TODO completar
+    return 0;
 }
 //-----------------------------------------------------------------------------------------
 void %NAME%Gw::exportAction(const Common::Action& p_action, const boost::any& p_any)
 {
-    //ControllerSignals::Action_cmd_id(p_action, p_any);
+    //ControllerSignals::Action_cmd_id(p_action, p_any);     // TODO completar
 }
 //-----------------------------------------------------------------------------------------
 void %NAME%Gw::exportMessage(const Format::MessageKind& p_kind, const Format::MessageBody& p_body)
 {
-    //ControllerSignals::Message_cmd_id(p_kind, p_body);
+    //ControllerSignals::Message_cmd_id(p_kind, p_body);    // TODO completar
 }
 //------------------------------------------------------------------------------------

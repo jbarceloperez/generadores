@@ -116,7 +116,7 @@ map<TemplateMark, string> Generador::fillPropertiesMap(GPanel p)
     }
     fillButtonMarks(p, props, code_chunks);
     if (p.getType() == CONFIG || p.getType() == EXTERNAL_UI_CONFIG)
-    {
+    {   // si hay botones añadir el metodo panelCheck()
         string aux;
         props[PANEL_CHECK_H] = code_chunks[PANEL_CHECK_H];
         char buff[200];

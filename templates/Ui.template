@@ -16,7 +16,26 @@
    <string>%NAME%</string>
   </property>
   <layout class="%LAYOUT_UI%" name="generatedLayout">
+  <item>
+    <layout class="%LAYOUT_UI%" name="textLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Panel generado
+automáticamente</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="1" column="0">
+    <layout class="%LAYOUT_UI%" name="buttonsLayout">
    %BUTTONS_UI%
+    </layout>
+   </item>
   </layout>
  </widget>
  <resources/>
