@@ -382,7 +382,7 @@ void GeneratorPanelImpl::updateButtons()
     if (controller->getCurrentPanel() != nullptr)
     {
         p_impl->ui.listWidget_but->clear();
-        for (Button b : controller->getCurrentPanel()->getButtons())
+        for (GButton b : controller->getCurrentPanel()->getButtons())
         {
             p_impl->ui.listWidget_but->addItem(b.getName().data());
         }

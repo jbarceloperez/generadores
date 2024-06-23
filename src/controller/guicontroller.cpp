@@ -118,11 +118,11 @@ void GuiController::onPbAddButtonPressed(std::string name, std::string action)
 {
     if (currentPanel == nullptr)
         return;
-    for (Button b : currentPanel->getButtons())
+    for (GButton b : currentPanel->getButtons())
     {
         if (b.getName() == name)
         {
-            log.mainlog(INFO, "Button " + name + " alredy exists.");
+            log.mainlog(INFO, "GButton " + name + " alredy exists.");
             return;
         }
     }

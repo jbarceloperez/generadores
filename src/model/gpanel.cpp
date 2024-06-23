@@ -56,7 +56,7 @@ LayoutType GPanel::getLayout() const
     return layout;
 }
 
-std::vector<Button> GPanel::getButtons() const
+std::vector<GButton> GPanel::getButtons() const
 {
     return buttons;
 }
@@ -126,7 +126,7 @@ void GPanel::setLayout(LayoutType newLayout)
 // Funcionalidad con los botones
 void GPanel::addButton(std::string _name)
 {
-    buttons.push_back(Button(_name));
+    buttons.push_back(GButton(_name));
     log->mainlog(TRACE, "Added button [" + _name + "]");
     if (type == READ_ONLY) type = CONFIG;
     else if (type == EXTERNAL_UI_READ) type = EXTERNAL_UI_CONFIG;
@@ -135,7 +135,7 @@ void GPanel::addButton(std::string _name)
 void GPanel::addButton(std::string _name, std::string _action)
 {
     log->mainlog(TRACE, "Added button [" + _name + "]");
-    buttons.push_back(Button(_name, _action));
+    buttons.push_back(GButton(_name, _action));
     if (type == READ_ONLY) type = CONFIG;
     else if (type == EXTERNAL_UI_READ) type = EXTERNAL_UI_CONFIG;
 }
@@ -184,7 +184,7 @@ std::string GPanel::toString() const
     str += "Type: " + PanelTypeToString.find(type)->second + "\n  ";
     str += "Layout: " + LayoutTypeToString.find(layout)->second + "\n  ";
     str += "Buttons:\n";
-    for (Button b : buttons)
+    for (GButton b : buttons)
     {
         str += "   > " + b.toString();
     }

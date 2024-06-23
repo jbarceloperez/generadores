@@ -1,12 +1,12 @@
 #include "button.h"
 
-Button::Button(std::string _name)
+GButton::GButton(std::string _name)
 {
     name = _name;
     action = NULLBUTTONACTION;
 }
 
-Button::Button(std::string _name, std::string _action)
+GButton::GButton(std::string _name, std::string _action)
 {
     name = _name;
     for (auto const& element : ButtonActionToString)
@@ -15,32 +15,32 @@ Button::Button(std::string _name, std::string _action)
     }
 }
 
-std::string Button::getName()
+std::string GButton::getName()
 {
     return name;
 }
 
-ButtonAction Button::getAction()
+ButtonAction GButton::getAction()
 {
     return action;
 }
 
-void Button::setName(std::string _name)
+void GButton::setName(std::string _name)
 {
     name = _name;
 }
 
-void Button::setAction(ButtonAction _action)
+void GButton::setAction(ButtonAction _action)
 {
     action = _action;
 }
 
-void Button::deleteAction() 
+void GButton::deleteAction() 
 {
     action = NULLBUTTONACTION;
 } 
 
-std::string Button::toString()
+std::string GButton::toString()
 {
     std::string str;
     str = "'" + name + "': action=" + ButtonActionToString.find(action)->second + "\n";

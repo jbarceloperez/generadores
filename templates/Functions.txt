@@ -115,11 +115,6 @@ addFooterButton(Footer::Button_Reset, p_impl->ui.%s);
 %/ADD_FOOTER_BUTTON_RESET%
 
 
-%%ADD_FOOTER_BUTTON_CHECK%	// %s = button name
-addFooterButton(Footer::Button_Check, p_impl->ui.%s);
-%/ADD_FOOTER_BUTTON_CHECK%
-
-
 %%ADD_FOOTER_BUTTON_CUSTOM1%	// %s = button name
 addFooterButton(Footer::Button_Custom_1, p_impl->ui.%s);
 %/ADD_FOOTER_BUTTON_CUSTOM1%

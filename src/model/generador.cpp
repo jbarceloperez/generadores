@@ -115,7 +115,15 @@ map<TemplateMark, string> Generador::fillPropertiesMap(GPanel p)
         replaceMarks(i.second, props);
     }
     fillButtonMarks(p, props, code_chunks);
-
+    if (p.getType() == CONFIG || p.getType() == EXTERNAL_UI_CONFIG)
+    {
+        string aux;
+        props[PANEL_CHECK_H] = code_chunks[PANEL_CHECK_H];
+        char buff[200];
+        aux = code_chunks[PANEL_CHECK_CPP];
+        sprintf(buff, aux.data(), p.getName().data());
+        props[PANEL_CHECK_CPP] = buff;
+    }
     return props;
 }
 
@@ -125,7 +133,7 @@ void Generador::fillButtonMarks(GPanel &p, map<TemplateMark, string> &props, map
     // generacion de los botones
     string str_buttons = "";
     int n_buttons = 0;
-    for (Button b : p.getButtons())
+    for (GButton b : p.getButtons())
     {
         ButtonAction accion = b.getAction();
         string aux;
@@ -138,9 +146,6 @@ void Generador::fillButtonMarks(GPanel &p, map<TemplateMark, string> &props, map
         case CANCEL:
             setButtonData(props, code_chunks, p, b, str_buttons, PANEL_CANCEL_H, PANEL_CANCEL_CPP, ADD_FOOTER_BUTTON_CANCEL);
             break;
-        // case CHECK:
-        //     setButtonData(props, code_chunks, p, b, str_buttons, PANEL_CHECK_H, PANEL_CHECK_CPP, ADD_FOOTER_BUTTON_CHECK);
-        //     break;
         case RESET:
             setButtonData(props, code_chunks, p, b, str_buttons, PANEL_RESET_H, PANEL_RESET_CPP, ADD_FOOTER_BUTTON_RESET);
             break;
@@ -175,7 +180,7 @@ void Generador::fillButtonMarks(GPanel &p, map<TemplateMark, string> &props, map
  * Función que genera el texto correspondiente a las acciones de los botones en los
  * archivos QtCb.cpp y QtCb.h 
 */
-void Generador::setButtonData(map<TemplateMark, string> &props, map<TemplateMark, string> &code_chunks, GPanel &p, Button &b, string &str_buttons, TemplateMark h_mark, TemplateMark cpp_mark, TemplateMark addButton_mark)
+void Generador::setButtonData(map<TemplateMark, string> &props, map<TemplateMark, string> &code_chunks, GPanel &p, GButton &b, string &str_buttons, TemplateMark h_mark, TemplateMark cpp_mark, TemplateMark addButton_mark)
 {
     string aux;
     props[h_mark] = code_chunks[h_mark];

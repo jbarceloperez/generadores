@@ -47,7 +47,7 @@ private:
     PanelType type;                 // Propiedad
     LayoutType layout;              // Tipo de layout del panel
     std::string uipath;             // Ruta al archivo ui, si lo tuvise
-    std::vector<Button> buttons;    // Collección de botones
+    std::vector<GButton> buttons;    // Collección de botones
     SaesHeader header;              // Cabecera SAES del panel
     Logger* log;                    // Logger
 
@@ -65,7 +65,7 @@ public:
     int getHeight() const;
     PanelType getType() const;
     LayoutType getLayout() const;
-    std::vector<Button> getButtons() const;
+    std::vector<GButton> getButtons() const;
     SaesHeader getHeader() const;
 
     // Setters

@@ -131,7 +131,7 @@ void XMLParser::writeXMLFile(PanelCollection panels, string xmlPath)
         {
             xmlWriter.writeStartElement("buttons"); // <buttons>
 
-            for (Button b : p.getButtons())
+            for (GButton b : p.getButtons())
             {
                 xmlWriter.writeStartElement("button");  // <button>
                 // xmlWriter.writeAttribute("type", QString::fromStdString(ButtonTypeToString[b.getType()]));

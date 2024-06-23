@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Generador</string>
+   <string>Generador de HMI</string>
   </property>
   <property name="frameShape">
    <enum>QFrame::StyledPanel</enum>

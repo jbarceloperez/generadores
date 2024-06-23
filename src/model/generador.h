@@ -16,9 +16,8 @@ enum TemplateMark
     PANEL_CANCEL_CPP, PANEL_CHECK_H, PANEL_CHECK_CPP, PANEL_RESET_H,
     PANEL_RESET_CPP, PANEL_CUSTOM1_H, PANEL_CUSTOM1_CPP, PANEL_CUSTOM2_H, 
     PANEL_CUSTOM2_CPP, ADD_FOOTER_BUTTON_APPLY, ADD_FOOTER_BUTTON_CANCEL, 
-    ADD_FOOTER_BUTTON_CHECK, ADD_FOOTER_BUTTON_RESET, 
-    ADD_FOOTER_BUTTON_CUSTOM1, ADD_FOOTER_BUTTON_CUSTOM2, GEOMETRY_W, 
-    GEOMETRY_H, BUTTONS_UI, LAYOUT_UI, SAES_HEADER, UIXMLBUTTON,
+    ADD_FOOTER_BUTTON_RESET, ADD_FOOTER_BUTTON_CUSTOM1, ADD_FOOTER_BUTTON_CUSTOM2, 
+    GEOMETRY_W,  GEOMETRY_H, BUTTONS_UI, LAYOUT_UI, SAES_HEADER, UIXMLBUTTON,
     UIXMLBUTTON_WITHPOS, END_MARK
 };
 
@@ -50,7 +49,6 @@ static std::map<TemplateMark, std::string> MarkStrings = {
     {PANEL_CUSTOM2_H,           "PANEL_CUSTOM2_H"},
     {ADD_FOOTER_BUTTON_APPLY,   "ADD_FOOTER_BUTTON_APPLY"},
     {ADD_FOOTER_BUTTON_CANCEL,  "ADD_FOOTER_BUTTON_CANCEL"},
-    {ADD_FOOTER_BUTTON_CHECK,   "ADD_FOOTER_BUTTON_CHECK"},
     {ADD_FOOTER_BUTTON_CUSTOM1, "ADD_FOOTER_BUTTON_CUSTOM1"},
     {ADD_FOOTER_BUTTON_CUSTOM2, "ADD_FOOTER_BUTTON_CUSTOM2"},
     {ADD_FOOTER_BUTTON_RESET,   "ADD_FOOTER_BUTTON_RESET"},
@@ -78,7 +76,7 @@ void replaceMarks(std::string &code, const std::map<TemplateMark, std::string> &
 
 std::map<TemplateMark, std::string> fillPropertiesMap(GPanel p);
 void fillButtonMarks(GPanel &p, std::map<TemplateMark, std::string> &props, std::map<TemplateMark, std::string> &code_chunks);
-void setButtonData(std::map<TemplateMark, std::string> &props, std::map<TemplateMark, std::string> &code_chunks, GPanel &p, Button &b, std::string &str_buttons, TemplateMark mark1, TemplateMark mark2, TemplateMark mark3);
+void setButtonData(std::map<TemplateMark, std::string> &props, std::map<TemplateMark, std::string> &code_chunks, GPanel &p, GButton &b, std::string &str_buttons, TemplateMark mark1, TemplateMark mark2, TemplateMark mark3);
 
 std::map<TemplateMark, std::string> readCodeChunks(const std::string &filename);
 std::map<std::string, std::string> readDocumentation(const std::string &filename);

@@ -13,7 +13,6 @@ enum ButtonAction {
 static std::map<ButtonAction, std::string> ButtonActionToString = {
     {APPLY, "Apply"},
     {CANCEL, "Cancel"},
-    // {CHECK, "Check"},
     {RESET, "Reset"},
     {CUSTOM1, "Custom1"},
     {CUSTOM2, "Custom2"},
@@ -25,16 +24,16 @@ static std::map<ButtonAction, std::string> ButtonActionToString = {
  * sus getters y setters. Las acciones de boton tienen un
  * mapa que mapea cada enumerado con su etiqueta de texto.
 */
-class Button {
+class GButton {
 private:
     std::string name;
     ButtonAction action;
 
 public:
-    Button() {};
-    Button(std::string _name);
-    Button(std::string _name, std::string _action);
-    ~Button() {};
+    GButton() {};
+    GButton(std::string _name);
+    GButton(std::string _name, std::string _action);
+    ~GButton() {};
 
     std::string getName();
     ButtonAction getAction();
