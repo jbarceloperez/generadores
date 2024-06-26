@@ -16,11 +16,10 @@ private:
 
 public:
     XMLFile(char * xmlPath);
-    XMLFile() {};
+    XMLFile(char * xmlPath, XMLElement rootElement);
+    XMLFile();
+    ~XMLFile();
 
-    ~XMLFile() {};
-
-    void read();
     XMLElement getRootElement() const;
     char * getXmlPath() const;
     char * getDtdPath() const;

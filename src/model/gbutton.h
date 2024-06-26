@@ -1,5 +1,5 @@
-#ifndef BUTTON_H
-#define BUTTON_H
+#ifndef GBUTTON_H
+#define GBUTTON_H
 
 #include <string>
 #include <map>

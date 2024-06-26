@@ -30,7 +30,7 @@ private:
 
 public:
     XMLParser();
-    XMLElement readXml(char *path);
+    XMLFile readXml(char *path);
     XMLElement parseElement(QXmlStreamReader& xml);
     void writeXMLFile(PanelCollection panels, string xmlPath);
     GPanel buildPanel(XMLElement e);

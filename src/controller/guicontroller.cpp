@@ -24,17 +24,9 @@ void GuiController::onPbGeneratePressed(string outDirectory)
  * que avise por pantalla.
 */
 bool GuiController::onPbWithUIPressed(string uiPath)
-{        
-    XMLFile uiXml(uiPath.data());
-    try
-    {
-        uiXml.read(); // lee el archivo .ui
-    }   
-    catch(const XMLFileException& e)
-    {   // TODO: Manejar el error en vez de excepción
-        log.mainlog(CRITICAL, e.what());
-        log.mainlog(CRITICAL, "Error loading path '" + uiPath + "'\n");
-    }
+{    
+    XMLParser parser;
+    XMLFile uiXml = parser.readXml(uiPath.data());
     if (readUiXml(uiXml))   // si el panel ya existe devuelve falso
         return true;
     return false;    

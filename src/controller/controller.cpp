@@ -154,18 +154,7 @@ void Controller::iterateXML(XMLElement e)
 void Controller::readInputXml(string inputFileName)
 {
     XMLParser parser;
-    XMLFile doc(inputFileName.data());
-
-    try
-    {
-        doc.read();
-    }
-    catch(const XMLFileException& e)
-    {
-        log.mainlog(CRITICAL, "Error loading file '%s'", inputFileName);
-        log.mainlog(CRITICAL, e.what());
-        exit(EXIT_FAILURE);
-    }
+    XMLFile doc = parser.readXml(inputFileName.data());
     for(XMLElement panel : doc.getRootElement().getElements()) {
         panelCol.addPanel(parser.buildPanel(panel));
     }

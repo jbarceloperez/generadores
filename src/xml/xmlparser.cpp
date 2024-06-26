@@ -6,7 +6,7 @@ XMLParser::XMLParser()
     log = Controller::getInstance().getLogger();
 }
 
-XMLElement XMLParser::readXml(char *xmlPath)
+XMLFile XMLParser::readXml(char *xmlPath)
 {
     QFile file(xmlPath);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -16,8 +16,8 @@ XMLElement XMLParser::readXml(char *xmlPath)
 
     QXmlStreamReader xmlReader(&file);
     xmlReader.readNextStartElement();
-    XMLElement e = parseElement(xmlReader);
-    return e;
+    XMLElement root = parseElement(xmlReader);
+    return XMLFile(xmlPath, root);
 }
 
 

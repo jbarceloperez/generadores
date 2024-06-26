@@ -24,9 +24,6 @@ void Logger::hmilog(TraceLevel level, const char *msg, ...)
 {
     va_list args;
     va_start(args, msg);
-    // char *out;
-    // vsprintf(out, msg, args);
-
     switch (level)
     {
         case TRACE:

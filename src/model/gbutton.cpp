@@ -1,4 +1,4 @@
-#include "button.h"
+#include "gbutton.h"
 
 GButton::GButton(std::string _name)
 {

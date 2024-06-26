@@ -13,11 +13,14 @@ XMLFile::XMLFile(char* _xmlPath) {
     xmlPath = _xmlPath;
 }
 
-void XMLFile::read()
+XMLFile::XMLFile(char *_xmlPath, XMLElement _rootElement)
 {
-    XMLParser parser;
-    rootElement = parser.readXml(xmlPath);
+    xmlPath = _xmlPath;
+    rootElement = _rootElement;
 }
+
+XMLFile::XMLFile() {}
+XMLFile::~XMLFile() {}
 
 char * XMLFile::getXmlPath() const {
     return xmlPath;
