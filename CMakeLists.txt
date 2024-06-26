@@ -10,6 +10,13 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+include(FetchContent)
+FetchContent_Declare(
+  googletest
+  URL https://github.com/google/googletest/archive/release-1.10.0.zip
+)
+FetchContent_MakeAvailable(googletest)
+
 # set(CMAKE_PREFIX_PATH "C:\\Qt\\6.6.1\\mingw_64\\")
 # Para poder incluir los logs
 # set ( ENV{SAES_PATH} "C:\\Users\\javib\\Documents\\saes\\Generadores\\lib\\log-saes")
@@ -77,3 +84,13 @@ include_directories(
 )
 
 add_subdirectory(lib)
+
+# Definir el ejecutable de tus tests
+enable_testing()
+add_executable(xml_tests src/xml/xmltests.cpp)
+target_link_libraries(xml_tests PRIVATE Qt6::Widgets gtest_main)
+target_compile_options(xml_tests PRIVATE "-Wall" "-Wextra")
+
+# Incluir Google Test en el testing
+include(GoogleTest)
+gtest_discover_tests(xml_tests)
