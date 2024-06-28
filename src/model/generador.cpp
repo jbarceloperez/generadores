@@ -61,6 +61,23 @@ void Generador::generatePanelFiles(GPanel p, string outDirectory)
     {
         writeFile(aux_root + ".ui", documentation, properties, UI);
     }
+    else    // en caso de que el ui ya exista, se debe insertar ese el .ui en la carpeta
+    {
+        fs::path uiPath = p.getUiPath();
+        fs::path targetDir = srcDirPath;
+        auto target = targetDir / uiPath.filename();
+        try
+        {
+            fs::copy_file(uiPath, target);
+            log->mainlog(INFO, "Creado nuevo fichero -> " + aux_root + ".ui");
+        }
+        catch (exception& e)  
+        {
+            log->mainlog(CRITICAL, "Error al copiar el fichero");
+            log->mainlog(CRITICAL, e.what());
+        }
+    }
+    
 }
 
 //-----------------------------------------------------------------------------

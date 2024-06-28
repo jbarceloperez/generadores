@@ -58,7 +58,7 @@ void %NAME%QtCb::initialize()
     %ADD_FOOTER_BUTTON_CUSTOM1%
     %ADD_FOOTER_BUTTON_CUSTOM2%
 
-    addComponents(p_impl->ui.generatedLayout);
+    addComponents(p_impl->ui.layoutBase);
 }
 
 //----------------------------------------------------------------

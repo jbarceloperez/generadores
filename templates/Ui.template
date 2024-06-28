@@ -15,7 +15,7 @@
   <property name="windowTitle">
    <string>%NAME%</string>
   </property>
-  <layout class="%LAYOUT_UI%" name="generatedLayout">
+  <layout class="%LAYOUT_UI%" name="layoutBase">
   <item>
     <layout class="%LAYOUT_UI%" name="textLayout">
      <item row="0" column="0">
