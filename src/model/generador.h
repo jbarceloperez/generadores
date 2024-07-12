@@ -7,7 +7,7 @@
 
 enum FileToGenerate 
 {
-    HEADER, GWHEADER, GW, QTCBHEADER, QTCB, UI, CMAKELISTS, DOXYFILE, FILES_END
+    HEADER, GWHEADER, GW, QTCBHEADER, QTCB, UI, CMAKELISTS, DOXYFILE, TESTFILE, FILES_END
 };
 
 enum TemplateMark
@@ -18,7 +18,8 @@ enum TemplateMark
     PANEL_CUSTOM2_CPP, ADD_FOOTER_BUTTON_APPLY, ADD_FOOTER_BUTTON_CANCEL, 
     ADD_FOOTER_BUTTON_RESET, ADD_FOOTER_BUTTON_CUSTOM1, ADD_FOOTER_BUTTON_CUSTOM2, 
     GEOMETRY_W,  GEOMETRY_H, BUTTONS_UI, LAYOUT_UI, SAES_HEADER, UIXMLBUTTON,
-    UIXMLBUTTON_WITHPOS, END_MARK
+    UIXMLBUTTON_WITHPOS, PANEL_OK_H, PANEL_OK_CPP, ADD_FOOTER_BUTTON_OK, 
+    END_MARK
 };
 
 static std::map<FileToGenerate, std::string> FileTemplatePath = {
@@ -29,7 +30,8 @@ static std::map<FileToGenerate, std::string> FileTemplatePath = {
     {QTCB,          "../templates/QtCb.template"},
     {UI,            "../templates/Ui.template"},
     {CMAKELISTS,    "../templates/CMakeLists.template"},
-    {DOXYFILE,      "../templates/Doxyfile.template"}
+    {DOXYFILE,      "../templates/Doxyfile.template"},
+    {TESTFILE,      "../templates/Testfile.template"}
 };
 
 static std::map<TemplateMark, std::string> MarkStrings = {
@@ -47,6 +49,9 @@ static std::map<TemplateMark, std::string> MarkStrings = {
     {PANEL_CUSTOM1_H,           "PANEL_CUSTOM1_H"},
     {PANEL_CUSTOM2_CPP,         "PANEL_CUSTOM2_CPP"},
     {PANEL_CUSTOM2_H,           "PANEL_CUSTOM2_H"},
+    {PANEL_OK_CPP,              "PANEL_OK_CPP"},
+    {PANEL_OK_H,                "PANEL_OK_H"},
+    {ADD_FOOTER_BUTTON_OK,      "ADD_FOOTER_BUTTON_OK"},
     {ADD_FOOTER_BUTTON_APPLY,   "ADD_FOOTER_BUTTON_APPLY"},
     {ADD_FOOTER_BUTTON_CANCEL,  "ADD_FOOTER_BUTTON_CANCEL"},
     {ADD_FOOTER_BUTTON_CUSTOM1, "ADD_FOOTER_BUTTON_CUSTOM1"},

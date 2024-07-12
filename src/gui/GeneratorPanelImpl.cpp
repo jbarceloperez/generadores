@@ -217,8 +217,8 @@ void GeneratorPanelImpl::onPbAddButtonPressed()
         controller->onPbAddButtonPressed("pbApply", "Apply");
     if (p_impl->ui.cb_cancel->isChecked())
         controller->onPbAddButtonPressed("pbCancel", "Cancel");
-    // if (p_impl->ui.cb_check->isChecked())
-    //     controller->onPbAddButtonPressed("pbCheck", "Check");
+    if (p_impl->ui.cb_ok->isChecked())
+        controller->onPbAddButtonPressed("pbOk", "Ok");
     if (p_impl->ui.cb_reset->isChecked())
         controller->onPbAddButtonPressed("pbReset", "Reset");
     if (p_impl->ui.cb_custom->isChecked())

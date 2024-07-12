@@ -162,6 +162,13 @@
 %/DOC_QTCB_PIMPL%
 
 
+%%DOC_QTCB_PANELOK%
+/**
+	 * @brief Método con la funcionalidad del botón "Ok".
+	 */
+%/DOC_QTCB_PANELOK%
+
+
 %%DOC_QTCB_PANELAPPLY%
 /**
 	 * @brief Método con la funcionalidad del botón "Apply".

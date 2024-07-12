@@ -27,7 +27,8 @@ void Generador::generatePanelFiles(GPanel p, string outDirectory)
 
     string dirPath = outDirectory + "/" + p.getName();  // ruta absoluta al directorio
     string aux_root = dirPath + "/src_inc/" + p.getName(); // prefijo de cada fichero en la carpeta de sources
-    string srcDirPath = dirPath + "/src_inc";   // ruta absoluta al directorio de sources
+    string srcDirPath = dirPath + "/src_inc";       // ruta absoluta al directorio de sources
+    string testsDirPath = dirPath + "/tests";     // ruta absoluta al directorio de tests
 
     // Verifica si el directorio ya existe
     if (fs::exists(dirPath)) {
@@ -48,10 +49,15 @@ void Generador::generatePanelFiles(GPanel p, string outDirectory)
     // Carpeta con los ficheros del panel
     fs::create_directory(srcDirPath);
     log->mainlog(INFO, "Creado nuevo directorio -> " + srcDirPath);
+
+    // Carpeta con los tests
+    fs::create_directory(testsDirPath);
+    log->mainlog(INFO, "Creado nuevo directorio -> " + testsDirPath);
     
     // Genera todos los ficheros
     writeFile(dirPath + "/CMakeLists.txt", documentation, properties, CMAKELISTS);
     writeFile(dirPath + "/Doxyfile", documentation, properties, DOXYFILE);
+    writeFile(testsDirPath + "/test_" + p.getName() + ".cpp", documentation, properties, TESTFILE);
     writeFile(aux_root + ".h", documentation, properties, HEADER);
     writeFile(aux_root + "Gw.h", documentation, properties, GWHEADER);
     writeFile(aux_root + "Gw.cpp", documentation, properties, GW);
@@ -157,6 +163,9 @@ void Generador::fillButtonMarks(GPanel &p, map<TemplateMark, string> &props, map
         char buff[200];
         switch (accion)
         {
+        case OK:
+            setButtonData(props, code_chunks, p, b, str_buttons, PANEL_OK_H, PANEL_OK_CPP, ADD_FOOTER_BUTTON_OK);
+            break;
         case APPLY:
             setButtonData(props, code_chunks, p, b, str_buttons, PANEL_APPLY_H, PANEL_APPLY_CPP, ADD_FOOTER_BUTTON_APPLY);
             break;

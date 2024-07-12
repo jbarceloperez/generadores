@@ -10,6 +10,20 @@
  * de código a insertar. 
  */
 
+%%PANEL_OK_H%
+	%DOC_QTCB_PANELOK%
+	void panelOk();
+%/PANEL_OK_H%
+
+
+%%PANEL_APPLY_CPP%
+//----------------------------------------------------------------
+void %NAME%QtCb::panelApply()
+{
+	// Implementation here
+}
+%/PANEL_APPLY_CPP%
+
 %%PANEL_APPLY_H%
 	%DOC_QTCB_PANELAPPLY%
 	virtual void panelApply() override final;
@@ -98,6 +112,11 @@ void %NAME%QtCb::panelCustom2()
 	// Implementation here
 }
 %/PANEL_ACUSTOM2_CPP%
+
+
+%%ADD_FOOTER_BUTTON_OK%	// %s = button name
+addFooterButton(Footer::Button_OK, p_impl->ui.%s);
+%/ADD_FOOTER_BUTTON_OK%
 
 
 %%ADD_FOOTER_BUTTON_APPLY%	// %s = button name

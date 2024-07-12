@@ -367,6 +367,13 @@
           <number>8</number>
          </property>
          <item>
+          <widget class="QCheckBox" name="cb_ok">
+           <property name="text">
+            <string>Ok</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QCheckBox" name="cb_apply">
            <property name="text">
             <string>Apply</string>

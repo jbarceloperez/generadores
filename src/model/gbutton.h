@@ -7,15 +7,16 @@
 
 
 enum ButtonAction {
-    APPLY, CANCEL, RESET, CUSTOM1, CUSTOM2, NULLBUTTONACTION
+    OK, APPLY, CANCEL, RESET, CUSTOM1, CUSTOM2, NULLBUTTONACTION
 };
 
 static std::map<ButtonAction, std::string> ButtonActionToString = {
-    {APPLY, "Apply"},
-    {CANCEL, "Cancel"},
-    {RESET, "Reset"},
-    {CUSTOM1, "Custom1"},
-    {CUSTOM2, "Custom2"},
+    {OK,        "Ok"},
+    {APPLY,     "Apply"},
+    {CANCEL,    "Cancel"},
+    {RESET,     "Reset"},
+    {CUSTOM1,   "Custom1"},
+    {CUSTOM2,   "Custom2"},
     {NULLBUTTONACTION, "null"}
 };
 

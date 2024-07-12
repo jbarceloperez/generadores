@@ -52,6 +52,7 @@ void %NAME%QtCb::init()
 //----------------------------------------------------------------
 void %NAME%QtCb::initialize()
 {   
+    %ADD_FOOTER_BUTTON_OK%
     %ADD_FOOTER_BUTTON_APPLY%
     %ADD_FOOTER_BUTTON_CANCEL%
     %ADD_FOOTER_BUTTON_RESET%
@@ -67,6 +68,7 @@ void %NAME%QtCb::signalsAndSlots()
 
 }
 
+%PANEL_OK_CPP%
 %PANEL_CHECK_CPP%
 %PANEL_APPLY_CPP%
 %PANEL_CANCEL_CPP%
