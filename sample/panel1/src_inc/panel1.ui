@@ -15,36 +15,48 @@
   <property name="windowTitle">
    <string>panel1</string>
   </property>
-  <layout class="QHBoxLayout" name="generatedLayout">
-   	<item>
+  <layout class="QGridLayout" name="layoutBase">
+  <item>
+    <layout class="QGridLayout" name="textLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Panel "panel1"
+generado automáticamente</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="1" column="0">
+    <layout class="QGridLayout" name="buttonsLayout">
+   	<item row="0" column="0">
 	    <widget class="QPushButton" name="pbApply">
 		    <property name="text">
 			    <string>pbApply</string>
 			</property>
 		</widget>
 	</item>
-	<item>
+	<item row="0" column="1">
 	    <widget class="QPushButton" name="pbCancel">
 		    <property name="text">
 			    <string>pbCancel</string>
 			</property>
 		</widget>
 	</item>
-	<item>
-	    <widget class="QPushButton" name="pbReset">
+	<item row="0" column="2">
+	    <widget class="QPushButton" name="pbOk">
 		    <property name="text">
-			    <string>pbReset</string>
-			</property>
-		</widget>
-	</item>
-	<item>
-	    <widget class="QPushButton" name="botonCustom">
-		    <property name="text">
-			    <string>botonCustom</string>
+			    <string>pbOk</string>
 			</property>
 		</widget>
 	</item>
 
+    </layout>
+   </item>
   </layout>
  </widget>
  <resources/>
