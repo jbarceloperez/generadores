@@ -19,7 +19,7 @@ enum TemplateMark
     ADD_FOOTER_BUTTON_RESET, ADD_FOOTER_BUTTON_CUSTOM1, ADD_FOOTER_BUTTON_CUSTOM2, 
     GEOMETRY_W,  GEOMETRY_H, BUTTONS_UI, LAYOUT_UI, SAES_HEADER, UIXMLBUTTON,
     UIXMLBUTTON_WITHPOS, PANEL_OK_H, PANEL_OK_CPP, ADD_FOOTER_BUTTON_OK, 
-    END_MARK
+    TESTS, TEST_FUNCTION, END_MARK
 };
 
 static std::map<FileToGenerate, std::string> FileTemplatePath = {
@@ -63,7 +63,9 @@ static std::map<TemplateMark, std::string> MarkStrings = {
     {LAYOUT_UI,                 "LAYOUT_UI"},
     {SAES_HEADER,               "SAES_HEADER"},
     {UIXMLBUTTON,               "UIXMLBUTTON"},
-    {UIXMLBUTTON_WITHPOS,       "UIXMLBUTTON_WITHPOS"}
+    {UIXMLBUTTON_WITHPOS,       "UIXMLBUTTON_WITHPOS"},
+    {TESTS,                     "TESTS"},
+    {TEST_FUNCTION,             "TEST_FUNCTION"}
 };
 
 class Generador {
@@ -80,6 +82,7 @@ std::string readTemplate(const std::string &filename);
 void replaceMarks(std::string &code, const std::map<TemplateMark, std::string> &properties);
 
 std::map<TemplateMark, std::string> fillPropertiesMap(GPanel p);
+void fillTests(GPanel &p, std::map<TemplateMark, std::string> &code_chunks, std::map<TemplateMark, std::string> &props);
 void fillButtonMarks(GPanel &p, std::map<TemplateMark, std::string> &props, std::map<TemplateMark, std::string> &code_chunks);
 void setButtonData(std::map<TemplateMark, std::string> &props, std::map<TemplateMark, std::string> &code_chunks, GPanel &p, GButton &b, std::string &str_buttons, TemplateMark mark1, TemplateMark mark2, TemplateMark mark3);
 

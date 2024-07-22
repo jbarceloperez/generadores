@@ -167,3 +167,21 @@ addFooterButton(Footer::Button_Custom_2, p_impl->ui.%s);
 	</item>
 %/UIXMLBUTTON_WITHPOS%
 
+
+// %s = panelName, %s = button name, %s = button name
+%%TEST_FUNCTION%
+
+TEST_F(%sTest, Test_%s) 
+{
+    QPushButton *button = obj->findChild<QPushButton *>("%s");
+    ASSERT_NE(button, nullptr);
+
+    // Usar QSignalSpy para monitorear la señal clicked del botón
+    QSignalSpy spy(button, &QPushButton::clicked);
+    QTest::mouseClick(button, Qt::LeftButton, Qt::NoModifier);
+
+    ASSERT_EQ(spy.count(), 1);
+}
+
+%/TEST_FUNCTION%
+

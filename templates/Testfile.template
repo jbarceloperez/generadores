@@ -1,42 +1,44 @@
 #include "gtest/gtest.h"
 
+#include <QApplication>
+#include <QObject>
+#include <QPushButton>
+#include <QTest>
+#include <QSignalSpy>
+
 #include "../src_inc/%NAME%.h"
 
 // Definir la clase test fixture.
 class %NAME%Test : public ::testing::Test 
 {
 protected:
-    %NAME%Test()
-    {
-        // Constructor
-        obj = new %NAME%();
-    }
+    // Declarar objetos o variables para los tests
+    QApplication *app;
+    %NAME% *obj;
 
     void SetUp() override 
     {
-        // Inicializar
+        int argc = 0;
+        char *argv[] = {(char *)"test"};
+        app = new QApplication(argc, argv);
+
+        obj = new %NAME%();
+        obj->show();
     }
 
     void TearDown() override 
     {
         // Limpiar
+        obj->close();
         delete obj;
+
+        delete app;
     }
 
-    // Declarar objetos o variables para los tests
-    %NAME%* obj;
 };
 
 // Definir los tests.
-TEST_F(%NAME%Test, TestFunction1) 
-{
-    // Call the function you want to test.
-    // ...
-
-    // Assert that the function behaves as expected.
-    // ...  
-    ASSERT_EQ(1, 1);  
-}
+%TESTS%
 
 int main(int argc, char **argv) 
 {

@@ -147,9 +147,22 @@ map<TemplateMark, string> Generador::fillPropertiesMap(GPanel p)
         sprintf(buff, aux.data(), p.getName().data());
         props[PANEL_CHECK_CPP] = buff;
     }
+
+    fillTests(p, code_chunks, props);
+
     return props;
 }
 
+void Generador::fillTests(GPanel &p, std::map<TemplateMark, std::string> &code_chunks, std::map<TemplateMark, std::string> &props)
+{
+    for (GButton b : p.getButtons())
+    {
+        string aux = code_chunks[TEST_FUNCTION];
+        char buff[400];
+        sprintf(buff, aux.data(), p.getName().data(), b.getName().data(), b.getName().data());
+        props[TESTS] += buff;
+    }
+}
 
 void Generador::fillButtonMarks(GPanel &p, map<TemplateMark, string> &props, map<TemplateMark, string> &code_chunks)
 {

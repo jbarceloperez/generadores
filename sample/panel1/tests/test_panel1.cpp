@@ -1,42 +1,83 @@
 #include "gtest/gtest.h"
 
+#include <QApplication>
+#include <QObject>
+#include <QPushButton>
+#include <QTest>
+#include <QSignalSpy>
+
 #include "../src_inc/panel1.h"
 
 // Definir la clase test fixture.
 class panel1Test : public ::testing::Test 
 {
 protected:
-    panel1Test()
-    {
-        // Constructor
-        obj = new panel1();
-    }
+    // Declarar objetos o variables para los tests
+    QApplication *app;
+    panel1 *obj;
 
     void SetUp() override 
     {
-        // Inicializar
+        int argc = 0;
+        char *argv[] = {(char *)"test"};
+        app = new QApplication(argc, argv);
+
+        obj = new panel1();
+        obj->show();
     }
 
     void TearDown() override 
     {
         // Limpiar
+        obj->close();
         delete obj;
+
+        delete app;
     }
 
-    // Declarar objetos o variables para los tests
-    panel1* obj;
 };
 
 // Definir los tests.
-TEST_F(panel1Test, TestFunction1) 
-{
-    // Call the function you want to test.
-    // ...
 
-    // Assert that the function behaves as expected.
-    // ...  
-    ASSERT_EQ(1, 1);  
+TEST_F(panel1Test, Test_pbApply) 
+{
+    QPushButton *button = obj->findChild<QPushButton *>("pbApply");
+    ASSERT_NE(button, nullptr);
+
+    // Usar QSignalSpy para monitorear la señal clicked del botón
+    QSignalSpy spy(button, &QPushButton::clicked);
+    QTest::mouseClick(button, Qt::LeftButton, Qt::NoModifier);
+
+    ASSERT_EQ(spy.count(), 1);
 }
+
+
+TEST_F(panel1Test, Test_pbCancel) 
+{
+    QPushButton *button = obj->findChild<QPushButton *>("pbCancel");
+    ASSERT_NE(button, nullptr);
+
+    // Usar QSignalSpy para monitorear la señal clicked del botón
+    QSignalSpy spy(button, &QPushButton::clicked);
+    QTest::mouseClick(button, Qt::LeftButton, Qt::NoModifier);
+
+    ASSERT_EQ(spy.count(), 1);
+}
+
+
+TEST_F(panel1Test, Test_pbOk) 
+{
+    QPushButton *button = obj->findChild<QPushButton *>("pbOk");
+    ASSERT_NE(button, nullptr);
+
+    // Usar QSignalSpy para monitorear la señal clicked del botón
+    QSignalSpy spy(button, &QPushButton::clicked);
+    QTest::mouseClick(button, Qt::LeftButton, Qt::NoModifier);
+
+    ASSERT_EQ(spy.count(), 1);
+}
+
+
 
 int main(int argc, char **argv) 
 {

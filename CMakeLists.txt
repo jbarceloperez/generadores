@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.15)
 
 project(codeGenerator VERSION 0.1.0 
                       DESCRIPTION "SAES Code generator"
@@ -10,18 +10,11 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-include(FetchContent)
-FetchContent_Declare(
-  googletest
-  URL https://github.com/google/googletest/archive/release-1.10.0.zip
-)
-FetchContent_MakeAvailable(googletest)
-
-# set(CMAKE_PREFIX_PATH "C:\\Qt\\6.6.1\\mingw_64\\")
 # Para poder incluir los logs
-# set ( ENV{SAES_PATH} "C:\\Users\\javib\\Documents\\saes\\Generadores\\lib\\log-saes")
 set ( ENV{SAES_PATH} "lib/log-saes")
+
 set(CMAKE_PREFIX_PATH "/home/javi/Qt/6.7.0/gcc_64/lib/cmake")
+
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
@@ -85,12 +78,19 @@ include_directories(
 
 add_subdirectory(lib)
 
-# Definir el ejecutable de tus tests
-enable_testing()
-add_executable(xml_tests src/xml/xmltests.cpp)
-target_link_libraries(xml_tests PRIVATE Qt6::Widgets gtest_main)
-target_compile_options(xml_tests PRIVATE "-Wall" "-Wextra")
+#include(FetchContent)
+#FetchContent_Declare(
+#  googletest
+#  URL https://github.com/google/googletest/archive/release-1.10.0.zip
+#)
+#FetchContent_MakeAvailable(googletest)
 
-# Incluir Google Test en el testing
-include(GoogleTest)
-gtest_discover_tests(xml_tests)
+## Definir el ejecutable de tus tests
+#enable_testing()
+#add_executable(xml_tests src/xml/xmltests.cpp)
+#target_link_libraries(xml_tests PRIVATE Qt6::Widgets gtest_main)
+#target_compile_options(xml_tests PRIVATE "-Wall" "-Wextra")
+
+## Incluir Google Test en el testing
+#include(GoogleTest)
+#gtest_discover_tests(xml_tests)

@@ -14,11 +14,10 @@ target_sources(proj_name PRIVATE
 
 target_include_directories(proj_name PRIVATE src_inc)
 
-find_package(GTest REQUIRED)
-
 add_executable(test_panel1 tests/test_panel1.cpp)
 
-target_link_libraries(test_panel1 GTest::GTest GTest::Main core)
+target_link_libraries(test_panel1 Qt6::Core Qt6::Gui Qt6::Widgets gtest gtest_main)
+target_include_directories(test_panel1 PRIVATE ${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
 # Agregar los tests
-add_test(NAME test_main COMMAND test_main)
+add_test(NAME panel1test COMMAND panel1test)
