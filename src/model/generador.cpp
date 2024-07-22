@@ -368,9 +368,17 @@ void Generador::processDocLine(string &line, bool &inChunk, string &currentChunk
 string Generador::readTemplate(const string &filename)
 {
     ifstream file(filename);
-    string content((istreambuf_iterator<char>(file)), istreambuf_iterator<char>());
-    file.close();
-    return content;
+    if (file.is_open()) 
+    {
+        string content((istreambuf_iterator<char>(file)), istreambuf_iterator<char>());
+        file.close();
+        return content;
+    }
+    else
+    {
+        log->mainlog(CRITICAL, "Unable to open file");
+        return "";
+    }
 }
 
 /**
