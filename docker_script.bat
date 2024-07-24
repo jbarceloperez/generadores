@@ -13,11 +13,11 @@ if "%1"=="build" (
 ) else if "%1"=="run" (
     echo Ejecutando el contenedor Docker...
     set DISPLAY=$DISPLAY
-    docker run -it --name qt_container --rm -e DISPLAY=host.docker.internal:0.0 -v /tmp/.X11-unix:/tmp/.X11-unix -v %cd%\Generadores:/workspace/Generadores qtcreator6-6
+    docker run -it --name qt_container --rm -e DISPLAY=host.docker.internal:0.0 -v /tmp/.X11-unix:/tmp/.X11-unix -v %cd%\Generadores:/workspace/Generadores -v %cd%\out:/workspace/out qtcreator6-6
 ) else if "%1"=="qtcreator" (
     echo Iniciando el contenedor y ejecutando Qt Creator...
     set DISPLAY=%DISPLAY%
-    docker run -it --name qt_container --rm -e DISPLAY=host.docker.internal:0.0 -v /tmp/.X11-unix:/tmp/.X11-unix -v %cd%\Generadores:/workspace/Generadores qtcreator6-6 qtcreator
+    docker run -it --name qt_container --rm -e DISPLAY=host.docker.internal:0.0 -v /tmp/.X11-unix:/tmp/.X11-unix -v %cd%\Generadores:/workspace/Generadores -v %cd%\out:/workspace/out qtcreator6-6 qtcreator
 ) else (
     echo Uso: %0 [build | run | qtcreator]
     echo   build      Construir la imagen Docker
