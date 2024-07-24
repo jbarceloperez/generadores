@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<panels>
+    <panel name="panel1" type="config">
+        <header>
+            <companyName>SAES</companyName>
+            <fileName>panel1</fileName>
+        </header>
+        <buttons>
+            <button>
+                <name>pbApply</name>
+                <action>Apply</action>
+            </button>
+            <button>
+                <name>pbOk</name>
+                <action>Ok</action>
+            </button>
+        </buttons>
+    </panel>
+</panels>

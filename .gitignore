@@ -1,5 +1,2 @@
-.vscode
-build/
-ScenarioWavRecordPanel.ui
-*.autosave
-out/
+Generadores/build/
+Generadores/out/
