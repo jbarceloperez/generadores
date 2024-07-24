@@ -4,6 +4,10 @@
 #include "gpanel.h"
 #include "../log/logger.h"
 #include <map>
+#include <string>
+
+#define TEMPLATES_PATH "../templates/"
+#define FULLPATH(x) (std::string(TEMPLATES_PATH) + x)
 
 enum FileToGenerate 
 {
@@ -23,15 +27,15 @@ enum TemplateMark
 };
 
 static std::map<FileToGenerate, std::string> FileTemplatePath = {
-    {HEADER,        "../templates/Header.template"},
-    {GWHEADER,      "../templates/GwHeader.template"},
-    {GW,            "../templates/Gw.template"},
-    {QTCBHEADER,    "../templates/QtCbHeader.template"},
-    {QTCB,          "../templates/QtCb.template"},
-    {UI,            "../templates/Ui.template"},
-    {CMAKELISTS,    "../templates/CMakeLists.template"},
-    {DOXYFILE,      "../templates/Doxyfile.template"},
-    {TESTFILE,      "../templates/Testfile.template"}
+    {HEADER,        FULLPATH("Header.template")},
+    {GWHEADER,      FULLPATH("GwHeader.template")},
+    {GW,            FULLPATH("Gw.template")},
+    {QTCBHEADER,    FULLPATH("QtCbHeader.template")},
+    {QTCB,          FULLPATH("QtCb.template")},
+    {UI,            FULLPATH("Ui.template")},
+    {CMAKELISTS,    FULLPATH("CMakeLists.template")},
+    {DOXYFILE,      FULLPATH("Doxyfile.template")},
+    {TESTFILE,      FULLPATH("Testfile.template")}
 };
 
 static std::map<TemplateMark, std::string> MarkStrings = {

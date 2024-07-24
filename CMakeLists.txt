@@ -13,6 +13,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Para poder incluir los logs
 set ( ENV{SAES_PATH} "lib/log-saes")
 
+# Especificar la ubicación de CMake
 set(CMAKE_PREFIX_PATH "/home/javi/Qt/6.7.0/gcc_64/lib/cmake")
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
@@ -78,19 +79,3 @@ include_directories(
 
 add_subdirectory(lib)
 
-#include(FetchContent)
-#FetchContent_Declare(
-#  googletest
-#  URL https://github.com/google/googletest/archive/release-1.10.0.zip
-#)
-#FetchContent_MakeAvailable(googletest)
-
-## Definir el ejecutable de tus tests
-#enable_testing()
-#add_executable(xml_tests src/xml/xmltests.cpp)
-#target_link_libraries(xml_tests PRIVATE Qt6::Widgets gtest_main)
-#target_compile_options(xml_tests PRIVATE "-Wall" "-Wextra")
-
-## Incluir Google Test en el testing
-#include(GoogleTest)
-#gtest_discover_tests(xml_tests)

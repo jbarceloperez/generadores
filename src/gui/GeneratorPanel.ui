@@ -180,15 +180,9 @@
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,1,0">
          <item>
-          <widget class="QPushButton" name="pbFile">
-           <property name="maximumSize">
-            <size>
-             <width>74</width>
-             <height>16777215</height>
-            </size>
-           </property>
+          <widget class="QLabel" name="lblUipath">
            <property name="text">
-            <string>Select file</string>
+            <string>UI Path:</string>
            </property>
           </widget>
          </item>

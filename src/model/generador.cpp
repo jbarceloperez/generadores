@@ -23,7 +23,7 @@ Generador::Generador()
 void Generador::generatePanelFiles(GPanel p, string outDirectory)
 {
     map<TemplateMark, string> properties = fillPropertiesMap(p);
-    map<string, string> documentation = readDocumentation("../templates/Documentation.txt");
+    map<string, string> documentation = readDocumentation(FULLPATH("Documentation.txt"));
 
     string dirPath = outDirectory + "/" + p.getName();  // ruta absoluta al directorio
     string aux_root = dirPath + "/src_inc/" + p.getName(); // prefijo de cada fichero en la carpeta de sources
@@ -124,7 +124,7 @@ map<TemplateMark, string> Generador::fillPropertiesMap(GPanel p)
     map<TemplateMark, string> props;
     for (int m = NAME; m < END_MARK; m++)   // inicializar propiedades a 0
         props[static_cast<TemplateMark>(m)] = "";
-    map<TemplateMark, string> code_chunks = readCodeChunks("../templates/Functions.txt");
+    map<TemplateMark, string> code_chunks = readCodeChunks(FULLPATH("Functions.txt"));
     props[NAME] = p.getName();
     string str_name = p.getName();
     transform(str_name.begin(), str_name.end(), str_name.begin(), ::toupper);

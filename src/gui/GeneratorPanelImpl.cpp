@@ -39,7 +39,6 @@ GeneratorPanelImpl::GeneratorPanelImpl()
     connect(p_impl->ui.pbGenerate, &QPushButton::clicked, this, &GeneratorPanelImpl::handleButtonClicked);
     connect(p_impl->ui.pbAssociate, &QPushButton::clicked, this, &GeneratorPanelImpl::handleButtonClicked);
     connect(p_impl->ui.pbDeassociate, &QPushButton::clicked, this, &GeneratorPanelImpl::handleButtonClicked);
-    connect(p_impl->ui.pbFile, &QPushButton::clicked, this, &GeneratorPanelImpl::handleButtonClicked);
     connect(p_impl->ui.pbSaveXml, &QPushButton::clicked, this, &GeneratorPanelImpl::handleButtonClicked);
     connect(p_impl->ui.pbLoadXml, &QPushButton::clicked, this, &GeneratorPanelImpl::handleButtonClicked);
     connect(p_impl->ui.pb_addButton, &QPushButton::clicked, this, &GeneratorPanelImpl::handleButtonClicked);
@@ -139,10 +138,6 @@ void GeneratorPanelImpl::handleButtonClicked()
     {
         onPbDeassociatePressed();
     }
-    else if(sender() == p_impl->ui.pbFile)
-    {
-        onPbFilePressed();
-    }
     else if(sender() == p_impl->ui.pbSaveXml)
     {
         onPbSaveXmlPressed();
@@ -223,20 +218,6 @@ void GeneratorPanelImpl::onPbAddButtonPressed()
         controller->onPbAddButtonPressed("pbReset", "Reset");
     if (p_impl->ui.cb_custom->isChecked())
         controller->onPbAddButtonPressed(p_impl->ui.lneCustom->text().toStdString(), "Custom1");
-    updateHmi();
-}
-
-void GeneratorPanelImpl::onPbFilePressed()
-{
-    QString file = QFileDialog::getOpenFileName(this, "Select a ui file", "../");
-    if (file.isEmpty())
-    {
-        log->hmilog(TRACE, "onPbFilePressed> No file selected.");
-        return;
-    }
-    // update ui
-    p_impl->ui.lnePath->setText(file);
-    log->hmilog(INFO,"Selected file: %s", file.toStdString().data());
     updateHmi();
 }
 
@@ -344,7 +325,17 @@ void GeneratorPanelImpl::onPbWithoutUIPressed()
 void GeneratorPanelImpl::onPbWithUIPressed()
 {
     log->hmilog(TRACE, "pbWithUi");
-    QString file = p_impl->ui.lnePath->text();
+    QString file = QFileDialog::getOpenFileName(this, "Select a ui file", "../");
+    if (file.isEmpty())
+    {
+        log->hmilog(TRACE, "onPbFilePressed> No file selected.");
+        return;
+    }
+    // update ui
+    p_impl->ui.lnePath->setText(file);
+    log->hmilog(INFO,"Selected file: %s", file.toStdString().data());
+    updateHmi();
+    // QString file = p_impl->ui.lnePath->text();
     if (file.isEmpty())
     {
         QMessageBox::critical(this, "Error", "A .ui file must be selected.");

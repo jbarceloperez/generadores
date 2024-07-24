@@ -3,7 +3,7 @@
 #include "../model/generador.h"
 #include <bits/getopt_core.h>
 
-#define TRACES_CONFIG_PATH "/home/javi/Documentos/Generadores/traces.cfg"
+#define TRACES_CONFIG_PATH "../traces.cfg"
 
 
 Controller::~Controller() {}
