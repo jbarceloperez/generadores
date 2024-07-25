@@ -239,4 +239,6 @@
 
 %%DOC_QTCBCPP_PDATA_UI%
 /**
-        
+         * UI del panel
+         */
+%/DOC_QTCBCPP_PDATA_UI%
