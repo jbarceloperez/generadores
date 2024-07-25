@@ -31,7 +31,7 @@
 %%DOC_GW_CLASS%
 /**
  * @class %NAME%Gw
- * @brief Clase que hereda de %NAME%QtCb, 
+ * @brief Clase que hereda de %NAME%QtCb, implementa métodos para exportar mensajes y acciones
  */
 %/DOC_GW_CLASS%
 

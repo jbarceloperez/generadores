@@ -57,6 +57,7 @@ public:
     virtual void onHeaderSaveToAllPanelsPressed(SaesHeader* header);
     virtual bool changeCurrentPanelHeigth(int h);
     virtual bool changeCurrentPanelWidth(int w);
+    virtual void changeTestGeneration(bool value);
     virtual std::string panelInfo();
 };
 

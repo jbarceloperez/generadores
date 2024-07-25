@@ -23,6 +23,7 @@ private slots:
     void handleLayoutCombobox();
     void handleSpinBoxWidth();
     void handleSpinBoxHeight();
+    void handleTestsCheckbox();
 
 private:
     class PrivateData;

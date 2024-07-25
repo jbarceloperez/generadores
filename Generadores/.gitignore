@@ -1,0 +1,6 @@
+.vscode
+build/
+ScenarioWavRecordPanel.ui
+*.autosave
+out/
+CMakeLists.txt.user

@@ -51,13 +51,17 @@ void Generador::generatePanelFiles(GPanel p, string outDirectory)
     log->mainlog(INFO, "Creado nuevo directorio -> " + srcDirPath);
 
     // Carpeta con los tests
-    fs::create_directory(testsDirPath);
-    log->mainlog(INFO, "Creado nuevo directorio -> " + testsDirPath);
+    if (p.getTest())
+    {
+        fs::create_directory(testsDirPath);
+        log->mainlog(INFO, "Creado nuevo directorio -> " + testsDirPath);
+        writeFile(testsDirPath + "/test_" + p.getName() + ".cpp", documentation, properties, TESTFILE);
+        writeFile(testsDirPath + "/test_main.cpp", documentation, properties, TESTMAIN);
+    }
     
     // Genera todos los ficheros
     writeFile(dirPath + "/CMakeLists.txt", documentation, properties, CMAKELISTS);
     writeFile(dirPath + "/Doxyfile", documentation, properties, DOXYFILE);
-    writeFile(testsDirPath + "/test_" + p.getName() + ".cpp", documentation, properties, TESTFILE);
     writeFile(aux_root + ".h", documentation, properties, HEADER);
     writeFile(aux_root + "Gw.h", documentation, properties, GWHEADER);
     writeFile(aux_root + "Gw.cpp", documentation, properties, GW);
@@ -148,7 +152,16 @@ map<TemplateMark, string> Generador::fillPropertiesMap(GPanel p)
         props[PANEL_CHECK_CPP] = buff;
     }
 
-    fillTests(p, code_chunks, props);
+    if (p.getTest())
+    {
+        fillTests(p, code_chunks, props);
+        string aux;
+        char buff[1200];
+        aux = code_chunks[TEST_CMAKE];
+        const char * name = p.getName().data();
+        sprintf(buff, aux.data(), name, name, name, name, name, name, name, name, name, name, name, name);
+        props[TEST_CMAKE] = buff;
+    }
 
     return props;
 }

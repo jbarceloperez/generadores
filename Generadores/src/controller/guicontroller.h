@@ -25,6 +25,7 @@ public:
     virtual void onHeaderSaveToAllPanelsPressed(SaesHeader* header) override final;
     virtual bool changeCurrentPanelHeigth(int h) override final;
     virtual bool changeCurrentPanelWidth(int w) override final;
+    virtual void changeTestGeneration(bool value) override final;
     virtual std::string panelInfo() override final;
 };
 
