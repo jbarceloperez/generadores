@@ -66,6 +66,12 @@ SaesHeader GPanel::getHeader() const
     return header;
 }
 
+bool GPanel::getTest() const
+{
+    return test;
+}
+
+
 // Setters
 void GPanel::setName(std::string _name)
 {
@@ -121,6 +127,11 @@ void GPanel::setLayout(std::string newLayout)
 void GPanel::setLayout(LayoutType newLayout)
 {
     layout = newLayout;
+}
+
+void GPanel::setTest(bool newValue)
+{
+    test = newValue;
 }
 
 // Funcionalidad con los botones

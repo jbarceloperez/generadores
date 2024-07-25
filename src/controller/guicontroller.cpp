@@ -225,6 +225,14 @@ bool GuiController::changeCurrentPanelWidth(int w)
 }
 
 /**
+ * Función que indica al objeto panel si debe generar tests.
+*/
+void GuiController::changeTestGeneration(bool value)
+{
+    currentPanel->setTest(value);
+}
+
+/**
  * Función que devuelve un string con la información del panel actual.
 */
 string GuiController::panelInfo()
