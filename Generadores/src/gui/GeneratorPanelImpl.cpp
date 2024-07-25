@@ -55,7 +55,7 @@ GeneratorPanelImpl::GeneratorPanelImpl()
     connect(p_impl->ui.cb_tests, SIGNAL(stateChanged(int)), this, SLOT(handleTestsCheckbox()));
 
     // añadir acciones de botones a la lista
-    for (int i = APPLY; i < NULLBUTTONACTION; i++)
+    for (int i = APPLY; i < OK; i++)
     {
         p_impl->ui.listWidget_act->addItem(ButtonActionToString[static_cast<ButtonAction>(i)].data());
     }
