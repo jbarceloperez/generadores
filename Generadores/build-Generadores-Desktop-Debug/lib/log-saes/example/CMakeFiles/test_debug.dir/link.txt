@@ -1,0 +1,1 @@
+/usr/bin/g++ -DQT_QML_DEBUG -g -rdynamic CMakeFiles/test_debug.dir/test_debug_autogen/mocs_compilation.cpp.o CMakeFiles/test_debug.dir/test_log.cpp.o -o test_debug  -Wl,-rpath,/workspace/Generadores/build-Generadores-Desktop-Debug/lib/log-saes/src ../src/liblogs.so -lpthread 

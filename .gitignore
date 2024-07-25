@@ -1,5 +1,5 @@
-Generadores/build/
 Generadores/out/
 out/
 .vscode/
 Generadores/CMakeLists.txt.user.*
+CMakeLists.txt.user

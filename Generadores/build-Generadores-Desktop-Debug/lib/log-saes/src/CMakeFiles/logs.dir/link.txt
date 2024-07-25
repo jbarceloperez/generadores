@@ -1,0 +1,1 @@
+/usr/bin/g++ -fPIC -DQT_QML_DEBUG -g -shared -Wl,-soname,liblogs.so -o liblogs.so CMakeFiles/logs.dir/logs_autogen/mocs_compilation.cpp.o CMakeFiles/logs.dir/logs.cpp.o  -Wl,-rpath,:::::::::::::::::::::: 
