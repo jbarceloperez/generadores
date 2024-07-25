@@ -1,1 +1,242 @@
-doc_es
+// ================== HEADER FILE ==================
+// =================================================
+
+%%DOC_HEADER_FILE%
+/**
+ * @file %NAME%.h
+ * @brief Define el tipo %NAME%Gw como un tipo de dato %NAME%.
+ * @details Fichero generado por generador de código de paneles.
+ */
+%/DOC_HEADER_FILE%
+
+
+%%DOC_HEADER_TYPEDEF%
+/**
+ * @brief Define el tipo %NAME%Gw como %NAME%.
+ */
+%/DOC_HEADER_TYPEDEF%
+
+
+// =================== Gw.h FILE ===================
+// =================================================
+
+%%DOC_GW_FILE%
+/**
+ * @file %NAME%Gw.h
+ * @brief Header para la clase %NAME%Gw.
+ * @details Fichero generado por generador de código de paneles.
+ */
+%/DOC_GW_FILE%
+
+%%DOC_GW_CLASS%
+/**
+ * @class %NAME%Gw
+ * @brief Clase que hereda de %NAME%QtCb, implementa métodos para exportar mensajes y acciones
+ */
+%/DOC_GW_CLASS%
+
+%%DOC_GW_CONSTRUCTOR%
+/**
+     * @brief Constructor de la clase %NAME%Gw.
+     * @param parent Puntero al objeto BaseClass padre (nullptr por defecto).
+     */
+%/DOC_GW_CONSTRUCTOR%
+
+
+%%DOC_GW_DESTRUCTOR%
+/**
+     * @brief Destructor de la clase %NAME%Gw.
+     */
+%/DOC_GW_DESTRUCTOR%
+
+
+%%DOC_GW_EXPORTGETPARAMETERLIMIT%
+/**
+     * @brief Info del método exportGetParameterLimit()
+     * @return devuelve un puntero a un objeto de tipo ParameterLimitData
+    */
+%/DOC_GW_EXPORTGETPARAMETERLIMIT%
+
+
+%%DOC_GW_EXPORTACTION%
+/**
+     * @brief Info del método exportAction()
+    */
+%/DOC_GW_EXPORTACTION%
+
+
+%%DOC_GW_EXPORTMESSAGE%
+/**
+     * @brief Info del método exportMessage()
+    */
+%/DOC_GW_EXPORTMESSAGE%
+
+
+// ================== Gw.cpp FILE ==================
+// =================================================
+
+%%DOC_GWCPP_FILE%
+/**
+ * @file %NAME%Gw.cpp
+ * @brief Implementación de %NAME%Gw.
+ * @details Fichero generado por generador de código de paneles.
+ */
+%/DOC_GWCPP_FILE%
+
+// ================== QtCb.h FILE ==================
+// =================================================
+
+%%DOC_QTCB_FILE%
+/**
+ * @file %NAME%QtCb.h
+ * @brief Header para la clase %NAME%QtCb.
+ * @details Fichero generado por generador de código de paneles.
+ */
+%/DOC_QTCB_FILE%
+
+
+%%DOC_QTCB_CLASS%
+/**
+ * @class %NAME%QtCb
+ * @brief Clase que hereda de BaseClass, representa un panel con funcionalidad específica.
+ */
+%/DOC_QTCB_CLASS%
+
+
+%%DOC_QTCB_CONSTRUCTOR%
+/**
+     * @brief Constructor de la clase %NAME%QtCb.
+     * @param parent Puntero al objeto BaseClass padre (nullptr por defecto).
+     */
+%/DOC_QTCB_CONSTRUCTOR%
+
+
+%%DOC_QTCB_DESTRUCTOR%
+/**
+     * @brief Destructor de la clase %NAME%QtCb.
+     */
+%/DOC_QTCB_DESTRUCTOR%
+
+
+%%DOC_QTCB_INIT%
+/**
+     * @brief Método para inicializar el panel.
+    */
+%/DOC_QTCB_INIT%
+
+
+%%DOC_QTCB_EXPORTGETPARAMETERLIMIT%
+/**
+     * @brief Método virtual puro a implementar en Gw.
+    */
+%/DOC_QTCB_EXPORTGETPARAMETERLIMIT%
+
+
+%%DOC_QTCB_INITIALIZE%
+/**
+     * @brief Método para inicializar el panel. Añade la funcionalidad de
+     * los botones y el layout. 
+    */
+%/DOC_QTCB_INITIALIZE%
+
+
+%%DOC_QTCB_SIGNALSANDSLOTS%
+/**
+     * @brief Método para conectar los señales y funciones de slots.
+    */
+%/DOC_QTCB_SIGNALSANDSLOTS%
+
+
+%%DOC_QTCB_PRIVATEDATACLASS%
+/**
+     * @class PrivateData
+     * @brief Clase privada que contiene los datos privados del panel.
+    */
+%/DOC_QTCB_PRIVATEDATACLASS%
+
+
+%%DOC_QTCB_PIMPL%
+/**
+     * Puntero al objeto PrivateData privado.
+    */
+%/DOC_QTCB_PIMPL%
+
+
+%%DOC_QTCB_PANELOK%
+/**
+	 * @brief Método con la funcionalidad del botón "Ok".
+	 */
+%/DOC_QTCB_PANELOK%
+
+
+%%DOC_QTCB_PANELAPPLY%
+/**
+	 * @brief Método con la funcionalidad del botón "Apply".
+	 */
+%/DOC_QTCB_PANELAPPLY%
+
+
+%%DOC_QTCB_PANELRESET%
+/**
+	 * @brief Método con la funcionalidad del botón "Reset".
+	 */
+%/DOC_QTCB_PANELRESET%
+
+
+%%DOC_QTCB_PANELCANCEL%
+/**
+	 * @brief Método con la funcionalidad del botón "Cancel".
+	 */
+%/DOC_QTCB_PANELCANCEL%
+
+
+%%DOC_QTCB_PANELCHECK%
+/**
+	 * @brief Método con la funcionalidad de checkear el panel.
+	 */
+%/DOC_QTCB_PANELCHECK%
+
+
+%%DOC_QTCB_PANELCUSTOM1%
+/**
+	 * @brief Método con la funcionalidad del botón "Custom1".
+	 */
+%/DOC_QTCB_PANELCUSTOM1%
+
+
+%%DOC_QTCB_PANELCUSTOM2%
+/**
+	 * @brief Método con la funcionalidad del botón "Custom2".
+	 */
+%/DOC_QTCB_PANELCUSTOM2%
+
+// ================= QtCb.cpp FILE =================
+// =================================================
+
+%%DOC_QTCBCPP_FILE%
+/**
+ * @file %NAME%QtCb.cpp
+ * @brief Implementación de %NAME%QtCb.
+ * @details Fichero generado por generador de código de paneles.
+ */
+%/DOC_QTCBCPP_FILE%
+
+
+%%DOC_QTCBCPP_PDATA_CONSTRUCTOR%
+/**
+         * @brief Constructor de la clase PrivateData.
+         * @param parent Puntero al objeto BaseClass padre (nullptr por defecto).
+         */
+%/DOC_QTCBCPP_PDATA_CONSTRUCTOR%
+
+
+%%DOC_QTCBCPP_PDATA_DESTRUCTOR%
+/**
+         * @brief Destructor de la clase PrivateData.
+         */
+%/DOC_QTCBCPP_PDATA_DESTRUCTOR%
+
+
+%%DOC_QTCBCPP_PDATA_UI%
+/**
+        
