@@ -1,5 +1,10 @@
 // Company Name...............................SAES
+// Project....................................HMI Code Generator
+// Repository.................................https://elecsub@dev.azure.com/elecsub/Becarios%202024/_git/Generadores
+// Author.....................................Javier Barceló
+// Description................................Panel de muestra
 // File Name..................................panel1
+// Date.......................................25/07/2024
 
 
 /**

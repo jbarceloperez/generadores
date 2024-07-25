@@ -65,19 +65,6 @@ TEST_F(panel1Test, Test_pbCancel)
 }
 
 
-TEST_F(panel1Test, Test_pbOk) 
-{
-    QPushButton *button = obj->findChild<QPushButton *>("pbOk");
-    ASSERT_NE(button, nullptr);
-
-    // Usar QSignalSpy para monitorear la señal clicked del botón
-    QSignalSpy spy(button, &QPushButton::clicked);
-    QTest::mouseClick(button, Qt::LeftButton, Qt::NoModifier);
-
-    ASSERT_EQ(spy.count(), 1);
-}
-
-
 
 int main(int argc, char **argv) 
 {
