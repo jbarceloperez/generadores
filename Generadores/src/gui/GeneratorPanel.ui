@@ -480,7 +480,7 @@
                </size>
               </property>
               <property name="title">
-               <string>Controles</string>
+               <string>Botones</string>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_3">
                <item>
@@ -525,7 +525,7 @@
                </size>
               </property>
               <property name="title">
-               <string>Enumerado</string>
+               <string>Acciones</string>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_4">
                <item>
