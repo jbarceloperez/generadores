@@ -49,6 +49,7 @@ private:
     std::string uipath;             // Ruta al archivo ui, si lo tuvise
     std::vector<GButton> buttons;   // Collección de botones
     SaesHeader header;              // Cabecera SAES del panel
+    bool test = true;               // Indica si debe generar tests
     Logger* log;                    // Logger
 
 public:
@@ -67,6 +68,7 @@ public:
     LayoutType getLayout() const;
     std::vector<GButton> getButtons() const;
     SaesHeader getHeader() const;
+    bool getTest() const;
 
     // Setters
     void setName(std::string _name);
@@ -77,6 +79,7 @@ public:
     void setType(std::string newTypeValue);
     void setLayout(std::string newLayout);
     void setLayout(LayoutType newLayout);
+    void setTest(bool newValue);
 
     // Funcionalidad con los botones
     void addButton(std::string name);

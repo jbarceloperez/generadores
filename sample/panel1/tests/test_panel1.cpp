@@ -63,24 +63,3 @@ TEST_F(panel1Test, Test_pbCancel)
 
     ASSERT_EQ(spy.count(), 1);
 }
-
-
-TEST_F(panel1Test, Test_pbOk) 
-{
-    QPushButton *button = obj->findChild<QPushButton *>("pbOk");
-    ASSERT_NE(button, nullptr);
-
-    // Usar QSignalSpy para monitorear la señal clicked del botón
-    QSignalSpy spy(button, &QPushButton::clicked);
-    QTest::mouseClick(button, Qt::LeftButton, Qt::NoModifier);
-
-    ASSERT_EQ(spy.count(), 1);
-}
-
-
-
-int main(int argc, char **argv) 
-{
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
-}

@@ -1,5 +1,10 @@
 // Company Name...............................SAES
+// Project....................................HMI Code Generator
+// Repository.................................https://elecsub@dev.azure.com/elecsub/Becarios%202024/_git/Generadores
+// Author.....................................Javier Barceló
+// Description................................Panel de muestra
 // File Name..................................panel1
+// Date.......................................25/07/2024
 
 
 /**
@@ -65,8 +70,7 @@ void panel1QtCb::init()
 //----------------------------------------------------------------
 void panel1QtCb::initialize()
 {   
-    addFooterButton(Footer::Button_OK, p_impl->ui.pbOk);
-
+    
     addFooterButton(Footer::Button_Apply, p_impl->ui.pbApply);
 
     addFooterButton(Footer::Button_Cancel, p_impl->ui.pbCancel);

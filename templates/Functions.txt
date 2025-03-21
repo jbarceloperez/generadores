@@ -185,3 +185,40 @@ TEST_F(%sTest, Test_%s)
 
 %/TEST_FUNCTION%
 
+// %s = panelName 12 veces
+%%TEST_CMAKE%
+## TESTS
+
+# Incluir FetchContent para GoogleTest
+include(FetchContent)
+FetchContent_Declare(
+  googletest
+  URL https://github.com/google/googletest/archive/9ff2450a56aed4f7f124f5104d9e3088bf791ee9.zip
+)
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(googletest)
+
+enable_testing()
+
+# Añadir los ficheros necesarios para los tests
+set(TEST_SOURCES tests/test_%NAME%.cpp tests/test_main.cpp
+    src_inc/%NAME%.h
+    src_inc/%NAME%QtCb.h
+    src_inc/%NAME%QtCb.cpp
+    src_inc/%NAME%Gw.h
+    src_inc/%NAME%Gw.cpp
+# Incluye aquí el resto de ficheros fuente necesarios
+    ../BaseClass/src_inc/BaseClass.cpp
+    ../FooterManager/src_inc/Footer.cpp
+)
+
+add_executable(test_%NAME% ${TEST_SOURCES})
+
+target_link_libraries(test_%NAME% Qt6::Core Qt6::Gui Qt6::Widgets gtest gtest_main)
+target_include_directories(test_%NAME% PRIVATE ${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR} src_inc)
+
+# Agregar los tests
+add_test(NAME %NAME%test COMMAND %NAME%test)
+
+%/TEST_CMAKE%
+

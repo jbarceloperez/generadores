@@ -11,7 +11,7 @@
 
 enum FileToGenerate 
 {
-    HEADER, GWHEADER, GW, QTCBHEADER, QTCB, UI, CMAKELISTS, DOXYFILE, TESTFILE, FILES_END
+    HEADER, GWHEADER, GW, QTCBHEADER, QTCB, UI, CMAKELISTS, DOXYFILE, TESTFILE, TESTMAIN, FILES_END
 };
 
 enum TemplateMark
@@ -23,7 +23,7 @@ enum TemplateMark
     ADD_FOOTER_BUTTON_RESET, ADD_FOOTER_BUTTON_CUSTOM1, ADD_FOOTER_BUTTON_CUSTOM2, 
     GEOMETRY_W,  GEOMETRY_H, BUTTONS_UI, LAYOUT_UI, SAES_HEADER, UIXMLBUTTON,
     UIXMLBUTTON_WITHPOS, PANEL_OK_H, PANEL_OK_CPP, ADD_FOOTER_BUTTON_OK, 
-    TESTS, TEST_FUNCTION, END_MARK
+    TESTS, TEST_FUNCTION, TEST_CMAKE, END_MARK
 };
 
 static std::map<FileToGenerate, std::string> FileTemplatePath = {
@@ -35,6 +35,7 @@ static std::map<FileToGenerate, std::string> FileTemplatePath = {
     {UI,            FULLPATH("Ui.template")},
     {CMAKELISTS,    FULLPATH("CMakeLists.template")},
     {DOXYFILE,      FULLPATH("Doxyfile.template")},
+    {TESTMAIN,      FULLPATH("Testmain.template")},
     {TESTFILE,      FULLPATH("Testfile.template")}
 };
 
@@ -69,7 +70,8 @@ static std::map<TemplateMark, std::string> MarkStrings = {
     {UIXMLBUTTON,               "UIXMLBUTTON"},
     {UIXMLBUTTON_WITHPOS,       "UIXMLBUTTON_WITHPOS"},
     {TESTS,                     "TESTS"},
-    {TEST_FUNCTION,             "TEST_FUNCTION"}
+    {TEST_FUNCTION,             "TEST_FUNCTION"},
+    {TEST_CMAKE,                "TEST_CMAKE"}
 };
 
 class Generador {

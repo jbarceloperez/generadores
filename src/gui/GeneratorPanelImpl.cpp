@@ -51,10 +51,11 @@ GeneratorPanelImpl::GeneratorPanelImpl()
     connect(p_impl->ui.comboLayout, SIGNAL(currentIndexChanged(int)), this, SLOT(handleLayoutCombobox()));
     // Conectar la señal de los spinBox del tamaño de los paneles
     connect(p_impl->ui.sbHeigth, SIGNAL(valueChanged(int)), this, SLOT(handleSpinBoxHeight()));
-    connect(p_impl->ui.sbWidth, SIGNAL(valueChanged(int)), this, SLOT(handleSpinBoxWidth()));    
+    connect(p_impl->ui.sbWidth, SIGNAL(valueChanged(int)), this, SLOT(handleSpinBoxWidth()));
+    connect(p_impl->ui.cb_tests, SIGNAL(stateChanged(int)), this, SLOT(handleTestsCheckbox()));
 
     // añadir acciones de botones a la lista
-    for (int i = APPLY; i < NULLBUTTONACTION; i++)
+    for (int i = APPLY; i < OK; i++)
     {
         p_impl->ui.listWidget_act->addItem(ButtonActionToString[static_cast<ButtonAction>(i)].data());
     }
@@ -69,6 +70,13 @@ GeneratorPanelImpl::~GeneratorPanelImpl()
 {
 
 }
+
+void GeneratorPanelImpl::handleTestsCheckbox()
+{
+    if (p_impl->ui.cb_tests->isChecked()) controller->changeTestGeneration(true);
+    else controller->changeTestGeneration(false);
+}
+
 
 void GeneratorPanelImpl::handleSpinBoxWidth()
 {
@@ -393,5 +401,11 @@ void GeneratorPanelImpl::updatePanelSettings()
         }
         LayoutType layout = controller->getCurrentPanel()->getLayout();
         p_impl->ui.comboLayout->setCurrentIndex(layout);
+        bool tests = controller->getCurrentPanel()->getTest();
+        if (tests)
+        {
+            p_impl->ui.cb_tests->setChecked(true);
+        }
+        else p_impl->ui.cb_tests->setChecked(false);
     }
 }

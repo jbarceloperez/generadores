@@ -1,7 +1,7 @@
 #include "controller.h"
 #include <iostream>
 #include "../model/generador.h"
-#include <bits/getopt_core.h>
+// #include <bits/getopt_core.h>
 
 #define TRACES_CONFIG_PATH "../traces.cfg"
 
@@ -28,37 +28,37 @@ void Controller::init(int _argc, char *_argv[])
     log.hmilog(INFO, "Initializing logger...");
     log.mainlog(INFO, "Initializing logger...");
     currentPanel = nullptr;
-    nogui(_argc, _argv);
+    // nogui(_argc, _argv);
 }
 
-void Controller::nogui(int _argc, char *_argv[])
-{
-    int c;
-    char *path;
-    int nogui = 0; // flag
-    while ((c = getopt(_argc, _argv, "hn:")) != -1)
-    {
-        switch (c)
-        {
-        case 'n':
-            nogui = 1;
-            path = optarg;
-            break;
-        case 'h':
-            cout << "codeGenerator [-n NO GUI MODE] input.xml\n";
-            exit(EXIT_FAILURE);
-            break;
-        default:
-            break;
-        }
-    }
-    if (nogui) // ejecución nogui
-    {
-        cout << "   - codeGenerator - no gui mode -\n\n";
-        generateAllFiles(path);
-        exit(EXIT_SUCCESS);
-    }
-}
+// void Controller::nogui(int _argc, char *_argv[])
+// {
+//     int c;
+//     char *path;
+//     int nogui = 0; // flag
+//     while ((c = getopt(_argc, _argv, "hn:")) != -1)
+//     {
+//         switch (c)
+//         {
+//         case 'n':
+//             nogui = 1;
+//             path = optarg;
+//             break;
+//         case 'h':
+//             cout << "codeGenerator [-n NO GUI MODE] input.xml\n";
+//             exit(EXIT_FAILURE);
+//             break;
+//         default:
+//             break;
+//         }
+//     }
+//     if (nogui) // ejecución nogui
+//     {
+//         cout << "   - codeGenerator - no gui mode -\n\n";
+//         generateAllFiles(path);
+//         exit(EXIT_SUCCESS);
+//     }
+// }
 
 GPanel* Controller::getCurrentPanel() const
 {
@@ -90,6 +90,7 @@ void Controller::onHeaderSavePressed(SaesHeader* header) {} // a implementar en 
 void Controller::onHeaderSaveToAllPanelsPressed(SaesHeader *header) {} // a implementar en subclase
 bool Controller::changeCurrentPanelHeigth(int h) { return 0; } // a implementar en subclase
 bool Controller::changeCurrentPanelWidth(int w) {return 0;} // a implementar en subclase
+void Controller::changeTestGeneration(bool value) {}; // a implementar en subclase
 string Controller::panelInfo() {return "";} // a implementar en subclase
 
 //-------------------------------------------------------------------

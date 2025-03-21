@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<panels>
+    <panel name="panel1" type="config">
+        <header>
+            <companyName>SAES</companyName>
+            <project>HMI Code Generator</project>
+            <repository>https://elecsub@dev.azure.com/elecsub/Becarios%202024/_git/Generadores</repository>
+            <author>Javier Barceló</author>
+            <description>Panel de muestra</description>
+            <fileName>panel1</fileName>
+            <date>25/07/2024</date>
+        </header>
+        <layout>QGridLayout</layout>
+        <buttons>
+            <button>
+                <name>pbApply</name>
+                <action>Apply</action>
+            </button>
+            <button>
+                <name>pbCancel</name>
+                <action>Cancel</action>
+            </button>
+        </buttons>
+    </panel>
+</panels>
